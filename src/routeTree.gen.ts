@@ -29,6 +29,7 @@ import { Route as ParaIesRouteImport } from './routes/para.ies'
 import { Route as ParaProfessorRouteImport } from './routes/para.professor'
 import { Route as ParaUsuarioGeralRouteImport } from './routes/para.usuario-geral'
 import { Route as AuthenticatedGestaoIndexRouteImport } from './routes/_authenticated/gestao.index'
+import { Route as AuthenticatedGestaoCadastrosRouteImport } from './routes/_authenticated/gestao.cadastros'
 import { Route as AuthenticatedVagasIndexRouteImport } from './routes/_authenticated/vagas.index'
 import { Route as AuthenticatedVagasIdRouteImport } from './routes/_authenticated/vagas.$id'
 import { Route as AuthenticatedVagasNovaRouteImport } from './routes/_authenticated/vagas.nova'
@@ -135,6 +136,12 @@ const AuthenticatedGestaoIndexRoute =
     path: '/gestao/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedGestaoCadastrosRoute =
+  AuthenticatedGestaoCadastrosRouteImport.update({
+    id: '/gestao/cadastros',
+    path: '/gestao/cadastros',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedVagasIndexRoute = AuthenticatedVagasIndexRouteImport.update({
   id: '/vagas/',
   path: '/vagas/',
@@ -170,6 +177,7 @@ export interface FileRoutesByFullPath {
   '/para/professor': typeof ParaProfessorRoute
   '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos/': typeof CursosIndexRoute
+  '/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
   '/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/vagas/nova': typeof AuthenticatedVagasNovaRoute
   '/gestao/': typeof AuthenticatedGestaoIndexRoute
@@ -194,6 +202,7 @@ export interface FileRoutesByTo {
   '/para/professor': typeof ParaProfessorRoute
   '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos': typeof CursosIndexRoute
+  '/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
   '/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/vagas/nova': typeof AuthenticatedVagasNovaRoute
   '/gestao': typeof AuthenticatedGestaoIndexRoute
@@ -220,6 +229,7 @@ export interface FileRoutesById {
   '/para/professor': typeof ParaProfessorRoute
   '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos/': typeof CursosIndexRoute
+  '/_authenticated/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
   '/_authenticated/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/_authenticated/vagas/nova': typeof AuthenticatedVagasNovaRoute
   '/_authenticated/gestao/': typeof AuthenticatedGestaoIndexRoute
@@ -246,6 +256,7 @@ export interface FileRouteTypes {
     | '/para/professor'
     | '/para/usuario-geral'
     | '/cursos/'
+    | '/gestao/cadastros'
     | '/vagas/$id'
     | '/vagas/nova'
     | '/gestao/'
@@ -270,6 +281,7 @@ export interface FileRouteTypes {
     | '/para/professor'
     | '/para/usuario-geral'
     | '/cursos'
+    | '/gestao/cadastros'
     | '/vagas/$id'
     | '/vagas/nova'
     | '/gestao'
@@ -295,6 +307,7 @@ export interface FileRouteTypes {
     | '/para/professor'
     | '/para/usuario-geral'
     | '/cursos/'
+    | '/_authenticated/gestao/cadastros'
     | '/_authenticated/vagas/$id'
     | '/_authenticated/vagas/nova'
     | '/_authenticated/gestao/'
@@ -460,6 +473,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedGestaoIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/gestao/cadastros': {
+      id: '/_authenticated/gestao/cadastros'
+      path: '/gestao/cadastros'
+      fullPath: '/gestao/cadastros'
+      preLoaderRoute: typeof AuthenticatedGestaoCadastrosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/vagas/': {
       id: '/_authenticated/vagas/'
       path: '/vagas'
@@ -490,6 +510,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPainelRoute: typeof AuthenticatedPainelRoute
   AuthenticatedPreferenciasRoute: typeof AuthenticatedPreferenciasRoute
+  AuthenticatedGestaoCadastrosRoute: typeof AuthenticatedGestaoCadastrosRoute
   AuthenticatedVagasIdRoute: typeof AuthenticatedVagasIdRoute
   AuthenticatedVagasNovaRoute: typeof AuthenticatedVagasNovaRoute
   AuthenticatedGestaoIndexRoute: typeof AuthenticatedGestaoIndexRoute
@@ -502,6 +523,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPainelRoute: AuthenticatedPainelRoute,
   AuthenticatedPreferenciasRoute: AuthenticatedPreferenciasRoute,
+  AuthenticatedGestaoCadastrosRoute: AuthenticatedGestaoCadastrosRoute,
   AuthenticatedVagasIdRoute: AuthenticatedVagasIdRoute,
   AuthenticatedVagasNovaRoute: AuthenticatedVagasNovaRoute,
   AuthenticatedGestaoIndexRoute: AuthenticatedGestaoIndexRoute,
