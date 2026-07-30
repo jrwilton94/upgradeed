@@ -22,6 +22,12 @@ import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedPreferenciasRouteImport } from './routes/_authenticated/preferencias'
 import { Route as CursosIndexRouteImport } from './routes/cursos.index'
 import { Route as CursosSlugRouteImport } from './routes/cursos.$slug'
+import { Route as ParaColaboradorRouteImport } from './routes/para.colaborador'
+import { Route as ParaEmpresaRouteImport } from './routes/para.empresa'
+import { Route as ParaEstudanteRouteImport } from './routes/para.estudante'
+import { Route as ParaIesRouteImport } from './routes/para.ies'
+import { Route as ParaProfessorRouteImport } from './routes/para.professor'
+import { Route as ParaUsuarioGeralRouteImport } from './routes/para.usuario-geral'
 import { Route as AuthenticatedVagasIndexRouteImport } from './routes/_authenticated/vagas.index'
 import { Route as AuthenticatedVagasIdRouteImport } from './routes/_authenticated/vagas.$id'
 import { Route as AuthenticatedVagasNovaRouteImport } from './routes/_authenticated/vagas.nova'
@@ -92,6 +98,36 @@ const CursosSlugRoute = CursosSlugRouteImport.update({
   path: '/cursos/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ParaColaboradorRoute = ParaColaboradorRouteImport.update({
+  id: '/para/colaborador',
+  path: '/para/colaborador',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParaEmpresaRoute = ParaEmpresaRouteImport.update({
+  id: '/para/empresa',
+  path: '/para/empresa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParaEstudanteRoute = ParaEstudanteRouteImport.update({
+  id: '/para/estudante',
+  path: '/para/estudante',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParaIesRoute = ParaIesRouteImport.update({
+  id: '/para/ies',
+  path: '/para/ies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParaProfessorRoute = ParaProfessorRouteImport.update({
+  id: '/para/professor',
+  path: '/para/professor',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParaUsuarioGeralRoute = ParaUsuarioGeralRouteImport.update({
+  id: '/para/usuario-geral',
+  path: '/para/usuario-geral',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedVagasIndexRoute = AuthenticatedVagasIndexRouteImport.update({
   id: '/vagas/',
   path: '/vagas/',
@@ -120,6 +156,12 @@ export interface FileRoutesByFullPath {
   '/painel': typeof AuthenticatedPainelRoute
   '/preferencias': typeof AuthenticatedPreferenciasRoute
   '/cursos/$slug': typeof CursosSlugRoute
+  '/para/colaborador': typeof ParaColaboradorRoute
+  '/para/empresa': typeof ParaEmpresaRoute
+  '/para/estudante': typeof ParaEstudanteRoute
+  '/para/ies': typeof ParaIesRoute
+  '/para/professor': typeof ParaProfessorRoute
+  '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos/': typeof CursosIndexRoute
   '/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/vagas/nova': typeof AuthenticatedVagasNovaRoute
@@ -137,6 +179,12 @@ export interface FileRoutesByTo {
   '/painel': typeof AuthenticatedPainelRoute
   '/preferencias': typeof AuthenticatedPreferenciasRoute
   '/cursos/$slug': typeof CursosSlugRoute
+  '/para/colaborador': typeof ParaColaboradorRoute
+  '/para/empresa': typeof ParaEmpresaRoute
+  '/para/estudante': typeof ParaEstudanteRoute
+  '/para/ies': typeof ParaIesRoute
+  '/para/professor': typeof ParaProfessorRoute
+  '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos': typeof CursosIndexRoute
   '/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/vagas/nova': typeof AuthenticatedVagasNovaRoute
@@ -156,6 +204,12 @@ export interface FileRoutesById {
   '/_authenticated/painel': typeof AuthenticatedPainelRoute
   '/_authenticated/preferencias': typeof AuthenticatedPreferenciasRoute
   '/cursos/$slug': typeof CursosSlugRoute
+  '/para/colaborador': typeof ParaColaboradorRoute
+  '/para/empresa': typeof ParaEmpresaRoute
+  '/para/estudante': typeof ParaEstudanteRoute
+  '/para/ies': typeof ParaIesRoute
+  '/para/professor': typeof ParaProfessorRoute
+  '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos/': typeof CursosIndexRoute
   '/_authenticated/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/_authenticated/vagas/nova': typeof AuthenticatedVagasNovaRoute
@@ -175,6 +229,12 @@ export interface FileRouteTypes {
     | '/painel'
     | '/preferencias'
     | '/cursos/$slug'
+    | '/para/colaborador'
+    | '/para/empresa'
+    | '/para/estudante'
+    | '/para/ies'
+    | '/para/professor'
+    | '/para/usuario-geral'
     | '/cursos/'
     | '/vagas/$id'
     | '/vagas/nova'
@@ -192,6 +252,12 @@ export interface FileRouteTypes {
     | '/painel'
     | '/preferencias'
     | '/cursos/$slug'
+    | '/para/colaborador'
+    | '/para/empresa'
+    | '/para/estudante'
+    | '/para/ies'
+    | '/para/professor'
+    | '/para/usuario-geral'
     | '/cursos'
     | '/vagas/$id'
     | '/vagas/nova'
@@ -210,6 +276,12 @@ export interface FileRouteTypes {
     | '/_authenticated/painel'
     | '/_authenticated/preferencias'
     | '/cursos/$slug'
+    | '/para/colaborador'
+    | '/para/empresa'
+    | '/para/estudante'
+    | '/para/ies'
+    | '/para/professor'
+    | '/para/usuario-geral'
     | '/cursos/'
     | '/_authenticated/vagas/$id'
     | '/_authenticated/vagas/nova'
@@ -224,6 +296,12 @@ export interface RootRouteChildren {
   PlataformaRoute: typeof PlataformaRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   CursosSlugRoute: typeof CursosSlugRoute
+  ParaColaboradorRoute: typeof ParaColaboradorRoute
+  ParaEmpresaRoute: typeof ParaEmpresaRoute
+  ParaEstudanteRoute: typeof ParaEstudanteRoute
+  ParaIesRoute: typeof ParaIesRoute
+  ParaProfessorRoute: typeof ParaProfessorRoute
+  ParaUsuarioGeralRoute: typeof ParaUsuarioGeralRoute
   CursosIndexRoute: typeof CursosIndexRoute
 }
 
@@ -320,6 +398,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CursosSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/para/colaborador': {
+      id: '/para/colaborador'
+      path: '/para/colaborador'
+      fullPath: '/para/colaborador'
+      preLoaderRoute: typeof ParaColaboradorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/para/empresa': {
+      id: '/para/empresa'
+      path: '/para/empresa'
+      fullPath: '/para/empresa'
+      preLoaderRoute: typeof ParaEmpresaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/para/estudante': {
+      id: '/para/estudante'
+      path: '/para/estudante'
+      fullPath: '/para/estudante'
+      preLoaderRoute: typeof ParaEstudanteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/para/ies': {
+      id: '/para/ies'
+      path: '/para/ies'
+      fullPath: '/para/ies'
+      preLoaderRoute: typeof ParaIesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/para/professor': {
+      id: '/para/professor'
+      path: '/para/professor'
+      fullPath: '/para/professor'
+      preLoaderRoute: typeof ParaProfessorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/para/usuario-geral': {
+      id: '/para/usuario-geral'
+      path: '/para/usuario-geral'
+      fullPath: '/para/usuario-geral'
+      preLoaderRoute: typeof ParaUsuarioGeralRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/vagas/': {
       id: '/_authenticated/vagas/'
       path: '/vagas'
@@ -377,6 +497,12 @@ const rootRouteChildren: RootRouteChildren = {
   PlataformaRoute: PlataformaRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   CursosSlugRoute: CursosSlugRoute,
+  ParaColaboradorRoute: ParaColaboradorRoute,
+  ParaEmpresaRoute: ParaEmpresaRoute,
+  ParaEstudanteRoute: ParaEstudanteRoute,
+  ParaIesRoute: ParaIesRoute,
+  ParaProfessorRoute: ParaProfessorRoute,
+  ParaUsuarioGeralRoute: ParaUsuarioGeralRoute,
   CursosIndexRoute: CursosIndexRoute,
 }
 export const routeTree = rootRouteImport
