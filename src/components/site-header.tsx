@@ -8,6 +8,9 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 const NAV = [
   { to: "/plataforma", label: "A plataforma" },
   { to: "/cursos", label: "Cursos" },
+  { to: "/para/empresa", label: "Empresas" },
+  { to: "/para/ies", label: "IES" },
+  { to: "/para/professor", label: "Professores" },
   { to: "/ia", label: "Como funciona nossa IA" },
 ];
 
