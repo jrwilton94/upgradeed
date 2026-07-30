@@ -25,11 +25,21 @@ export function CompanyDashboard({ profile }: { profile: Tables<"profiles"> }) {
       const matchesRes = jobIds.length
         ? await supabase
             .from("matches")
-            .select("*, profiles(full_name), jobs(title)")
+            .select("*, jobs(title)")
             .in("job_id", jobIds)
             .eq("status", "aceita")
         : { data: [] };
-      return { company: companyRes.data, jobs, matches: matchesRes.data ?? [] };
+      const matches = matchesRes.data ?? [];
+      const userIds = Array.from(new Set(matches.map((m) => m.user_id)));
+      const namesRes = userIds.length
+        ? await supabase.from("profiles").select("id, full_name").in("id", userIds)
+        : { data: [] };
+      const names = new Map((namesRes.data ?? []).map((p) => [p.id, p.full_name]));
+      return {
+        company: companyRes.data,
+        jobs,
+        matches: matches.map((m) => ({ ...m, candidateName: names.get(m.user_id) ?? "Candidato" })),
+      };
     },
   });
 
@@ -118,7 +128,7 @@ export function CompanyDashboard({ profile }: { profile: Tables<"profiles"> }) {
             {data.matches.map((match) => (
               <li key={match.id} className="rounded-xl border border-border p-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <p className="font-semibold text-foreground">{match.profiles?.full_name}</p>
+                  <p className="font-semibold text-foreground">{match.candidateName}</p>
                   <Badge className="bg-brand text-brand-foreground">{match.score}% compatível</Badge>
                 </div>
                 <p className="text-xs text-muted-foreground">{match.jobs?.title}</p>
