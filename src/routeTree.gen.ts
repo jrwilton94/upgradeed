@@ -22,6 +22,8 @@ import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedPreferenciasRouteImport } from './routes/_authenticated/preferencias'
 import { Route as CursosIndexRouteImport } from './routes/cursos.index'
 import { Route as CursosSlugRouteImport } from './routes/cursos.$slug'
+import { Route as AuthenticatedVagasIndexRouteImport } from './routes/_authenticated/vagas.index'
+import { Route as AuthenticatedVagasNovaRouteImport } from './routes/_authenticated/vagas.nova'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -89,6 +91,16 @@ const CursosSlugRoute = CursosSlugRouteImport.update({
   path: '/cursos/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedVagasIndexRoute = AuthenticatedVagasIndexRouteImport.update({
+  id: '/vagas/',
+  path: '/vagas/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedVagasNovaRoute = AuthenticatedVagasNovaRouteImport.update({
+  id: '/vagas/nova',
+  path: '/vagas/nova',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -103,6 +115,8 @@ export interface FileRoutesByFullPath {
   '/preferencias': typeof AuthenticatedPreferenciasRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/cursos/': typeof CursosIndexRoute
+  '/vagas/nova': typeof AuthenticatedVagasNovaRoute
+  '/vagas/': typeof AuthenticatedVagasIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,6 +131,8 @@ export interface FileRoutesByTo {
   '/preferencias': typeof AuthenticatedPreferenciasRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/cursos': typeof CursosIndexRoute
+  '/vagas/nova': typeof AuthenticatedVagasNovaRoute
+  '/vagas': typeof AuthenticatedVagasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -133,6 +149,8 @@ export interface FileRoutesById {
   '/_authenticated/preferencias': typeof AuthenticatedPreferenciasRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/cursos/': typeof CursosIndexRoute
+  '/_authenticated/vagas/nova': typeof AuthenticatedVagasNovaRoute
+  '/_authenticated/vagas/': typeof AuthenticatedVagasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -149,6 +167,8 @@ export interface FileRouteTypes {
     | '/preferencias'
     | '/cursos/$slug'
     | '/cursos/'
+    | '/vagas/nova'
+    | '/vagas/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -163,6 +183,8 @@ export interface FileRouteTypes {
     | '/preferencias'
     | '/cursos/$slug'
     | '/cursos'
+    | '/vagas/nova'
+    | '/vagas'
   id:
     | '__root__'
     | '/'
@@ -178,6 +200,8 @@ export interface FileRouteTypes {
     | '/_authenticated/preferencias'
     | '/cursos/$slug'
     | '/cursos/'
+    | '/_authenticated/vagas/nova'
+    | '/_authenticated/vagas/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -284,6 +308,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CursosSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/vagas/': {
+      id: '/_authenticated/vagas/'
+      path: '/vagas'
+      fullPath: '/vagas/'
+      preLoaderRoute: typeof AuthenticatedVagasIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/vagas/nova': {
+      id: '/_authenticated/vagas/nova'
+      path: '/vagas/nova'
+      fullPath: '/vagas/nova'
+      preLoaderRoute: typeof AuthenticatedVagasNovaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -293,6 +331,8 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPainelRoute: typeof AuthenticatedPainelRoute
   AuthenticatedPreferenciasRoute: typeof AuthenticatedPreferenciasRoute
+  AuthenticatedVagasNovaRoute: typeof AuthenticatedVagasNovaRoute
+  AuthenticatedVagasIndexRoute: typeof AuthenticatedVagasIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -301,6 +341,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPainelRoute: AuthenticatedPainelRoute,
   AuthenticatedPreferenciasRoute: AuthenticatedPreferenciasRoute,
+  AuthenticatedVagasNovaRoute: AuthenticatedVagasNovaRoute,
+  AuthenticatedVagasIndexRoute: AuthenticatedVagasIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
