@@ -23,6 +23,7 @@ import { Route as AuthenticatedPreferenciasRouteImport } from './routes/_authent
 import { Route as CursosIndexRouteImport } from './routes/cursos.index'
 import { Route as CursosSlugRouteImport } from './routes/cursos.$slug'
 import { Route as AuthenticatedVagasIndexRouteImport } from './routes/_authenticated/vagas.index'
+import { Route as AuthenticatedVagasIdRouteImport } from './routes/_authenticated/vagas.$id'
 import { Route as AuthenticatedVagasNovaRouteImport } from './routes/_authenticated/vagas.nova'
 
 const IndexRoute = IndexRouteImport.update({
@@ -96,6 +97,11 @@ const AuthenticatedVagasIndexRoute = AuthenticatedVagasIndexRouteImport.update({
   path: '/vagas/',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedVagasIdRoute = AuthenticatedVagasIdRouteImport.update({
+  id: '/vagas/$id',
+  path: '/vagas/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedVagasNovaRoute = AuthenticatedVagasNovaRouteImport.update({
   id: '/vagas/nova',
   path: '/vagas/nova',
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/preferencias': typeof AuthenticatedPreferenciasRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/cursos/': typeof CursosIndexRoute
+  '/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/vagas/nova': typeof AuthenticatedVagasNovaRoute
   '/vagas/': typeof AuthenticatedVagasIndexRoute
 }
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/preferencias': typeof AuthenticatedPreferenciasRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/cursos': typeof CursosIndexRoute
+  '/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/vagas/nova': typeof AuthenticatedVagasNovaRoute
   '/vagas': typeof AuthenticatedVagasIndexRoute
 }
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/_authenticated/preferencias': typeof AuthenticatedPreferenciasRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/cursos/': typeof CursosIndexRoute
+  '/_authenticated/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/_authenticated/vagas/nova': typeof AuthenticatedVagasNovaRoute
   '/_authenticated/vagas/': typeof AuthenticatedVagasIndexRoute
 }
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/preferencias'
     | '/cursos/$slug'
     | '/cursos/'
+    | '/vagas/$id'
     | '/vagas/nova'
     | '/vagas/'
   fileRoutesByTo: FileRoutesByTo
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
     | '/preferencias'
     | '/cursos/$slug'
     | '/cursos'
+    | '/vagas/$id'
     | '/vagas/nova'
     | '/vagas'
   id:
@@ -200,6 +211,7 @@ export interface FileRouteTypes {
     | '/_authenticated/preferencias'
     | '/cursos/$slug'
     | '/cursos/'
+    | '/_authenticated/vagas/$id'
     | '/_authenticated/vagas/nova'
     | '/_authenticated/vagas/'
   fileRoutesById: FileRoutesById
@@ -315,6 +327,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVagasIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/vagas/$id': {
+      id: '/_authenticated/vagas/$id'
+      path: '/vagas/$id'
+      fullPath: '/vagas/$id'
+      preLoaderRoute: typeof AuthenticatedVagasIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/vagas/nova': {
       id: '/_authenticated/vagas/nova'
       path: '/vagas/nova'
@@ -331,6 +350,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPainelRoute: typeof AuthenticatedPainelRoute
   AuthenticatedPreferenciasRoute: typeof AuthenticatedPreferenciasRoute
+  AuthenticatedVagasIdRoute: typeof AuthenticatedVagasIdRoute
   AuthenticatedVagasNovaRoute: typeof AuthenticatedVagasNovaRoute
   AuthenticatedVagasIndexRoute: typeof AuthenticatedVagasIndexRoute
 }
@@ -341,6 +361,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPainelRoute: AuthenticatedPainelRoute,
   AuthenticatedPreferenciasRoute: AuthenticatedPreferenciasRoute,
+  AuthenticatedVagasIdRoute: AuthenticatedVagasIdRoute,
   AuthenticatedVagasNovaRoute: AuthenticatedVagasNovaRoute,
   AuthenticatedVagasIndexRoute: AuthenticatedVagasIndexRoute,
 }
