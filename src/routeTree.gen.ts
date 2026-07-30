@@ -28,6 +28,7 @@ import { Route as ParaEstudanteRouteImport } from './routes/para.estudante'
 import { Route as ParaIesRouteImport } from './routes/para.ies'
 import { Route as ParaProfessorRouteImport } from './routes/para.professor'
 import { Route as ParaUsuarioGeralRouteImport } from './routes/para.usuario-geral'
+import { Route as AuthenticatedGestaoIndexRouteImport } from './routes/_authenticated/gestao.index'
 import { Route as AuthenticatedVagasIndexRouteImport } from './routes/_authenticated/vagas.index'
 import { Route as AuthenticatedVagasIdRouteImport } from './routes/_authenticated/vagas.$id'
 import { Route as AuthenticatedVagasNovaRouteImport } from './routes/_authenticated/vagas.nova'
@@ -128,6 +129,12 @@ const ParaUsuarioGeralRoute = ParaUsuarioGeralRouteImport.update({
   path: '/para/usuario-geral',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedGestaoIndexRoute =
+  AuthenticatedGestaoIndexRouteImport.update({
+    id: '/gestao/',
+    path: '/gestao/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedVagasIndexRoute = AuthenticatedVagasIndexRouteImport.update({
   id: '/vagas/',
   path: '/vagas/',
@@ -165,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/cursos/': typeof CursosIndexRoute
   '/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/vagas/nova': typeof AuthenticatedVagasNovaRoute
+  '/gestao/': typeof AuthenticatedGestaoIndexRoute
   '/vagas/': typeof AuthenticatedVagasIndexRoute
 }
 export interface FileRoutesByTo {
@@ -188,6 +196,7 @@ export interface FileRoutesByTo {
   '/cursos': typeof CursosIndexRoute
   '/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/vagas/nova': typeof AuthenticatedVagasNovaRoute
+  '/gestao': typeof AuthenticatedGestaoIndexRoute
   '/vagas': typeof AuthenticatedVagasIndexRoute
 }
 export interface FileRoutesById {
@@ -213,6 +222,7 @@ export interface FileRoutesById {
   '/cursos/': typeof CursosIndexRoute
   '/_authenticated/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/_authenticated/vagas/nova': typeof AuthenticatedVagasNovaRoute
+  '/_authenticated/gestao/': typeof AuthenticatedGestaoIndexRoute
   '/_authenticated/vagas/': typeof AuthenticatedVagasIndexRoute
 }
 export interface FileRouteTypes {
@@ -238,6 +248,7 @@ export interface FileRouteTypes {
     | '/cursos/'
     | '/vagas/$id'
     | '/vagas/nova'
+    | '/gestao/'
     | '/vagas/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -261,6 +272,7 @@ export interface FileRouteTypes {
     | '/cursos'
     | '/vagas/$id'
     | '/vagas/nova'
+    | '/gestao'
     | '/vagas'
   id:
     | '__root__'
@@ -285,6 +297,7 @@ export interface FileRouteTypes {
     | '/cursos/'
     | '/_authenticated/vagas/$id'
     | '/_authenticated/vagas/nova'
+    | '/_authenticated/gestao/'
     | '/_authenticated/vagas/'
   fileRoutesById: FileRoutesById
 }
@@ -440,6 +453,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ParaUsuarioGeralRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/gestao/': {
+      id: '/_authenticated/gestao/'
+      path: '/gestao'
+      fullPath: '/gestao/'
+      preLoaderRoute: typeof AuthenticatedGestaoIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/vagas/': {
       id: '/_authenticated/vagas/'
       path: '/vagas'
@@ -472,6 +492,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPreferenciasRoute: typeof AuthenticatedPreferenciasRoute
   AuthenticatedVagasIdRoute: typeof AuthenticatedVagasIdRoute
   AuthenticatedVagasNovaRoute: typeof AuthenticatedVagasNovaRoute
+  AuthenticatedGestaoIndexRoute: typeof AuthenticatedGestaoIndexRoute
   AuthenticatedVagasIndexRoute: typeof AuthenticatedVagasIndexRoute
 }
 
@@ -483,6 +504,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPreferenciasRoute: AuthenticatedPreferenciasRoute,
   AuthenticatedVagasIdRoute: AuthenticatedVagasIdRoute,
   AuthenticatedVagasNovaRoute: AuthenticatedVagasNovaRoute,
+  AuthenticatedGestaoIndexRoute: AuthenticatedGestaoIndexRoute,
   AuthenticatedVagasIndexRoute: AuthenticatedVagasIndexRoute,
 }
 
