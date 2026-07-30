@@ -10,33 +10,135 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as IaRouteImport } from './routes/ia'
+import { Route as PlataformaRouteImport } from './routes/plataforma'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as CursosIndexRouteImport } from './routes/cursos.index'
+import { Route as CursosSlugRouteImport } from './routes/cursos.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IaRoute = IaRouteImport.update({
+  id: '/ia',
+  path: '/ia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlataformaRoute = PlataformaRouteImport.update({
+  id: '/plataforma',
+  path: '/plataforma',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const CursosIndexRoute = CursosIndexRouteImport.update({
+  id: '/cursos/',
+  path: '/cursos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CursosSlugRoute = CursosSlugRouteImport.update({
+  id: '/cursos/$slug',
+  path: '/cursos/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/ia': typeof IaRoute
+  '/plataforma': typeof PlataformaRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/cursos/$slug': typeof CursosSlugRoute
+  '/cursos/': typeof CursosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/ia': typeof IaRoute
+  '/plataforma': typeof PlataformaRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/cursos/$slug': typeof CursosSlugRoute
+  '/cursos': typeof CursosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/ia': typeof IaRoute
+  '/plataforma': typeof PlataformaRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/cursos/$slug': typeof CursosSlugRoute
+  '/cursos/': typeof CursosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/ia'
+    | '/plataforma'
+    | '/reset-password'
+    | '/onboarding'
+    | '/cursos/$slug'
+    | '/cursos/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/ia'
+    | '/plataforma'
+    | '/reset-password'
+    | '/onboarding'
+    | '/cursos/$slug'
+    | '/cursos'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/ia'
+    | '/plataforma'
+    | '/reset-password'
+    | '/_authenticated/onboarding'
+    | '/cursos/$slug'
+    | '/cursos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  IaRoute: typeof IaRoute
+  PlataformaRoute: typeof PlataformaRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  CursosSlugRoute: typeof CursosSlugRoute
+  CursosIndexRoute: typeof CursosIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +150,86 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ia': {
+      id: '/ia'
+      path: '/ia'
+      fullPath: '/ia'
+      preLoaderRoute: typeof IaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plataforma': {
+      id: '/plataforma'
+      path: '/plataforma'
+      fullPath: '/plataforma'
+      preLoaderRoute: typeof PlataformaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/onboarding': {
+      id: '/_authenticated/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/cursos/': {
+      id: '/cursos/'
+      path: '/cursos'
+      fullPath: '/cursos/'
+      preLoaderRoute: typeof CursosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cursos/$slug': {
+      id: '/cursos/$slug'
+      path: '/cursos/$slug'
+      fullPath: '/cursos/$slug'
+      preLoaderRoute: typeof CursosSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  IaRoute: IaRoute,
+  PlataformaRoute: PlataformaRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  CursosSlugRoute: CursosSlugRoute,
+  CursosIndexRoute: CursosIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
