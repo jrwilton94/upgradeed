@@ -500,6 +500,107 @@ export type Database = {
         }
         Relationships: []
       }
+      payments: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          description: string
+          id: string
+          method: string
+          paid_at: string | null
+          reference: string | null
+          status: string
+          subscription_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          amount_cents?: number
+          created_at?: string
+          description?: string
+          id?: string
+          method?: string
+          paid_at?: string | null
+          reference?: string | null
+          status?: string
+          subscription_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          description?: string
+          id?: string
+          method?: string
+          paid_at?: string | null
+          reference?: string | null
+          status?: string
+          subscription_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plans: {
+        Row: {
+          active: boolean
+          audience: Database["public"]["Enums"]["profile_role"]
+          code: string
+          created_at: string
+          description: string
+          features: string[]
+          highlight: boolean
+          id: string
+          name: string
+          position: number
+          price_month_cents: number
+          price_year_cents: number
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          audience: Database["public"]["Enums"]["profile_role"]
+          code: string
+          created_at?: string
+          description?: string
+          features?: string[]
+          highlight?: boolean
+          id?: string
+          name: string
+          position?: number
+          price_month_cents?: number
+          price_year_cents?: number
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          audience?: Database["public"]["Enums"]["profile_role"]
+          code?: string
+          created_at?: string
+          description?: string
+          features?: string[]
+          highlight?: boolean
+          id?: string
+          name?: string
+          position?: number
+          price_month_cents?: number
+          price_year_cents?: number
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -593,15 +694,115 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriptions: {
+        Row: {
+          amount_cents: number
+          company_id: string | null
+          created_at: string
+          current_period_end: string | null
+          cycle: string
+          id: string
+          institution_id: string | null
+          plan_id: string | null
+          seats: number
+          started_at: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_cents?: number
+          company_id?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          cycle?: string
+          id?: string
+          institution_id?: string | null
+          plan_id?: string | null
+          seats?: number
+          started_at?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_cents?: number
+          company_id?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          cycle?: string
+          id?: string
+          institution_id?: string | null
+          plan_id?: string | null
+          seats?: number
+          started_at?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin: { Args: never; Returns: boolean }
       owns_company: { Args: { _company_id: string }; Returns: boolean }
       owns_job: { Args: { _job_id: string }; Returns: boolean }
     }
     Enums: {
+      app_role: "admin" | "staff"
       job_status: "aberta" | "encerrada"
       match_status: "sugerida" | "aceita" | "ignorada"
       profile_role:
@@ -738,6 +939,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "staff"],
       job_status: ["aberta", "encerrada"],
       match_status: ["sugerida", "aceita", "ignorada"],
       profile_role: [

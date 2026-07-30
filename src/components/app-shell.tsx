@@ -4,6 +4,7 @@ import {
   Award,
   BookOpen,
   Briefcase,
+  BadgeDollarSign,
   LayoutDashboard,
   LibraryBig,
   LogOut,
@@ -17,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { profileByRole, type ProfileRole } from "@/lib/profiles";
+import { useIsAdmin } from "@/hooks/use-plans";
 
 type NavItem = { to: LinkProps["to"]; label: string; icon: LucideIcon };
 
@@ -59,7 +61,13 @@ export function AppShell({
 }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const items = navForRole(role);
+  const { data: isAdmin } = useIsAdmin();
+  const items = [
+    ...navForRole(role),
+    ...(isAdmin
+      ? [{ to: "/gestao" as LinkProps["to"], label: "Gestão", icon: BadgeDollarSign }]
+      : []),
+  ];
   const definition = profileByRole(role);
 
   async function signOut() {
