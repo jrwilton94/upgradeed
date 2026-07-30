@@ -15,8 +15,11 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IaRouteImport } from './routes/ia'
 import { Route as PlataformaRouteImport } from './routes/plataforma'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedCertificadosRouteImport } from './routes/_authenticated/certificados'
+import { Route as AuthenticatedMeusCursosRouteImport } from './routes/_authenticated/meus-cursos'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated/painel'
+import { Route as AuthenticatedPreferenciasRouteImport } from './routes/_authenticated/preferencias'
 import { Route as CursosIndexRouteImport } from './routes/cursos.index'
 import { Route as CursosSlugRouteImport } from './routes/cursos.$slug'
 
@@ -49,6 +52,17 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedCertificadosRoute =
+  AuthenticatedCertificadosRouteImport.update({
+    id: '/certificados',
+    path: '/certificados',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMeusCursosRoute = AuthenticatedMeusCursosRouteImport.update({
+  id: '/meus-cursos',
+  path: '/meus-cursos',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -59,6 +73,12 @@ const AuthenticatedPainelRoute = AuthenticatedPainelRouteImport.update({
   path: '/painel',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPreferenciasRoute =
+  AuthenticatedPreferenciasRouteImport.update({
+    id: '/preferencias',
+    path: '/preferencias',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const CursosIndexRoute = CursosIndexRouteImport.update({
   id: '/cursos/',
   path: '/cursos/',
@@ -76,8 +96,11 @@ export interface FileRoutesByFullPath {
   '/ia': typeof IaRoute
   '/plataforma': typeof PlataformaRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/certificados': typeof AuthenticatedCertificadosRoute
+  '/meus-cursos': typeof AuthenticatedMeusCursosRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/painel': typeof AuthenticatedPainelRoute
+  '/preferencias': typeof AuthenticatedPreferenciasRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/cursos/': typeof CursosIndexRoute
 }
@@ -87,8 +110,11 @@ export interface FileRoutesByTo {
   '/ia': typeof IaRoute
   '/plataforma': typeof PlataformaRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/certificados': typeof AuthenticatedCertificadosRoute
+  '/meus-cursos': typeof AuthenticatedMeusCursosRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/painel': typeof AuthenticatedPainelRoute
+  '/preferencias': typeof AuthenticatedPreferenciasRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/cursos': typeof CursosIndexRoute
 }
@@ -100,8 +126,11 @@ export interface FileRoutesById {
   '/ia': typeof IaRoute
   '/plataforma': typeof PlataformaRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/certificados': typeof AuthenticatedCertificadosRoute
+  '/_authenticated/meus-cursos': typeof AuthenticatedMeusCursosRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/painel': typeof AuthenticatedPainelRoute
+  '/_authenticated/preferencias': typeof AuthenticatedPreferenciasRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/cursos/': typeof CursosIndexRoute
 }
@@ -113,8 +142,11 @@ export interface FileRouteTypes {
     | '/ia'
     | '/plataforma'
     | '/reset-password'
+    | '/certificados'
+    | '/meus-cursos'
     | '/onboarding'
     | '/painel'
+    | '/preferencias'
     | '/cursos/$slug'
     | '/cursos/'
   fileRoutesByTo: FileRoutesByTo
@@ -124,8 +156,11 @@ export interface FileRouteTypes {
     | '/ia'
     | '/plataforma'
     | '/reset-password'
+    | '/certificados'
+    | '/meus-cursos'
     | '/onboarding'
     | '/painel'
+    | '/preferencias'
     | '/cursos/$slug'
     | '/cursos'
   id:
@@ -136,8 +171,11 @@ export interface FileRouteTypes {
     | '/ia'
     | '/plataforma'
     | '/reset-password'
+    | '/_authenticated/certificados'
+    | '/_authenticated/meus-cursos'
     | '/_authenticated/onboarding'
     | '/_authenticated/painel'
+    | '/_authenticated/preferencias'
     | '/cursos/$slug'
     | '/cursos/'
   fileRoutesById: FileRoutesById
@@ -197,6 +235,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/certificados': {
+      id: '/_authenticated/certificados'
+      path: '/certificados'
+      fullPath: '/certificados'
+      preLoaderRoute: typeof AuthenticatedCertificadosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/meus-cursos': {
+      id: '/_authenticated/meus-cursos'
+      path: '/meus-cursos'
+      fullPath: '/meus-cursos'
+      preLoaderRoute: typeof AuthenticatedMeusCursosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/onboarding': {
       id: '/_authenticated/onboarding'
       path: '/onboarding'
@@ -209,6 +261,13 @@ declare module '@tanstack/react-router' {
       path: '/painel'
       fullPath: '/painel'
       preLoaderRoute: typeof AuthenticatedPainelRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/preferencias': {
+      id: '/_authenticated/preferencias'
+      path: '/preferencias'
+      fullPath: '/preferencias'
+      preLoaderRoute: typeof AuthenticatedPreferenciasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/cursos/': {
@@ -229,13 +288,19 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCertificadosRoute: typeof AuthenticatedCertificadosRoute
+  AuthenticatedMeusCursosRoute: typeof AuthenticatedMeusCursosRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPainelRoute: typeof AuthenticatedPainelRoute
+  AuthenticatedPreferenciasRoute: typeof AuthenticatedPreferenciasRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCertificadosRoute: AuthenticatedCertificadosRoute,
+  AuthenticatedMeusCursosRoute: AuthenticatedMeusCursosRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPainelRoute: AuthenticatedPainelRoute,
+  AuthenticatedPreferenciasRoute: AuthenticatedPreferenciasRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
