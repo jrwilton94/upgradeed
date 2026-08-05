@@ -122,11 +122,8 @@ function Index() {
                 key={profile.role}
                 className="group flex flex-col rounded-2xl border border-border bg-card p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
               >
-                <span
-                  aria-hidden="true"
-                  className="inline-flex size-11 items-center justify-center rounded-xl bg-brand-soft text-xl"
-                >
-                  {profile.emoji}
+                <span className="inline-flex size-11 items-center justify-center rounded-xl bg-brand-soft text-brand-foreground">
+                  <profile.icon className="size-5" />
                 </span>
                 <h3 className="mt-4 font-display text-lg font-bold text-foreground">
                   {profile.label}
