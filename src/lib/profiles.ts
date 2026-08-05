@@ -18,7 +18,13 @@ export type ProfileDefinition = {
   bullets: string[];
   emoji: string;
   summary: string;
-  path: string;
+  path:
+    | "/para/estudante"
+    | "/para/usuario-geral"
+    | "/para/colaborador"
+    | "/para/professor"
+    | "/para/ies"
+    | "/para/empresa";
 };
 
 export const PROFILES: ProfileDefinition[] = [
