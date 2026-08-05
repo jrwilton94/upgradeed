@@ -16,6 +16,9 @@ export type ProfileDefinition = {
   icon: LucideIcon;
   tagline: string;
   bullets: string[];
+  emoji: string;
+  summary: string;
+  path: string;
 };
 
 export const PROFILES: ProfileDefinition[] = [
@@ -24,6 +27,9 @@ export const PROFILES: ProfileDefinition[] = [
     label: "Estudante",
     icon: GraduationCap,
     tagline: "Aprende e constrói competências verificadas.",
+    emoji: "👨‍🎓",
+    summary: "Construa competências e conquiste oportunidades.",
+    path: "/para/estudante",
     bullets: [
       "Aprende",
       "Constrói competências",
@@ -36,6 +42,9 @@ export const PROFILES: ProfileDefinition[] = [
     label: "Usuário Geral",
     icon: UserRound,
     tagline: "Mesma jornada do estudante, sem vínculo institucional.",
+    emoji: "👤",
+    summary: "Aprenda continuamente e evolua profissionalmente.",
+    path: "/para/usuario-geral",
     bullets: [
       "Mesmo funcionamento do estudante",
       "Plano pago",
@@ -47,6 +56,9 @@ export const PROFILES: ProfileDefinition[] = [
     label: "Colaborador",
     icon: Users,
     tagline: "Desenvolvimento e mobilidade interna na empresa.",
+    emoji: "🏢",
+    summary: "Desenvolva novas competências e avance na sua carreira.",
+    path: "/para/colaborador",
     bullets: [
       "Funcionário de empresa",
       "Possui plano de desenvolvimento",
@@ -59,6 +71,9 @@ export const PROFILES: ProfileDefinition[] = [
     label: "Professor",
     icon: Presentation,
     tagline: "Publica cursos e acompanha audiência e receita.",
+    emoji: "👨‍🏫",
+    summary: "Compartilhe conhecimento e transforme carreiras.",
+    path: "/para/professor",
     bullets: ["Publica cursos", "Acompanha audiência", "Visualiza score", "Recebe remuneração"],
   },
   {
@@ -66,6 +81,9 @@ export const PROFILES: ProfileDefinition[] = [
     label: "IES",
     icon: Landmark,
     tagline: "Indicadores agregados e relatórios regulatórios.",
+    emoji: "🏫",
+    summary: "Transforme dados em melhores decisões acadêmicas.",
+    path: "/para/ies",
     bullets: [
       "Publica conteúdos",
       "Visualiza indicadores agregados",
@@ -79,6 +97,9 @@ export const PROFILES: ProfileDefinition[] = [
     label: "Empresa",
     icon: Building2,
     tagline: "Publica vagas e recebe candidatos compatíveis.",
+    emoji: "🏢",
+    summary: "Transforme competências em produtividade e retenção de talentos.",
+    path: "/para/empresa",
     bullets: [
       "Publica vagas",
       "Gerencia colaboradores",
