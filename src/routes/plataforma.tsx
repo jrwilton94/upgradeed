@@ -1,5 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, ShieldCheck, ShieldOff } from "lucide-react";
+import {
+  ArrowRight,
+  BarChart3,
+  Brain,
+  Check,
+  Handshake,
+  Lightbulb,
+  ShieldCheck,
+  ShieldOff,
+} from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { FlowDiagram } from "@/components/flow-diagram";
@@ -29,22 +38,22 @@ export const Route = createFileRoute("/plataforma")({
 
 const PILLARS = [
   {
-    emoji: "🧠",
+    icon: Brain,
     title: "Competências Verificadas",
     text: "Uma base confiável para acompanhar a evolução de pessoas e organizações.",
   },
   {
-    emoji: "🤝",
+    icon: Handshake,
     title: "Conexões Inteligentes",
     text: "Aproximamos talentos, especialistas, instituições de ensino e empresas.",
   },
   {
-    emoji: "💡",
+    icon: Lightbulb,
     title: "Desenvolvimento Contínuo",
     text: "Cada interação fortalece competências e amplia novas possibilidades.",
   },
   {
-    emoji: "📊",
+    icon: BarChart3,
     title: "Decisões Estratégicas",
     text: "Transformamos dados em inteligência para apoiar pessoas, empresas e instituições.",
   },
@@ -95,9 +104,7 @@ function PlataformaPage() {
             <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {PILLARS.map((pillar) => (
                 <div key={pillar.title} className="rounded-2xl border border-border bg-card p-6">
-                  <span aria-hidden="true" className="text-2xl">
-                    {pillar.emoji}
-                  </span>
+                  <pillar.icon className="size-5 text-brand" />
                   <p className="mt-3 font-display text-lg font-bold text-foreground">
                     {pillar.title}
                   </p>
@@ -131,7 +138,7 @@ function PlataformaPage() {
                         to={profile.path}
                         className="flex items-center gap-2 font-semibold text-foreground hover:text-brand"
                       >
-                        <span aria-hidden="true">{profile.emoji}</span>
+                        <profile.icon className="size-4 text-brand" />
                         {profile.label}
                       </Link>
                     </td>
