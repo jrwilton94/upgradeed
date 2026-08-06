@@ -11,10 +11,17 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AiaRouteImport } from './routes/aia'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ContatoRouteImport } from './routes/contato'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as IaRouteImport } from './routes/ia'
+import { Route as LgpdRouteImport } from './routes/lgpd'
 import { Route as PlataformaRouteImport } from './routes/plataforma'
+import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as TermosRouteImport } from './routes/termos'
+import { Route as TrabalheConoscoRouteImport } from './routes/trabalhe-conosco'
 import { Route as AuthenticatedCertificadosRouteImport } from './routes/_authenticated/certificados'
 import { Route as AuthenticatedMeusCursosRouteImport } from './routes/_authenticated/meus-cursos'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
@@ -43,9 +50,24 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiaRoute = AiaRouteImport.update({
+  id: '/aia',
+  path: '/aia',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContatoRoute = ContatoRouteImport.update({
+  id: '/contato',
+  path: '/contato',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IaRoute = IaRouteImport.update({
@@ -53,14 +75,34 @@ const IaRoute = IaRouteImport.update({
   path: '/ia',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LgpdRoute = LgpdRouteImport.update({
+  id: '/lgpd',
+  path: '/lgpd',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlataformaRoute = PlataformaRouteImport.update({
   id: '/plataforma',
   path: '/plataforma',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacidadeRoute = PrivacidadeRouteImport.update({
+  id: '/privacidade',
+  path: '/privacidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermosRoute = TermosRouteImport.update({
+  id: '/termos',
+  path: '/termos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrabalheConoscoRoute = TrabalheConoscoRouteImport.update({
+  id: '/trabalhe-conosco',
+  path: '/trabalhe-conosco',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedCertificadosRoute =
@@ -160,10 +202,17 @@ const AuthenticatedVagasNovaRoute = AuthenticatedVagasNovaRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/aia': typeof AiaRoute
   '/auth': typeof AuthRoute
+  '/contato': typeof ContatoRoute
+  '/faq': typeof FaqRoute
   '/ia': typeof IaRoute
+  '/lgpd': typeof LgpdRoute
   '/plataforma': typeof PlataformaRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/termos': typeof TermosRoute
+  '/trabalhe-conosco': typeof TrabalheConoscoRoute
   '/certificados': typeof AuthenticatedCertificadosRoute
   '/meus-cursos': typeof AuthenticatedMeusCursosRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
@@ -185,10 +234,17 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/aia': typeof AiaRoute
   '/auth': typeof AuthRoute
+  '/contato': typeof ContatoRoute
+  '/faq': typeof FaqRoute
   '/ia': typeof IaRoute
+  '/lgpd': typeof LgpdRoute
   '/plataforma': typeof PlataformaRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/termos': typeof TermosRoute
+  '/trabalhe-conosco': typeof TrabalheConoscoRoute
   '/certificados': typeof AuthenticatedCertificadosRoute
   '/meus-cursos': typeof AuthenticatedMeusCursosRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
@@ -212,10 +268,17 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/aia': typeof AiaRoute
   '/auth': typeof AuthRoute
+  '/contato': typeof ContatoRoute
+  '/faq': typeof FaqRoute
   '/ia': typeof IaRoute
+  '/lgpd': typeof LgpdRoute
   '/plataforma': typeof PlataformaRoute
+  '/privacidade': typeof PrivacidadeRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/termos': typeof TermosRoute
+  '/trabalhe-conosco': typeof TrabalheConoscoRoute
   '/_authenticated/certificados': typeof AuthenticatedCertificadosRoute
   '/_authenticated/meus-cursos': typeof AuthenticatedMeusCursosRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
@@ -239,10 +302,17 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/aia'
     | '/auth'
+    | '/contato'
+    | '/faq'
     | '/ia'
+    | '/lgpd'
     | '/plataforma'
+    | '/privacidade'
     | '/reset-password'
+    | '/termos'
+    | '/trabalhe-conosco'
     | '/certificados'
     | '/meus-cursos'
     | '/onboarding'
@@ -264,10 +334,17 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/aia'
     | '/auth'
+    | '/contato'
+    | '/faq'
     | '/ia'
+    | '/lgpd'
     | '/plataforma'
+    | '/privacidade'
     | '/reset-password'
+    | '/termos'
+    | '/trabalhe-conosco'
     | '/certificados'
     | '/meus-cursos'
     | '/onboarding'
@@ -290,10 +367,17 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/aia'
     | '/auth'
+    | '/contato'
+    | '/faq'
     | '/ia'
+    | '/lgpd'
     | '/plataforma'
+    | '/privacidade'
     | '/reset-password'
+    | '/termos'
+    | '/trabalhe-conosco'
     | '/_authenticated/certificados'
     | '/_authenticated/meus-cursos'
     | '/_authenticated/onboarding'
@@ -317,10 +401,17 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AiaRoute: typeof AiaRoute
   AuthRoute: typeof AuthRoute
+  ContatoRoute: typeof ContatoRoute
+  FaqRoute: typeof FaqRoute
   IaRoute: typeof IaRoute
+  LgpdRoute: typeof LgpdRoute
   PlataformaRoute: typeof PlataformaRoute
+  PrivacidadeRoute: typeof PrivacidadeRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  TermosRoute: typeof TermosRoute
+  TrabalheConoscoRoute: typeof TrabalheConoscoRoute
   CursosSlugRoute: typeof CursosSlugRoute
   ParaColaboradorRoute: typeof ParaColaboradorRoute
   ParaEmpresaRoute: typeof ParaEmpresaRoute
@@ -347,11 +438,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/aia': {
+      id: '/aia'
+      path: '/aia'
+      fullPath: '/aia'
+      preLoaderRoute: typeof AiaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contato': {
+      id: '/contato'
+      path: '/contato'
+      fullPath: '/contato'
+      preLoaderRoute: typeof ContatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ia': {
@@ -361,6 +473,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lgpd': {
+      id: '/lgpd'
+      path: '/lgpd'
+      fullPath: '/lgpd'
+      preLoaderRoute: typeof LgpdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/plataforma': {
       id: '/plataforma'
       path: '/plataforma'
@@ -368,11 +487,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlataformaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacidade': {
+      id: '/privacidade'
+      path: '/privacidade'
+      fullPath: '/privacidade'
+      preLoaderRoute: typeof PrivacidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termos': {
+      id: '/termos'
+      path: '/termos'
+      fullPath: '/termos'
+      preLoaderRoute: typeof TermosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trabalhe-conosco': {
+      id: '/trabalhe-conosco'
+      path: '/trabalhe-conosco'
+      fullPath: '/trabalhe-conosco'
+      preLoaderRoute: typeof TrabalheConoscoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/certificados': {
@@ -536,10 +676,17 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AiaRoute: AiaRoute,
   AuthRoute: AuthRoute,
+  ContatoRoute: ContatoRoute,
+  FaqRoute: FaqRoute,
   IaRoute: IaRoute,
+  LgpdRoute: LgpdRoute,
   PlataformaRoute: PlataformaRoute,
+  PrivacidadeRoute: PrivacidadeRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  TermosRoute: TermosRoute,
+  TrabalheConoscoRoute: TrabalheConoscoRoute,
   CursosSlugRoute: CursosSlugRoute,
   ParaColaboradorRoute: ParaColaboradorRoute,
   ParaEmpresaRoute: ParaEmpresaRoute,

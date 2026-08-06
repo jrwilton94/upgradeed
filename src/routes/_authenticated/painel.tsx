@@ -17,7 +17,7 @@ function PainelPage() {
   if (isLoading) {
     return <p className="p-10 text-muted-foreground">Carregando…</p>;
   }
-  if (!profile) return <Navigate to="/auth" />;
+  if (!profile) return <Navigate to="/auth" search={{ mode: "login" }} />;
   if (!profile.role) return <Navigate to="/onboarding" />;
 
   return (

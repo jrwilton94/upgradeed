@@ -84,7 +84,7 @@ function CourseDetail() {
     const { data: auth } = await supabase.auth.getUser();
     if (!auth.user) {
       toast.info("Entre na sua conta para continuar o curso.");
-      navigate({ to: "/auth" });
+      navigate({ to: "/auth", search: { mode: "login" } });
       return null;
     }
     return auth.user.id;
