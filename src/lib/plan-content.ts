@@ -18,6 +18,11 @@ export function formatBRL(cents: number) {
   return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100);
 }
 
+export type LandingPricing =
+  | { kind: "plans" }
+  | { kind: "fixed"; name: string; price: string; period: string; note?: string }
+  | { kind: "form"; variant: "indicate" | "quote"; title: string; description: string };
+
 export type LandingContent = {
   role: ProfileRole;
   path: string;
@@ -25,9 +30,11 @@ export type LandingContent = {
   title: string;
   subtitle: string;
   highlights: { title: string; text: string }[];
-  steps: { title: string; text: string }[];
+  steps?: { title: string; text: string }[];
+  pricing: LandingPricing;
   faq: { q: string; a: string }[];
   ctaLabel: string;
+  secondaryCtaLabel?: string;
 };
 
 export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
@@ -35,68 +42,159 @@ export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
     role: "estudante",
     path: "/para/estudante",
     eyebrow: "Para estudantes",
-    title: "Aprendizado que vira oportunidade real",
+    title: "Desenvolva competências e conquiste oportunidades",
     subtitle:
-      "Estude cursos curtos, gere certificados com carga horária e construa um perfil de competências verificadas que pode ser sugerido para vagas — só se você quiser.",
+      "Na Upgrade, cada curso gera mais do que um certificado. As competências desenvolvidas alimentam seu perfil e transformam sua trajetória de aprendizagem em inteligência sobre o seu potencial profissional.",
     highlights: [
-      { title: "Certificados válidos", text: "Carga horária automática para horas complementares." },
-      { title: "Perfil de competências", text: "Cada curso concluído gera skills verificadas." },
-      { title: "Matching opcional", text: "Você decide se quer receber sugestões de vagas." },
+      {
+        title: "Aprendizado que gera valor",
+        text: "Aprenda conteúdos que podem ser aplicados na sua formação e carreira.",
+      },
+      {
+        title: "Competências que ganham reconhecimento",
+        text: "Transforme seus aprendizados em competências que podem ser identificadas e valorizadas.",
+      },
+      {
+        title: "Uma trajetória que acompanha você",
+        text: "Certificados, experiências e competências reunidos para mostrar sua evolução.",
+      },
+      {
+        title: "Oportunidades no momento certo",
+        text: "Receba sugestões de vagas compatíveis com sua trajetória e escolha quais oportunidades fazem sentido para você.",
+      },
     ],
-    steps: [
-      { title: "Crie sua conta", text: "Cadastre-se gratuitamente com e-mail ou Google." },
-      { title: "Escolha o perfil Estudante", text: "No onboarding, informe sua instituição se houver convênio." },
-      { title: "Ative seu plano", text: "Se sua instituição é parceira, o acesso é liberado sem custo. Caso contrário, assine o Estudante Plus no painel." },
-    ],
+    pricing: {
+      kind: "fixed",
+      name: "Plano estudantil",
+      price: "R$ 14,90",
+      period: "/mês",
+      note: "Acesso completo aos cursos, certificados com carga horária e perfil de competências.",
+    },
     faq: [
-      { q: "Minha instituição precisa ser parceira?", a: "Não. Sem convênio você pode assinar o plano Estudante Plus individualmente." },
-      { q: "Meus dados vão para empresas?", a: "Somente se você ativar o matching e aceitar compartilhar o perfil em uma vaga específica." },
+      {
+        q: "O que está incluído no plano estudantil?",
+        a: "Acesso a todos os cursos publicados, certificados com carga horária e o perfil de competências alimentado automaticamente pelas trilhas concluídas.",
+      },
+      {
+        q: "Preciso estar matriculado em uma instituição?",
+        a: "Não. Qualquer estudante pode assinar. Se a sua instituição for parceira, o acesso pode ser liberado pela licença institucional.",
+      },
+      {
+        q: "Os certificados valem como horas complementares?",
+        a: "Sim. Cada certificado registra a carga horária do curso e pode ser apresentado à sua instituição.",
+      },
+      {
+        q: "Meus dados vão para empresas?",
+        a: "Somente se você ativar o matching e aceitar compartilhar o seu perfil em uma oportunidade específica.",
+      },
+      {
+        q: "Posso cancelar quando quiser?",
+        a: "Sim. O cancelamento é feito no painel e o acesso continua até o fim do período já pago.",
+      },
     ],
     ctaLabel: "Começar como estudante",
   },
   geral: {
     role: "geral",
     path: "/para/usuario-geral",
-    eyebrow: "Para você",
-    title: "Requalificação profissional sem vínculo institucional",
+    eyebrow: "Para profissionais",
+    title: "Sua carreira não precisa parar de evoluir.",
     subtitle:
-      "Mesma jornada do estudante, sem depender de faculdade ou empresa. Assine, estude no seu ritmo e apareça para quem contrata.",
+      "A Upgrade conecta aprendizado, desenvolvimento e oportunidades para quem quer continuar crescendo profissionalmente, com autonomia para aprender no próprio ritmo.",
     highlights: [
-      { title: "Catálogo completo", text: "Acesso a todas as trilhas e cursos publicados." },
-      { title: "Assinatura flexível", text: "Mensal ou anual, cancele quando quiser." },
-      { title: "Empregabilidade", text: "Matching por competências verificadas, não por currículo." },
+      {
+        title: "Aprenda no seu ritmo",
+        text: "Tenha acesso a cursos e trilhas para continuar desenvolvendo seus conhecimentos e competências.",
+      },
+      {
+        title: "Continue evoluindo",
+        text: "Transforme cada novo aprendizado em parte da sua trajetória de desenvolvimento profissional.",
+      },
+      {
+        title: "Dê visibilidade ao que você sabe",
+        text: "Reúna suas experiências e competências para apresentar melhor seu potencial profissional.",
+      },
+      {
+        title: "Encontre novas possibilidades",
+        text: "Quando houver compatibilidade, receba sugestões de oportunidades e escolha quais fazem sentido para você.",
+      },
     ],
-    steps: [
-      { title: "Crie sua conta", text: "Cadastro em menos de um minuto." },
-      { title: "Escolha o perfil Usuário Geral", text: "Sem código de empresa ou instituição." },
-      { title: "Assine o plano", text: "Pagamento por Pix, boleto ou cartão direto no painel." },
-    ],
+    pricing: {
+      kind: "fixed",
+      name: "Plano profissional",
+      price: "R$ 29,90",
+      period: "/mês",
+      note: "Catálogo completo, certificados verificados e matching opcional de oportunidades.",
+    },
     faq: [
-      { q: "Posso cancelar?", a: "Sim, a qualquer momento. O acesso segue até o fim do período pago." },
-      { q: "Tem período de teste?", a: "Sim, os primeiros 7 dias são liberados como trial." },
+      {
+        q: "Preciso ter vínculo com faculdade ou empresa?",
+        a: "Não. O plano profissional é individual e independe de qualquer vínculo institucional.",
+      },
+      {
+        q: "O que recebo com a assinatura?",
+        a: "Acesso a todos os cursos e trilhas, certificados verificados e um perfil de competências sempre atualizado.",
+      },
+      {
+        q: "Como funcionam as sugestões de oportunidades?",
+        a: "A plataforma compara suas competências com as necessidades das vagas publicadas e sugere apenas o que for compatível. Você decide se quer avançar.",
+      },
+      {
+        q: "Posso cancelar quando quiser?",
+        a: "Sim, a qualquer momento pelo painel, mantendo o acesso até o fim do período pago.",
+      },
     ],
-    ctaLabel: "Assinar plano individual",
+    ctaLabel: "Assinar plano profissional",
   },
   colaborador: {
     role: "colaborador",
     path: "/para/colaborador",
     eyebrow: "Para colaboradores",
-    title: "Cresça dentro da empresa onde você já está",
+    title: "Cresça na sua empresa. Desenvolva seu próximo passo.",
     subtitle:
-      "Trilhas de desenvolvimento definidas junto com o RH, foco em mobilidade interna e zero exposição do seu perfil para o mercado externo.",
+      "Na Upgrade, seu desenvolvimento acompanha seus objetivos profissionais. A partir do cargo que você ocupa e da posição que deseja alcançar, você recebe trilhas direcionadas às competências necessárias para dar o próximo passo.",
     highlights: [
-      { title: "Licença da empresa", text: "Sem custo para você: a empresa contrata as licenças." },
-      { title: "Plano de desenvolvimento", text: "Trilhas alinhadas ao seu cargo e ao próximo passo." },
-      { title: "Privacidade", text: "Colaboradores não participam do matching externo." },
+      {
+        title: "Desenvolvimento direcionado",
+        text: "Aprenda de acordo com as competências que sua função e seus próximos desafios exigem.",
+      },
+      {
+        title: "Evolução profissional",
+        text: "Transforme aprendizado em novas capacidades para avançar na carreira.",
+      },
+      {
+        title: "Mobilidade interna",
+        text: "Esteja preparado para novas funções e oportunidades dentro da empresa.",
+      },
+      {
+        title: "Reconhecimento do seu potencial",
+        text: "Torne sua evolução mais visível e mostre que está preparado para novos desafios.",
+      },
     ],
-    steps: [
-      { title: "Peça o código ao RH", text: "Cada empresa parceira tem um código de vínculo." },
-      { title: "Crie sua conta", text: "Escolha o perfil Colaborador no onboarding." },
-      { title: "Informe o código", text: "Seu acesso é liberado imediatamente pela licença da empresa." },
-    ],
+    pricing: {
+      kind: "form",
+      variant: "indicate",
+      title: "Indique sua empresa",
+      description:
+        "O acesso do colaborador é liberado pela licença da empresa. Indique sua empresa e nosso time entra em contato com o RH.",
+    },
     faq: [
-      { q: "Minha empresa vê meu progresso?", a: "Sim, de forma agregada e ligada ao plano de desenvolvimento — nunca dados sensíveis." },
-      { q: "Recebo vagas externas?", a: "Não. O perfil colaborador não entra no matching de vagas externas." },
+      {
+        q: "Eu pago alguma coisa?",
+        a: "Não. O acesso do colaborador é contratado pela empresa por meio de licenças.",
+      },
+      {
+        q: "Minha empresa ainda não usa a Upgrade. O que faço?",
+        a: "Preencha o formulário de indicação nesta página. Nosso time entra em contato com a área responsável.",
+      },
+      {
+        q: "Minha empresa vê tudo o que eu faço?",
+        a: "A empresa acompanha o progresso ligado ao plano de desenvolvimento, de forma agregada e sem dados sensíveis.",
+      },
+      {
+        q: "Recebo vagas de outras empresas?",
+        a: "Não. O perfil colaborador não participa do matching externo.",
+      },
     ],
     ctaLabel: "Entrar com código da empresa",
   },
@@ -112,6 +210,7 @@ export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
       { title: "Painel de audiência", text: "Alunos alcançados, minutos assistidos, avaliação e conclusão." },
       { title: "Repasse transparente", text: "60% da receita atribuída aos seus cursos." },
     ],
+    pricing: { kind: "plans" },
     steps: [
       { title: "Cadastre-se", text: "Crie a conta e escolha o perfil Professor." },
       { title: "Passe pela curadoria", text: "A gestão da Upgrade valida seu cadastro e área de atuação." },
@@ -135,6 +234,7 @@ export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
       { title: "Horas complementares", text: "Certificados com carga horária lançados automaticamente." },
       { title: "Privacidade por padrão", text: "A IES enxerga indicadores agregados, nunca dados individuais." },
     ],
+    pricing: { kind: "plans" },
     steps: [
       { title: "Fale com a gestão", text: "Escolha o plano e solicite o contrato institucional." },
       { title: "Cadastro da IES", text: "A gestão da Upgrade cadastra a instituição e cria o código de vínculo." },
@@ -150,23 +250,61 @@ export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
     role: "empresa",
     path: "/para/empresa",
     eyebrow: "Para empresas",
-    title: "Contrate por competências verificadas",
+    title: "Desenvolva pessoas. Encontre talentos. Cresça melhor.",
     subtitle:
-      "Publique vagas, receba candidatos compatíveis que autorizaram o compartilhamento do perfil e desenvolva seus colaboradores na mesma plataforma.",
+      "Na Upgrade, sua empresa conecta desenvolvimento, competências e oportunidades. Desenvolva seus colaboradores de acordo com as necessidades do negócio, reduza gaps de competências e encontre profissionais mais alinhados às suas oportunidades.",
     highlights: [
-      { title: "Matching explicável", text: "Cada score mostra as competências que geraram a compatibilidade." },
-      { title: "Desenvolvimento interno", text: "Licenças de colaborador incluídas para mobilidade interna." },
-      { title: "Consentimento explícito", text: "Você só vê o perfil de quem aceitou compartilhar." },
+      {
+        title: "Contratação mais assertiva",
+        text: "Encontre profissionais a partir das competências desenvolvidas e da compatibilidade com as necessidades da vaga.",
+      },
+      {
+        title: "Desenvolvimento sob medida",
+        text: "Crie trilhas de desenvolvimento alinhadas aos cargos, às necessidades do negócio e aos próximos passos dos colaboradores.",
+      },
+      {
+        title: "Mais retenção e mobilidade",
+        text: "Desenvolva seus talentos internamente e crie caminhos de crescimento que ajudam a reduzir turnover.",
+      },
+      {
+        title: "Inteligência sobre competências",
+        text: "Entenda quais competências sua empresa já possui e onde estão os principais gaps de desenvolvimento.",
+      },
     ],
-    steps: [
-      { title: "Escolha o plano", text: "Starter ou Scale, conforme o número de colaboradores." },
-      { title: "Cadastro da empresa", text: "Crie a conta empresa ou solicite o cadastro à gestão da Upgrade." },
-      { title: "Publique vagas", text: "Receba candidatos compatíveis e distribua licenças ao time." },
-    ],
+    pricing: {
+      kind: "form",
+      variant: "quote",
+      title: "Peça um orçamento",
+      description:
+        "Cada empresa tem uma necessidade diferente. Conte um pouco sobre o seu time e montamos uma proposta sob medida.",
+    },
     faq: [
-      { q: "Como é cobrado?", a: "Mensal ou anual por faixa de colaboradores, com nota fiscal emitida pela Upgrade." },
-      { q: "A IA descarta candidatos?", a: "Nunca. A IA é assistiva: ela ordena sugestões e explica o motivo, a decisão é humana." },
+      {
+        q: "Como a Upgrade ajuda minha empresa?",
+        a: "A Upgrade conecta desenvolvimento de pessoas, competências e oportunidades para apoiar decisões de contratação, desenvolvimento e mobilidade interna.",
+      },
+      {
+        q: "A Upgrade substitui o processo de seleção da empresa?",
+        a: "Não. A Upgrade identifica e sugere profissionais com maior compatibilidade, mas a decisão de avançar, entrevistar e contratar permanece sempre com a empresa.",
+      },
+      {
+        q: "Como funciona o matching de profissionais?",
+        a: "A empresa informa as competências necessárias para uma oportunidade e a plataforma identifica profissionais com maior compatibilidade, considerando as competências desenvolvidas e as informações que eles autorizaram compartilhar.",
+      },
+      {
+        q: "Posso usar a Upgrade para desenvolver meus colaboradores?",
+        a: "Sim. A empresa pode direcionar trilhas de desenvolvimento de acordo com o cargo atual e com as posições que o colaborador deseja alcançar.",
+      },
+      {
+        q: "A Upgrade ajuda a reduzir turnover?",
+        a: "A plataforma pode apoiar estratégias de desenvolvimento e mobilidade interna, ajudando a criar caminhos de crescimento para os colaboradores e a aproveitar melhor os talentos que a empresa já possui.",
+      },
+      {
+        q: "A empresa pode procurar profissionais diretamente?",
+        a: "Sim. A proposta da Upgrade pode permitir que empresas encontrem profissionais e especialistas de acordo com suas necessidades, incluindo possibilidades como contratação, palestras e outras demandas profissionais.",
+      },
     ],
-    ctaLabel: "Contratar plano empresarial",
+    ctaLabel: "Quero conhecer a Upgrade",
+    secondaryCtaLabel: "Indicar minha empresa",
   },
 };
