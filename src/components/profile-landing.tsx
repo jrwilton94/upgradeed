@@ -273,6 +273,68 @@ export function ProfileLanding({ content }: { content: LandingContent }) {
           </section>
         )}
 
+        {content.opportunities && (
+          <section className="mx-auto w-full max-w-4xl px-5 py-16">
+            <h2 className="font-display text-3xl font-extrabold text-foreground">
+              {content.opportunities.title}
+            </h2>
+            <p className="mt-4 text-lg text-muted-foreground">{content.opportunities.text}</p>
+          </section>
+        )}
+
+        {content.revenue && (
+          <section className="border-t border-border bg-secondary/30">
+            <div className="mx-auto w-full max-w-4xl px-5 py-16">
+              <h2 className="font-display text-3xl font-extrabold text-foreground">
+                {content.revenue.title}
+              </h2>
+              <p className="mt-3 text-muted-foreground">{content.revenue.description}</p>
+              <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-card">
+                <table className="w-full text-left text-sm">
+                  <thead className="bg-secondary/60">
+                    <tr>
+                      <th className="px-5 py-3 font-semibold text-foreground">O que conta</th>
+                      <th className="px-5 py-3 font-semibold text-foreground">Como funciona</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {content.revenue.rows.map((row) => (
+                      <tr key={row.label} className="border-t border-border">
+                        <td className="px-5 py-3 font-medium text-foreground">{row.label}</td>
+                        <td className="px-5 py-3 text-muted-foreground">{row.detail}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {content.revenue.note && (
+                <p className="mt-3 text-xs text-muted-foreground">{content.revenue.note}</p>
+              )}
+              {content.revenue.ctaLabel && (
+                <Button asChild variant="outline" className="mt-6">
+                  <Link to="/contato">
+                    {content.revenue.ctaLabel} <ArrowRight className="size-4" />
+                  </Link>
+                </Button>
+              )}
+            </div>
+          </section>
+        )}
+
+        {content.contactForm && (
+          <section className="mx-auto w-full max-w-4xl px-5 py-16">
+            <h2 className="font-display text-3xl font-extrabold text-foreground">
+              {content.contactForm.title}
+            </h2>
+            <p className="mt-2 text-muted-foreground">{content.contactForm.description}</p>
+            <div className="mt-8">
+              <LeadForm variant="info" />
+            </div>
+          </section>
+        )}
+
+
+
         <section className="border-t border-border bg-secondary/30">
           <div className="mx-auto w-full max-w-4xl px-5 py-16">
             <h2 className="font-display text-3xl font-extrabold text-foreground">Perguntas frequentes</h2>
