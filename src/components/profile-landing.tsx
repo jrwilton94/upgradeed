@@ -117,7 +117,13 @@ function PricingSection({ pricing, role }: { pricing: LandingPricing; role: Land
               <LeadForm variant={pricing.variant} />
             </div>
           </>
+        ) : pricing.kind === "statement" ? (
+          <div className="max-w-3xl">
+            <h2 className="font-display text-3xl font-extrabold text-foreground">{pricing.title}</h2>
+            <p className="mt-4 text-lg text-muted-foreground">{pricing.description}</p>
+          </div>
         ) : (
+
           <>
             <h2 className="font-display text-3xl font-extrabold text-foreground">Planos e valores</h2>
             {pricing.kind === "fixed" ? (
