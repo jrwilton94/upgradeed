@@ -41,26 +41,27 @@ export const Route = createFileRoute("/")({
 
 const PILLARS = [
   {
-    icon: BadgeCheck,
-    label: "Competências Verificadas",
-    text: "Uma base confiável para acompanhar a evolução de pessoas e organizações.",
-  },
-  {
-    icon: Zap,
-    label: "Conexões Inteligentes",
-    text: "Aproximamos talentos, especialistas, instituições de ensino e empresas.",
-  },
-  {
-    icon: Layers,
-    label: "Desenvolvimento Contínuo",
-    text: "Cada interação fortalece competências e amplia novas possibilidades.",
+    icon: TrendingDown,
+    label: "Para empresas",
+    text: "Reduza o turnover com treinamento continuado e contratação assertiva.",
   },
   {
     icon: UserCheck,
-    label: "Decisões Estratégicas",
-    text: "Transformamos dados em inteligência para apoiar pessoas, empresas e instituições.",
+    label: "Para usuários",
+    text: "Treinamento focado nos seus objetivos profissionais.",
+  },
+  {
+    icon: BadgeCheck,
+    label: "Para instituições",
+    text: "Tenha dados de mercado focados ao desenvolvimento estudantil.",
+  },
+  {
+    icon: Zap,
+    label: "Para professores",
+    text: "Compartilhe conhecimento, ganhe recompensas.",
   },
 ];
+
 
 const ECOSYSTEM = [
   {
