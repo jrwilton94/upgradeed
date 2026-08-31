@@ -229,11 +229,11 @@ export function ProfileLanding({ content }: { content: LandingContent }) {
 
         <PricingSection pricing={content.pricing} role={content.role} />
 
-        {content.steps && content.steps.length > 0 && (
+        {(content.steps?.length ?? 0) > 0 && (
           <section className="mx-auto w-full max-w-6xl px-5 py-16">
             <h2 className="font-display text-3xl font-extrabold text-foreground">Como contratar</h2>
             <ol className="mt-8 grid gap-5 md:grid-cols-3">
-              {content.steps.map((step, index) => (
+              {(content.steps ?? []).map((step, index) => (
                 <li key={step.title} className="rounded-2xl border border-border bg-card p-6 shadow-soft">
                   <span className="inline-flex size-8 items-center justify-center rounded-full bg-brand-soft font-display font-bold text-brand">
                     {index + 1}
