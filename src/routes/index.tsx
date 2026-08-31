@@ -114,18 +114,27 @@ function Index() {
                 <Link to="/plataforma">Conheça a Plataforma</Link>
               </Button>
             </div>
-            <ul className="mt-16 grid grid-cols-2 gap-6 border-t border-border pt-8 sm:grid-cols-4">
-              {PILLARS.map((pillar) => (
-                <li key={pillar.label} className="flex items-start gap-3">
-                  <pillar.icon className="mt-0.5 size-5 shrink-0 text-brand" />
-                  <span className="font-display text-base font-bold text-foreground">
-                    {pillar.label}
-                  </span>
-                </li>
-              ))}
-            </ul>
           </div>
         </section>
+
+        <section className="mx-auto w-full max-w-6xl px-5 py-20">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {PILLARS.map((pillar) => (
+              <div
+                key={pillar.label}
+                className="rounded-2xl border border-border bg-card p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
+              >
+                <pillar.icon className="size-5 text-brand" />
+                <h2 className="mt-3 font-display text-lg font-bold text-foreground">
+                  {pillar.label}
+                </h2>
+                <p className="mt-2 text-sm text-muted-foreground">{pillar.text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+
 
         <section className="mx-auto w-full max-w-6xl px-5 py-20">
           <h2 className="text-3xl font-extrabold text-foreground sm:text-4xl">
