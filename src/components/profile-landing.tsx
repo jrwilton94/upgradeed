@@ -12,8 +12,45 @@ import { usePlans } from "@/hooks/use-plans";
 import { formatBRL, type LandingContent, type LandingPricing } from "@/lib/plan-content";
 import { profileByRole } from "@/lib/profiles";
 
-function LeadForm({ variant }: { variant: "indicate" | "quote" }) {
+type LeadVariant = "indicate" | "quote" | "join" | "info";
+
+const LEAD_COPY: Record<
+  LeadVariant,
+  { org: string; contact: string; message: string; placeholder: string; submit: string }
+> = {
+  indicate: {
+    org: "Empresa",
+    contact: "Contato do RH (opcional)",
+    message: "Por que a Upgrade faria sentido aí?",
+    placeholder: "Área, número aproximado de colaboradores, desafios de desenvolvimento…",
+    submit: "Indicar minha empresa",
+  },
+  quote: {
+    org: "Empresa",
+    contact: "Telefone",
+    message: "Conte sobre sua necessidade",
+    placeholder: "Número de colaboradores, objetivos de contratação e desenvolvimento…",
+    submit: "Pedir orçamento",
+  },
+  join: {
+    org: "Área de atuação",
+    contact: "Telefone",
+    message: "Conte sobre sua experiência e os conteúdos que deseja publicar",
+    placeholder: "Formação, experiência, temas dos cursos, aulas ou palestras…",
+    submit: "Quero me juntar",
+  },
+  info: {
+    org: "Instituição",
+    contact: "Telefone",
+    message: "Conte sobre sua instituição",
+    placeholder: "Número de alunos, cursos ofertados e objetivos da parceria…",
+    submit: "Solicitar informações",
+  },
+};
+
+function LeadForm({ variant }: { variant: LeadVariant }) {
   const [sent, setSent] = useState(false);
+  const copy = LEAD_COPY[variant];
 
   if (sent) {
     return (
@@ -44,43 +81,27 @@ function LeadForm({ variant }: { variant: "indicate" | "quote" }) {
         <Input id="lead-email" name="email" type="email" required placeholder="voce@email.com" />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="lead-company">Empresa</Label>
-        <Input id="lead-company" name="company" required placeholder="Nome da empresa" />
+        <Label htmlFor="lead-company">{copy.org}</Label>
+        <Input id="lead-company" name="company" required placeholder={copy.org} />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="lead-contact">
-          {variant === "indicate" ? "Contato do RH (opcional)" : "Telefone"}
-        </Label>
-        <Input
-          id="lead-contact"
-          name="contact"
-          placeholder={variant === "indicate" ? "e-mail ou telefone do RH" : "(00) 00000-0000"}
-        />
+        <Label htmlFor="lead-contact">{copy.contact}</Label>
+        <Input id="lead-contact" name="contact" placeholder="(00) 00000-0000" />
       </div>
       <div className="grid gap-2 sm:col-span-2">
-        <Label htmlFor="lead-message">
-          {variant === "indicate" ? "Por que a Upgrade faria sentido aí?" : "Conte sobre sua necessidade"}
-        </Label>
-        <Textarea
-          id="lead-message"
-          name="message"
-          rows={4}
-          placeholder={
-            variant === "indicate"
-              ? "Área, número aproximado de colaboradores, desafios de desenvolvimento…"
-              : "Número de colaboradores, objetivos de contratação e desenvolvimento…"
-          }
-        />
+        <Label htmlFor="lead-message">{copy.message}</Label>
+        <Textarea id="lead-message" name="message" rows={4} placeholder={copy.placeholder} />
       </div>
       <div className="sm:col-span-2">
         <Button type="submit" size="lg">
-          {variant === "indicate" ? "Indicar minha empresa" : "Pedir orçamento"}
+          {copy.submit}
           <ArrowRight className="size-4" />
         </Button>
       </div>
     </form>
   );
 }
+
 
 function PricingSection({ pricing, role }: { pricing: LandingPricing; role: LandingContent["role"] }) {
   const { data: plans, isLoading } = usePlans(role);
