@@ -18,7 +18,7 @@ const LINKS = [
 
 const FOR_YOU = [
   { to: "/para/estudante", label: "Estudante" },
-  { to: "/para/usuario-geral", label: "Usuário geral" },
+  { to: "/para/usuario-geral", label: "Profissional" },
   { to: "/para/colaborador", label: "Colaborador" },
 ] as const;
 
