@@ -202,50 +202,136 @@ export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
     role: "professor",
     path: "/para/professor",
     eyebrow: "Para professores",
-    title: "Publique cursos e seja remunerado por audiência",
+    title: "Transforme seu conhecimento em oportunidades",
     subtitle:
-      "Sem mensalidade. Você publica trilhas curtas seguindo o roteiro pedagógico da Upgrade e recebe repasse conforme minutos assistidos e conclusões.",
+      "Na Upgrade, você compartilha conhecimento, alcança novos públicos e transforma sua experiência em cursos, conteúdos e novas possibilidades de atuação profissional.",
     highlights: [
-      { title: "Sem mensalidade", text: "Você não paga para publicar: ganha por performance." },
-      { title: "Painel de audiência", text: "Alunos alcançados, minutos assistidos, avaliação e conclusão." },
-      { title: "Repasse transparente", text: "60% da receita atribuída aos seus cursos." },
+      {
+        title: "Compartilhe seu conhecimento",
+        text: "Transforme sua experiência em cursos e conteúdos que ajudam pessoas a desenvolver novas competências.",
+      },
+      {
+        title: "Alcance novos públicos",
+        text: "Leve seu conteúdo para uma audiência interessada em aprender, se desenvolver e avançar profissionalmente.",
+      },
+      {
+        title: "Acompanhe seu desempenho",
+        text: "Tenha visibilidade sobre o alcance, consumo e conclusão dos seus conteúdos.",
+      },
+      {
+        title: "Gere novas receitas",
+        text: "Receba remuneração de acordo com o desempenho e a receita gerada pelos seus conteúdos.",
+      },
     ],
-    pricing: { kind: "plans" },
-    steps: [
-      { title: "Cadastre-se", text: "Crie a conta e escolha o perfil Professor." },
-      { title: "Passe pela curadoria", text: "A gestão da Upgrade valida seu cadastro e área de atuação." },
-      { title: "Publique e receba", text: "Siga o roteiro (aula de ~60min, jogo de fixação e avaliação) e acompanhe o repasse mensal." },
-    ],
+    pricing: {
+      kind: "form",
+      variant: "join",
+      title: "Junte-se a nós",
+      description:
+        "Conte um pouco sobre a sua área de atuação e experiência. Nosso time entra em contato para apresentar os próximos passos.",
+    },
+    opportunities: {
+      title: "Amplie suas oportunidades",
+      text: "Divulgue seus cursos, aulas particulares, palestras e outros serviços para uma audiência interessada no seu conhecimento.",
+    },
+    revenue: {
+      title: "Conheça nosso modelo de remuneração",
+      description:
+        "A remuneração acompanha o desempenho dos seus conteúdos na plataforma. Veja como funciona em linhas gerais:",
+      rows: [
+        { label: "Audiência", detail: "Quanto mais pessoas assistem e concluem seus conteúdos, maior o seu repasse." },
+        { label: "Receita atribuída", detail: "Parte da receita da plataforma é distribuída conforme o consumo de cada conteúdo." },
+        { label: "Qualidade", detail: "Avaliações e taxa de conclusão influenciam positivamente o resultado." },
+        { label: "Serviços extras", detail: "Aulas particulares, palestras e mentorias divulgadas na Upgrade são negociadas diretamente com você." },
+      ],
+      note: "Os detalhes completos são apresentados no contrato de parceria.",
+      ctaLabel: "Saiba mais",
+    },
     faq: [
-      { q: "Como recebo?", a: "Repasse mensal calculado sobre a receita atribuída aos seus cursos e registrado no seu painel." },
-      { q: "Preciso de estúdio?", a: "Não. Enviamos o roteiro e o padrão mínimo de qualidade de áudio e vídeo." },
+      {
+        q: "Preciso pagar para publicar meus conteúdos?",
+        a: "Não. A publicação não tem mensalidade: sua remuneração acompanha o desempenho dos conteúdos.",
+      },
+      {
+        q: "Como funciona a remuneração?",
+        a: "O repasse é calculado a partir da audiência, do consumo e da receita atribuída aos seus conteúdos, com acompanhamento pelo painel.",
+      },
+      {
+        q: "Como faço para me tornar professor parceiro?",
+        a: "Preencha o formulário desta página. Nosso time avalia sua área de atuação e apresenta os próximos passos.",
+      },
+      {
+        q: "Preciso de estúdio ou equipamento profissional?",
+        a: "Não. Enviamos o roteiro pedagógico e o padrão mínimo de qualidade de áudio e vídeo.",
+      },
+      {
+        q: "Posso divulgar outros serviços além dos cursos?",
+        a: "Sim. Você pode divulgar aulas particulares, palestras e outros serviços para uma audiência interessada no seu conhecimento.",
+      },
     ],
-    ctaLabel: "Quero publicar cursos",
+    ctaLabel: "Quero ser professor parceiro",
   },
   ies: {
     role: "ies",
     path: "/para/ies",
     eyebrow: "Para instituições de ensino",
-    title: "Empregabilidade mensurável para sua IES",
+    title: "Transforme a trajetória dos alunos em inteligência para sua IES",
     subtitle:
-      "Horas complementares automáticas, indicadores agregados de competências e relatórios prontos para avaliação regulatória — sem acessar dados individuais dos alunos.",
+      "Na Upgrade, sua instituição acompanha o desenvolvimento de competências ao longo da jornada acadêmica e transforma esses dados em indicadores de empregabilidade, desenvolvimento e conexão com o mercado.",
     highlights: [
-      { title: "Relatórios regulatórios", text: "Dados consolidados para processos de avaliação." },
-      { title: "Horas complementares", text: "Certificados com carga horária lançados automaticamente." },
-      { title: "Privacidade por padrão", text: "A IES enxerga indicadores agregados, nunca dados individuais." },
+      {
+        title: "Acompanhe o desenvolvimento",
+        text: "Entenda quais competências estão sendo desenvolvidas pelos alunos ao longo da jornada acadêmica.",
+      },
+      {
+        title: "Gere inteligência acadêmica",
+        text: "Transforme dados agregados de aprendizagem e competências em indicadores para apoiar decisões da instituição.",
+      },
+      {
+        title: "Fortaleça a empregabilidade",
+        text: "Aproxime a formação acadêmica das competências valorizadas pelo mercado e amplie as possibilidades profissionais dos alunos.",
+      },
+      {
+        title: "Comprove resultados",
+        text: "Tenha indicadores e relatórios que ajudam sua IES a demonstrar resultados de desenvolvimento e empregabilidade.",
+      },
     ],
-    pricing: { kind: "plans" },
-    steps: [
-      { title: "Fale com a gestão", text: "Escolha o plano e solicite o contrato institucional." },
-      { title: "Cadastro da IES", text: "A gestão da Upgrade cadastra a instituição e cria o código de vínculo." },
-      { title: "Convide os alunos", text: "Os alunos entram com o código e o acesso é liberado pela licença institucional." },
-    ],
+    pricing: {
+      kind: "statement",
+      title: "Seja parceira da Upgrade e transforme a jornada dos seus alunos",
+      description:
+        "Ao oferecer a Upgrade aos seus alunos, sua IES amplia as oportunidades de desenvolvimento e empregabilidade e passa a contar com inteligência sobre competências, indicadores e evolução acadêmica, sem custo adicional para a instituição.",
+    },
+    contactForm: {
+      title: "Solicite mais informações",
+      description:
+        "Preencha o formulário e nosso time institucional entra em contato para apresentar a parceria.",
+    },
     faq: [
-      { q: "Como é a cobrança?", a: "Contrato mensal ou anual por instituição, com faturamento centralizado." },
-      { q: "A IES vê notas individuais?", a: "Não. O painel institucional apresenta apenas indicadores agregados." },
+      {
+        q: "A IES paga para oferecer a Upgrade aos alunos?",
+        a: "Não há custo adicional para a instituição parceira. Os detalhes da parceria são apresentados no contato com nosso time.",
+      },
+      {
+        q: "Quais dados a instituição visualiza?",
+        a: "Apenas indicadores agregados de desenvolvimento, competências e empregabilidade. Dados individuais dos alunos não são expostos.",
+      },
+      {
+        q: "Como os dados ajudam nas decisões acadêmicas?",
+        a: "Os indicadores mostram quais competências estão sendo desenvolvidas e como se relacionam às exigências do mercado, apoiando ajustes de currículo e ações de empregabilidade.",
+      },
+      {
+        q: "Os certificados contam como horas complementares?",
+        a: "Sim. Cada certificado registra a carga horária concluída e pode ser aproveitado conforme as regras da instituição.",
+      },
+      {
+        q: "Como iniciamos a parceria?",
+        a: "Preencha o formulário desta página. Nosso time apresenta o modelo de parceria e organiza a liberação de acesso aos alunos.",
+      },
     ],
-    ctaLabel: "Falar com a gestão",
+    ctaLabel: "Falar com nosso time",
   },
+
   empresa: {
     role: "empresa",
     path: "/para/empresa",
