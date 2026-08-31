@@ -45,7 +45,7 @@ export const PROFILES: ProfileDefinition[] = [
   },
   {
     role: "geral",
-    label: "Usuário Geral",
+    label: "Profissional",
     icon: UserRound,
     tagline: "Mesma jornada do estudante, sem vínculo institucional.",
     emoji: "👤",
