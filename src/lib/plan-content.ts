@@ -21,7 +21,13 @@ export function formatBRL(cents: number) {
 export type LandingPricing =
   | { kind: "plans" }
   | { kind: "fixed"; name: string; price: string; period: string; note?: string }
-  | { kind: "form"; variant: "indicate" | "quote"; title: string; description: string };
+  | { kind: "statement"; title: string; description: string }
+  | {
+      kind: "form";
+      variant: "indicate" | "quote" | "join";
+      title: string;
+      description: string;
+    };
 
 export type LandingContent = {
   role: ProfileRole;
@@ -31,11 +37,21 @@ export type LandingContent = {
   subtitle: string;
   highlights: { title: string; text: string }[];
   steps?: { title: string; text: string }[];
+  opportunities?: { title: string; text: string };
+  revenue?: {
+    title: string;
+    description: string;
+    rows: { label: string; detail: string }[];
+    note?: string;
+    ctaLabel?: string;
+  };
+  contactForm?: { title: string; description: string };
   pricing: LandingPricing;
   faq: { q: string; a: string }[];
   ctaLabel: string;
   secondaryCtaLabel?: string;
 };
+
 
 export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
   estudante: {
