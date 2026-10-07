@@ -34,6 +34,7 @@ import { Route as ParaEmpresaRouteImport } from './routes/para.empresa'
 import { Route as ParaEstudanteRouteImport } from './routes/para.estudante'
 import { Route as ParaIesRouteImport } from './routes/para.ies'
 import { Route as ParaProfessorRouteImport } from './routes/para.professor'
+import { Route as ParaProfissionalRouteImport } from './routes/para.profissional'
 import { Route as ParaUsuarioGeralRouteImport } from './routes/para.usuario-geral'
 import { Route as AuthenticatedGestaoIndexRouteImport } from './routes/_authenticated/gestao.index'
 import { Route as AuthenticatedGestaoCadastrosRouteImport } from './routes/_authenticated/gestao.cadastros'
@@ -167,6 +168,11 @@ const ParaProfessorRoute = ParaProfessorRouteImport.update({
   path: '/para/professor',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ParaProfissionalRoute = ParaProfissionalRouteImport.update({
+  id: '/para/profissional',
+  path: '/para/profissional',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ParaUsuarioGeralRoute = ParaUsuarioGeralRouteImport.update({
   id: '/para/usuario-geral',
   path: '/para/usuario-geral',
@@ -224,6 +230,7 @@ export interface FileRoutesByFullPath {
   '/para/estudante': typeof ParaEstudanteRoute
   '/para/ies': typeof ParaIesRoute
   '/para/professor': typeof ParaProfessorRoute
+  '/para/profissional': typeof ParaProfissionalRoute
   '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos/': typeof CursosIndexRoute
   '/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
@@ -256,6 +263,7 @@ export interface FileRoutesByTo {
   '/para/estudante': typeof ParaEstudanteRoute
   '/para/ies': typeof ParaIesRoute
   '/para/professor': typeof ParaProfessorRoute
+  '/para/profissional': typeof ParaProfissionalRoute
   '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos': typeof CursosIndexRoute
   '/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
@@ -290,6 +298,7 @@ export interface FileRoutesById {
   '/para/estudante': typeof ParaEstudanteRoute
   '/para/ies': typeof ParaIesRoute
   '/para/professor': typeof ParaProfessorRoute
+  '/para/profissional': typeof ParaProfissionalRoute
   '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos/': typeof CursosIndexRoute
   '/_authenticated/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
@@ -324,6 +333,7 @@ export interface FileRouteTypes {
     | '/para/estudante'
     | '/para/ies'
     | '/para/professor'
+    | '/para/profissional'
     | '/para/usuario-geral'
     | '/cursos/'
     | '/gestao/cadastros'
@@ -356,6 +366,7 @@ export interface FileRouteTypes {
     | '/para/estudante'
     | '/para/ies'
     | '/para/professor'
+    | '/para/profissional'
     | '/para/usuario-geral'
     | '/cursos'
     | '/gestao/cadastros'
@@ -389,6 +400,7 @@ export interface FileRouteTypes {
     | '/para/estudante'
     | '/para/ies'
     | '/para/professor'
+    | '/para/profissional'
     | '/para/usuario-geral'
     | '/cursos/'
     | '/_authenticated/gestao/cadastros'
@@ -418,6 +430,7 @@ export interface RootRouteChildren {
   ParaEstudanteRoute: typeof ParaEstudanteRoute
   ParaIesRoute: typeof ParaIesRoute
   ParaProfessorRoute: typeof ParaProfessorRoute
+  ParaProfissionalRoute: typeof ParaProfissionalRoute
   ParaUsuarioGeralRoute: typeof ParaUsuarioGeralRoute
   CursosIndexRoute: typeof CursosIndexRoute
 }
@@ -599,6 +612,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ParaProfessorRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/para/profissional': {
+      id: '/para/profissional'
+      path: '/para/profissional'
+      fullPath: '/para/profissional'
+      preLoaderRoute: typeof ParaProfissionalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/para/usuario-geral': {
       id: '/para/usuario-geral'
       path: '/para/usuario-geral'
@@ -693,6 +713,7 @@ const rootRouteChildren: RootRouteChildren = {
   ParaEstudanteRoute: ParaEstudanteRoute,
   ParaIesRoute: ParaIesRoute,
   ParaProfessorRoute: ParaProfessorRoute,
+  ParaProfissionalRoute: ParaProfissionalRoute,
   ParaUsuarioGeralRoute: ParaUsuarioGeralRoute,
   CursosIndexRoute: CursosIndexRoute,
 }
