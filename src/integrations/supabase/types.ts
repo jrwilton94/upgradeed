@@ -764,6 +764,48 @@ export type Database = {
           },
         ]
       }
+      test_profile_access: {
+        Row: {
+          company_id: string | null
+          created_at: string
+          institution_id: string | null
+          role: Database["public"]["Enums"]["profile_role"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string
+          institution_id?: string | null
+          role: Database["public"]["Enums"]["profile_role"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string
+          institution_id?: string | null
+          role?: Database["public"]["Enums"]["profile_role"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_profile_access_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "test_profile_access_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -797,9 +839,22 @@ export type Database = {
         }
         Returns: boolean
       }
+      institution_indicators: {
+        Args: { _institution_id: string }
+        Returns: {
+          completion: number
+          enrollments: number
+          hours: number
+          students: number
+        }[]
+      }
       is_admin: { Args: never; Returns: boolean }
       owns_company: { Args: { _company_id: string }; Returns: boolean }
       owns_job: { Args: { _job_id: string }; Returns: boolean }
+      switch_test_profile: {
+        Args: { _role: Database["public"]["Enums"]["profile_role"] }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "staff"
