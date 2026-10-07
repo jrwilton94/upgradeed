@@ -1,4 +1,5 @@
 import type { ProfileRole } from "@/lib/profiles";
+import { PROFILE_FAQ } from "@/lib/profile-faq";
 
 export type PlanRow = {
   id: string;
@@ -84,35 +85,14 @@ export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
       name: "Plano estudantil",
       price: "R$ 14,90",
       period: "/mês",
-      note: "Acesso completo aos cursos, certificados com carga horária e perfil de competências.",
+      note: "Exige matrícula regular em instituição de ensino. Cursos, certificados com carga horária e perfil de competências.",
     },
-    faq: [
-      {
-        q: "O que está incluído no plano estudantil?",
-        a: "Acesso a todos os cursos publicados, certificados com carga horária e o perfil de competências alimentado automaticamente pelas trilhas concluídas.",
-      },
-      {
-        q: "Preciso estar matriculado em uma instituição?",
-        a: "Não. Qualquer estudante pode assinar. Se a sua instituição for parceira, o acesso pode ser liberado pela licença institucional.",
-      },
-      {
-        q: "Os certificados valem como horas complementares?",
-        a: "Sim. Cada certificado registra a carga horária do curso e pode ser apresentado à sua instituição.",
-      },
-      {
-        q: "Meus dados vão para empresas?",
-        a: "Somente se você ativar o matching e aceitar compartilhar o seu perfil em uma oportunidade específica.",
-      },
-      {
-        q: "Posso cancelar quando quiser?",
-        a: "Sim. O cancelamento é feito no painel e o acesso continua até o fim do período já pago.",
-      },
-    ],
+    faq: PROFILE_FAQ.estudante,
     ctaLabel: "Começar como estudante",
   },
   geral: {
     role: "geral",
-    path: "/para/usuario-geral",
+    path: "/para/profissional",
     eyebrow: "Para profissionais",
     title: "Sua carreira não precisa parar de evoluir.",
     subtitle:
@@ -142,24 +122,7 @@ export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
       period: "/mês",
       note: "Catálogo completo, certificados verificados e matching opcional de oportunidades.",
     },
-    faq: [
-      {
-        q: "Preciso ter vínculo com faculdade ou empresa?",
-        a: "Não. O plano profissional é individual e independe de qualquer vínculo institucional.",
-      },
-      {
-        q: "O que recebo com a assinatura?",
-        a: "Acesso a todos os cursos e trilhas, certificados verificados e um perfil de competências sempre atualizado.",
-      },
-      {
-        q: "Como funcionam as sugestões de oportunidades?",
-        a: "A plataforma compara suas competências com as necessidades das vagas publicadas e sugere apenas o que for compatível. Você decide se quer avançar.",
-      },
-      {
-        q: "Posso cancelar quando quiser?",
-        a: "Sim, a qualquer momento pelo painel, mantendo o acesso até o fim do período pago.",
-      },
-    ],
+    faq: PROFILE_FAQ.geral,
     ctaLabel: "Assinar plano profissional",
   },
   colaborador: {
@@ -194,24 +157,7 @@ export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
       description:
         "O acesso do colaborador é liberado pela licença da empresa. Indique sua empresa e nosso time entra em contato com o RH.",
     },
-    faq: [
-      {
-        q: "Eu pago alguma coisa?",
-        a: "Não. O acesso do colaborador é contratado pela empresa por meio de licenças.",
-      },
-      {
-        q: "Minha empresa ainda não usa a Upgrade. O que faço?",
-        a: "Preencha o formulário de indicação nesta página. Nosso time entra em contato com a área responsável.",
-      },
-      {
-        q: "Minha empresa vê tudo o que eu faço?",
-        a: "A empresa acompanha o progresso ligado ao plano de desenvolvimento, de forma agregada e sem dados sensíveis.",
-      },
-      {
-        q: "Recebo vagas de outras empresas?",
-        a: "Não. O perfil colaborador não participa do matching externo.",
-      },
-    ],
+    faq: PROFILE_FAQ.colaborador,
     ctaLabel: "Entrar com código da empresa",
   },
   professor: {
@@ -236,7 +182,7 @@ export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
       },
       {
         title: "Gere novas receitas",
-        text: "Receba remuneração de acordo com o desempenho e a receita gerada pelos seus conteúdos.",
+        text: "Participe do fundo de professores, formado por 25% da receita mensal, conforme seu score.",
       },
     ],
     pricing: {
@@ -255,36 +201,16 @@ export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
       description:
         "A remuneração acompanha o desempenho dos seus conteúdos na plataforma. Veja como funciona em linhas gerais:",
       rows: [
-        { label: "Audiência", detail: "Quanto mais pessoas assistem e concluem seus conteúdos, maior o seu repasse." },
-        { label: "Receita atribuída", detail: "Parte da receita da plataforma é distribuída conforme o consumo de cada conteúdo." },
-        { label: "Qualidade", detail: "Avaliações e taxa de conclusão influenciam positivamente o resultado." },
-        { label: "Serviços extras", detail: "Aulas particulares, palestras e mentorias divulgadas na Upgrade são negociadas diretamente com você." },
+        { label: "Fundo de professores", detail: "25% da receita mensal da plataforma, separado do fundo das IES." },
+        { label: "Audiência", detail: "Participação dos minutos assistidos: 50% do score no MVP, 55% na tração e 60% na escala." },
+        { label: "Produção", detail: "Participação dos minutos de conteúdo aprovado: 40% no MVP, 25% na tração e 20% na escala." },
+        { label: "Conclusão", detail: "Taxa média de conclusão: 10% no MVP e 20% na tração e escala." },
+        { label: "Remuneração", detail: "Seu score multiplicado pelo fundo mensal dos professores. Score e fundo são acompanhados semanalmente." },
       ],
-      note: "Os detalhes completos são apresentados no contrato de parceria.",
+      note: "Audiência conta a partir de 20 segundos, limitada à duração do vídeo por pessoa/dia. Conteúdos sem visualização no mês não diluem o fundo.",
       ctaLabel: "Saiba mais",
     },
-    faq: [
-      {
-        q: "Preciso pagar para publicar meus conteúdos?",
-        a: "Não. A publicação não tem mensalidade: sua remuneração acompanha o desempenho dos conteúdos.",
-      },
-      {
-        q: "Como funciona a remuneração?",
-        a: "O repasse é calculado a partir da audiência, do consumo e da receita atribuída aos seus conteúdos, com acompanhamento pelo painel.",
-      },
-      {
-        q: "Como faço para me tornar professor parceiro?",
-        a: "Preencha o formulário desta página. Nosso time avalia sua área de atuação e apresenta os próximos passos.",
-      },
-      {
-        q: "Preciso de estúdio ou equipamento profissional?",
-        a: "Não. Enviamos o roteiro pedagógico e o padrão mínimo de qualidade de áudio e vídeo.",
-      },
-      {
-        q: "Posso divulgar outros serviços além dos cursos?",
-        a: "Sim. Você pode divulgar aulas particulares, palestras e outros serviços para uma audiência interessada no seu conhecimento.",
-      },
-    ],
+    faq: PROFILE_FAQ.professor,
     ctaLabel: "Quero ser professor parceiro",
   },
   ies: {
@@ -308,8 +234,8 @@ export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
         text: "Aproxime a formação acadêmica das competências valorizadas pelo mercado e amplie as possibilidades profissionais dos alunos.",
       },
       {
-        title: "Comprove resultados",
-        text: "Tenha indicadores e relatórios que ajudam sua IES a demonstrar resultados de desenvolvimento e empregabilidade.",
+        title: "Publique e seja remunerada",
+        text: "Publique aulas sem oferecer diploma e participe do fundo exclusivo das IES: 10% da receita mensal, distribuído por score entre instituições com conteúdo ativo.",
       },
     ],
     pricing: {
@@ -323,28 +249,7 @@ export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
       description:
         "Preencha o formulário e nosso time institucional entra em contato para apresentar a parceria.",
     },
-    faq: [
-      {
-        q: "A IES paga para oferecer a Upgrade aos alunos?",
-        a: "Não há custo adicional para a instituição parceira. Os detalhes da parceria são apresentados no contato com nosso time.",
-      },
-      {
-        q: "Quais dados a instituição visualiza?",
-        a: "Apenas indicadores agregados de desenvolvimento, competências e empregabilidade. Dados individuais dos alunos não são expostos.",
-      },
-      {
-        q: "Como os dados ajudam nas decisões acadêmicas?",
-        a: "Os indicadores mostram quais competências estão sendo desenvolvidas e como se relacionam às exigências do mercado, apoiando ajustes de currículo e ações de empregabilidade.",
-      },
-      {
-        q: "Os certificados contam como horas complementares?",
-        a: "Sim. Cada certificado registra a carga horária concluída e pode ser aproveitado conforme as regras da instituição.",
-      },
-      {
-        q: "Como iniciamos a parceria?",
-        a: "Preencha o formulário desta página. Nosso time apresenta o modelo de parceria e organiza a liberação de acesso aos alunos.",
-      },
-    ],
+    faq: PROFILE_FAQ.ies,
     ctaLabel: "Falar com nosso time",
   },
 
@@ -380,32 +285,7 @@ export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
       description:
         "Cada empresa tem uma necessidade diferente. Conte um pouco sobre o seu time e montamos uma proposta sob medida.",
     },
-    faq: [
-      {
-        q: "Como a Upgrade ajuda minha empresa?",
-        a: "A Upgrade conecta desenvolvimento de pessoas, competências e oportunidades para apoiar decisões de contratação, desenvolvimento e mobilidade interna.",
-      },
-      {
-        q: "A Upgrade substitui o processo de seleção da empresa?",
-        a: "Não. A Upgrade identifica e sugere profissionais com maior compatibilidade, mas a decisão de avançar, entrevistar e contratar permanece sempre com a empresa.",
-      },
-      {
-        q: "Como funciona o matching de profissionais?",
-        a: "A empresa informa as competências necessárias para uma oportunidade e a plataforma identifica profissionais com maior compatibilidade, considerando as competências desenvolvidas e as informações que eles autorizaram compartilhar.",
-      },
-      {
-        q: "Posso usar a Upgrade para desenvolver meus colaboradores?",
-        a: "Sim. A empresa pode direcionar trilhas de desenvolvimento de acordo com o cargo atual e com as posições que o colaborador deseja alcançar.",
-      },
-      {
-        q: "A Upgrade ajuda a reduzir turnover?",
-        a: "A plataforma pode apoiar estratégias de desenvolvimento e mobilidade interna, ajudando a criar caminhos de crescimento para os colaboradores e a aproveitar melhor os talentos que a empresa já possui.",
-      },
-      {
-        q: "A empresa pode procurar profissionais diretamente?",
-        a: "Sim. A proposta da Upgrade pode permitir que empresas encontrem profissionais e especialistas de acordo com suas necessidades, incluindo possibilidades como contratação, palestras e outras demandas profissionais.",
-      },
-    ],
+    faq: PROFILE_FAQ.empresa,
     ctaLabel: "Quero conhecer a Upgrade",
     secondaryCtaLabel: "Indicar minha empresa",
   },

@@ -6,7 +6,6 @@ import {
   ShieldCheck,
   Sparkles,
   TrendingDown,
-  UserCheck,
   Zap,
 } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
@@ -21,7 +20,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "A maior base viva de competências da América Latina, conectando quem aprende, quem ensina e quem contrata.",
+          "Educação complementar no Brasil, competências adquiridas e oportunidades de trabalho compatíveis com cada trajetória.",
       },
       {
         property: "og:title",
@@ -38,30 +37,6 @@ export const Route = createFileRoute("/")({
   }),
   component: Index,
 });
-
-const PILLARS = [
-  {
-    icon: TrendingDown,
-    label: "Para empresas",
-    text: "Reduza o turnover com treinamento continuado e contratação assertiva.",
-  },
-  {
-    icon: UserCheck,
-    label: "Para usuários",
-    text: "Treinamento focado nos seus objetivos profissionais.",
-  },
-  {
-    icon: BadgeCheck,
-    label: "Para instituições",
-    text: "Tenha dados de mercado focados ao desenvolvimento estudantil.",
-  },
-  {
-    icon: Zap,
-    label: "Para professores",
-    text: "Compartilhe conhecimento, ganhe recompensas.",
-  },
-];
-
 
 const ECOSYSTEM = [
   {
@@ -102,8 +77,8 @@ function Index() {
               <span className="bg-brand-gradient bg-clip-text text-transparent">oportunidades.</span>
             </h1>
             <p className="animate-rise mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Criamos a maior base viva de competências da América Latina, conectando quem aprende,
-              quem ensina e quem contrata.
+              Ampliamos o acesso à educação complementar no Brasil, conectando aprendizagem,
+              competências e oportunidades de trabalho.
             </p>
             <div className="animate-rise mt-9 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg" className="h-12 px-7 text-base">
@@ -118,24 +93,16 @@ function Index() {
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-6xl px-5 py-20">
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {PILLARS.map((pillar) => (
-              <div
-                key={pillar.label}
-                className="rounded-2xl border border-border bg-card p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
-              >
-                <pillar.icon className="size-5 text-brand" />
-                <h2 className="mt-3 font-display text-lg font-bold text-foreground">
-                  {pillar.label}
-                </h2>
-                <p className="mt-2 text-sm text-muted-foreground">{pillar.text}</p>
-              </div>
-            ))}
+        <section className="border-b border-border">
+          <div className="mx-auto w-full max-w-6xl px-5 py-16">
+            <h2 className="text-3xl font-extrabold text-foreground">Nossa missão</h2>
+            <p className="mt-5 max-w-4xl text-lg leading-relaxed text-muted-foreground">
+              Transformar e ampliar o acesso à educação complementar no Brasil, monitorando a
+              trajetória dos usuários, as competências adquiridas e a propensão a uma melhor
+              aderência às vagas oferecidas pelo mercado.
+            </p>
           </div>
         </section>
-
-
 
         <section className="mx-auto w-full max-w-6xl px-5 py-20">
           <h2 className="text-3xl font-extrabold text-foreground sm:text-4xl">
