@@ -8,7 +8,7 @@ export const Route = createFileRoute("/trabalhe-conosco")({
       {
         name: "description",
         content:
-          "Faça parte do time que está construindo a maior base viva de competências da América Latina.",
+          "Faça parte do time que amplia o acesso à educação complementar no Brasil.",
       },
       { property: "og:title", content: "Trabalhe conosco — Upgrade Educação" },
       { property: "og:description", content: "Vagas, cultura e como se candidatar na Upgrade." },
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/trabalhe-conosco")({
     <ContentPage
       eyebrow="Carreiras"
       title="Trabalhe conosco"
-      intro="Estamos construindo a maior base viva de competências da América Latina — e queremos gente que acredita em tecnologia responsável."
+      intro="Ampliamos o acesso à educação complementar no Brasil — e queremos gente que acredita em aprendizado e tecnologia responsável."
       sections={[
         {
           heading: "Como trabalhamos",

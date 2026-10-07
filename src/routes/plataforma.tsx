@@ -60,12 +60,12 @@ const PILLARS = [
 ];
 
 const ECOSYSTEM_ROLES: Record<string, string> = {
-  estudante: "Construa competências e conquiste oportunidades.",
-  geral: "Aprenda continuamente e evolua profissionalmente.",
-  colaborador: "Desenvolva seu potencial e cresça na empresa.",
-  professor: "Compartilhe conhecimento e transforme carreiras.",
-  ies: "Transforme formação em inteligência.",
-  empresa: "Contrate melhor. Desenvolva pessoas. Reduza o turnover.",
+  estudante: "Vínculo estudantil válido, cursos, horas complementares, orientação de carreira e matching opcional.",
+  geral: "Plano individual, cursos e trilhas por objetivo, avaliações de competências e matching opcional.",
+  colaborador: "Academia corporativa, capacitação e mobilidade interna, sem matching externo.",
+  professor: "Publica cursos e acompanha audiência, minutos assistidos, conclusão, score e fundo de 25%. Não gerencia usuários.",
+  ies: "Publica conteúdo e recebe pelo fundo separado de 10%. Acessa apenas relatórios agregados, nunca dados individuais.",
+  empresa: "Cadastra colaboradores, capacita equipes e publica vagas internas ou abertas. Recebe candidatos externos somente após candidatura.",
 };
 
 const AI_USES = [
@@ -97,9 +97,11 @@ function PlataformaPage() {
               Conectando competências e oportunidades.
             </h1>
             <p className="mt-5 max-w-2xl text-muted-foreground">
-              A Upgrade é um ecossistema de Skills Intelligence onde competências se transformam em
-              inteligência compartilhada. Cada interação fortalece uma base viva de inteligência que
-              impulsiona o desenvolvimento de pessoas, instituições e organizações.
+              A Upgrade Educação é um hub de Skills Intelligence que amplia o acesso à educação
+              complementar no Brasil. Acompanhamos a trajetória do Ensino Médio à Graduação,
+              conectando competências adquiridas, orientação de carreira e oportunidades de trabalho.
+              Cursos livres e certificados apoiam a formação; indicadores agregados ajudam as
+              instituições a agir sobre a evasão e a transição para o mercado.
             </p>
             <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {PILLARS.map((pillar) => (

@@ -20,7 +20,7 @@ export type ProfileDefinition = {
   summary: string;
   path:
     | "/para/estudante"
-    | "/para/usuario-geral"
+    | "/para/profissional"
     | "/para/colaborador"
     | "/para/professor"
     | "/para/ies"
@@ -50,7 +50,7 @@ export const PROFILES: ProfileDefinition[] = [
     tagline: "Continue evoluindo profissionalmente, no seu ritmo.",
     emoji: "👤",
     summary: "Aprenda continuamente e evolua profissionalmente.",
-    path: "/para/usuario-geral",
+    path: "/para/profissional",
     bullets: [
       "Aprende no próprio ritmo",
       "Plano individual",

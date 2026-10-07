@@ -1,8 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { ProfileLanding } from "@/components/profile-landing";
-import { LANDING_CONTENT } from "@/lib/plan-content";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/para/usuario-geral")({
+  beforeLoad: () => { throw redirect({ to: "/para/profissional", statusCode: 301 }); },
   head: () => ({
     meta: [
       { title: "Para profissionais — Upgrade Educação" },
@@ -13,5 +12,4 @@ export const Route = createFileRoute("/para/usuario-geral")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: () => <ProfileLanding content={LANDING_CONTENT.geral} />,
 });
