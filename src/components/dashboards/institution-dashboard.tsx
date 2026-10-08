@@ -10,25 +10,16 @@ export function InstitutionDashboard({ profile }: { profile: Tables<"profiles"> 
     queryKey: ["institution", profile.institution_id],
     enabled: Boolean(profile.institution_id),
     queryFn: async () => {
-      const [institutionRes, studentsRes] = await Promise.all([
-        supabase.from("institutions").select("*").eq("id", profile.institution_id!).maybeSingle(),
-        supabase.from("profiles").select("id, full_name, xp, level").eq("institution_id", profile.institution_id!),
+      if (!profile.institution_id) return null;
+      const [institutionRes, indicatorsRes] = await Promise.all([
+        supabase.from("institutions").select("name").eq("id", profile.institution_id).maybeSingle(),
+        supabase.rpc("institution_indicators", { _institution_id: profile.institution_id }),
       ]);
-      const students = studentsRes.data ?? [];
-      const ids = students.map((s) => s.id);
-      const [enrollmentsRes, certificatesRes] = await Promise.all([
-        ids.length
-          ? supabase.from("enrollments").select("progress, user_id").in("user_id", ids)
-          : Promise.resolve({ data: [] as { progress: number; user_id: string }[] }),
-        ids.length
-          ? supabase.from("certificates").select("hours, user_id").in("user_id", ids)
-          : Promise.resolve({ data: [] as { hours: number; user_id: string }[] }),
-      ]);
+      if (institutionRes.error) throw institutionRes.error;
+      if (indicatorsRes.error) throw indicatorsRes.error;
       return {
         institution: institutionRes.data,
-        students,
-        enrollments: enrollmentsRes.data ?? [],
-        certificates: certificatesRes.data ?? [],
+        indicators: indicatorsRes.data?.[0],
       };
     },
   });
@@ -36,18 +27,14 @@ export function InstitutionDashboard({ profile }: { profile: Tables<"profiles"> 
   if (!profile.institution_id) {
     return (
       <p className="text-muted-foreground">
-        Nenhuma instituição vinculada ao seu perfil. Refaça o onboarding para cadastrar.
+        Nenhuma instituição vinculada ao seu perfil. Solicite o vínculo à gestão da Upgrade.
       </p>
     );
   }
   if (isLoading || !data) return <p className="text-muted-foreground">Carregando indicadores…</p>;
 
-  const completion = data.enrollments.length
-    ? Math.round(
-        (data.enrollments.filter((e) => e.progress >= 100).length / data.enrollments.length) * 100,
-      )
-    : 0;
-  const hours = data.certificates.reduce((sum, c) => sum + c.hours, 0);
+  const completion = Number(data.indicators?.completion ?? 0);
+  const hours = Number(data.indicators?.hours ?? 0);
 
   return (
     <div className="space-y-6">
@@ -61,8 +48,8 @@ export function InstitutionDashboard({ profile }: { profile: Tables<"profiles"> 
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Estudantes vinculados" value={data.students.length} icon={GraduationCap} />
-        <StatCard label="Matrículas em cursos" value={data.enrollments.length} icon={Layers} />
+        <StatCard label="Estudantes vinculados" value={data.indicators?.students ?? 0} icon={GraduationCap} />
+        <StatCard label="Matrículas em cursos" value={data.indicators?.enrollments ?? 0} icon={Layers} />
         <StatCard label="Horas complementares" value={`${hours}h`} icon={Award} />
         <StatCard label="Taxa de conclusão" value={`${completion}%`} icon={TrendingUp} />
       </div>
@@ -71,25 +58,6 @@ export function InstitutionDashboard({ profile }: { profile: Tables<"profiles"> 
         <Progress value={completion} />
       </SectionCard>
 
-      <SectionCard
-        title="Estudantes"
-        description="Dados agregados de progresso. Nenhum dado sensível é processado."
-      >
-        {data.students.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Nenhum estudante vinculado ainda.</p>
-        ) : (
-          <ul className="divide-y divide-border">
-            {data.students.map((student) => (
-              <li key={student.id} className="flex items-center justify-between py-3 text-sm">
-                <span className="text-foreground">{student.full_name}</span>
-                <span className="text-muted-foreground">
-                  Nível {student.level} · {student.xp} XP
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </SectionCard>
     </div>
   );
 }

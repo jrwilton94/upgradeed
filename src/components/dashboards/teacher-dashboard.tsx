@@ -13,7 +13,7 @@ export function TeacherDashboard({ profile }: { profile: Tables<"profiles"> }) {
       const { data: courses, error } = await supabase
         .from("courses")
         .select("*")
-        .eq("instructor_name", profile.full_name);
+        .eq("instructor_id", profile.id);
       if (error) throw error;
       return courses ?? [];
     },
@@ -36,7 +36,7 @@ export function TeacherDashboard({ profile }: { profile: Tables<"profiles"> }) {
       <div>
         <h1 className="font-display text-3xl font-extrabold text-foreground">Painel do professor</h1>
         <p className="mt-1 text-muted-foreground">
-          Módulos de até 60 minutos, com jogo de fixação e avaliação final de 10 questões.
+          Módulos de pelo menos uma hora, com jogo de fixação e avaliação final.
         </p>
       </div>
 
@@ -58,7 +58,7 @@ export function TeacherDashboard({ profile }: { profile: Tables<"profiles"> }) {
       >
         {courses.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            Nenhum módulo vinculado ao seu nome ainda. Fale com a curadoria da Upgrade para publicar.
+            Nenhum módulo publicado ainda.
           </p>
         ) : (
           <ul className="space-y-3">
@@ -90,7 +90,7 @@ export function TeacherDashboard({ profile }: { profile: Tables<"profiles"> }) {
           <li>1. Abertura com o problema real que a competência resolve.</li>
           <li>2. Explicação em blocos curtos, com exemplos aplicados.</li>
           <li>3. Jogo de fixação ao final de cada bloco.</li>
-          <li>4. Avaliação final com 10 questões para liberar o certificado.</li>
+          <li>4. Avaliação final para liberar o certificado.</li>
           <li>5. Indicação das competências geradas no perfil do aluno.</li>
         </ol>
       </SectionCard>
