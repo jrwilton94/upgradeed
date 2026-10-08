@@ -3,4 +3,6 @@
 - [x] Aplicar FAQs dos anexos nas seis páginas e na página FAQ.
 - [x] Alinhar descrições e permissões dos perfis aos documentos; corrigir a privacidade institucional e identificar limitações do MVP.
 - [x] Preparar uma conta com acesso autorizado aos seis perfis de teste e verificar o acesso.
-- [ ] Verificar páginas, funcionalidades alteradas e atualização obrigatória de pacotes.
+- [x] Verificar páginas, troca dos seis perfis, exportação institucional e atualização obrigatória de pacotes.
+
+Limitações identificadas do MVP: apuração e pagamento de repasses ainda não ativos; academia corporativa e gestão completa de colaboradores ainda não implementadas; exportação institucional é agregada, não um documento oficial do MEC.
