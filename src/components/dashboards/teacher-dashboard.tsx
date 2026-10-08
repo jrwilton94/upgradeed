@@ -94,6 +94,11 @@ export function TeacherDashboard({ profile }: { profile: Tables<"profiles"> }) {
           <li>5. Indicação das competências geradas no perfil do aluno.</li>
         </ol>
       </SectionCard>
+
+      <SectionCard title="Remuneração">
+        <p className="text-sm text-muted-foreground">Fundo de professores: 25% da receita mensal, separado do fundo das IES. No MVP, o score considera audiência (50%), produção (40%) e conclusão (10%).</p>
+        <p className="mt-3 text-sm text-muted-foreground">Ainda não há demonstrativo de repasse disponível. O cálculo e a liquidação financeira não estão ativos neste MVP.</p>
+      </SectionCard>
     </div>
   );
 }
