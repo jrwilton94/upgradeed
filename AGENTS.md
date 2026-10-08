@@ -13,3 +13,4 @@
 - Use /para/profissional as the canonical professional URL and permanently redirect the former URL to preserve published links.
 - Test profile switching must be authorized through a server-managed access table and authenticated database function, never through email checks or client storage.
 - Institution reporting must return aggregate values from an authorized database function, never individual student rows to the browser.
+- Refresh user-scoped queries after authorized test-profile switches so every view reflects the selected profile.

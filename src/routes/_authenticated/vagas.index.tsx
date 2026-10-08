@@ -7,6 +7,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/use-profile";
 
 export const Route = createFileRoute("/_authenticated/vagas/")({
+  head: () => ({ meta: [
+    { title: "Vagas — Upgrade Educação" },
+    { name: "description", content: "Consulte oportunidades e vagas na Upgrade Educação." },
+    { property: "og:title", content: "Vagas — Upgrade Educação" },
+    { property: "og:description", content: "Oportunidades conectadas a competências." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: JobsPage,
 });
 

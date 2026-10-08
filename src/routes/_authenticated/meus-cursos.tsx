@@ -6,6 +6,14 @@ import { useProfile } from "@/hooks/use-profile";
 import { useLearnerData } from "@/hooks/use-learner-data";
 
 export const Route = createFileRoute("/_authenticated/meus-cursos")({
+  head: () => ({ meta: [
+    { title: "Meus cursos — Upgrade Educação" },
+    { name: "description", content: "Continue os cursos da sua jornada de aprendizagem." },
+    { property: "og:title", content: "Meus cursos — Upgrade Educação" },
+    { property: "og:description", content: "Sua evolução nos cursos Upgrade." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: MyCoursesPage,
 });
 

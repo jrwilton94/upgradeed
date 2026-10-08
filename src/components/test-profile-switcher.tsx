@@ -30,7 +30,7 @@ export function TestProfileSwitcher({ role }: { role?: ProfileRole | null }) {
       await queryClient.cancelQueries();
       const { error } = await supabase.rpc("switch_test_profile", { _role: next.role });
       if (error) throw error;
-      queryClient.clear();
+      await queryClient.invalidateQueries();
       await router.invalidate();
       await navigate({ to: "/painel" });
       toast.success(`Perfil ${next.label} ativado`);

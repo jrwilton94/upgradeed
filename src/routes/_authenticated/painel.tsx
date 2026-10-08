@@ -8,6 +8,14 @@ import { CompanyDashboard } from "@/components/dashboards/company-dashboard";
 import { useProfile } from "@/hooks/use-profile";
 
 export const Route = createFileRoute("/_authenticated/painel")({
+  head: () => ({ meta: [
+    { title: "Meu painel — Upgrade Educação" },
+    { name: "description", content: "Acompanhe sua jornada na Upgrade Educação." },
+    { property: "og:title", content: "Meu painel — Upgrade Educação" },
+    { property: "og:description", content: "Aprendizagem, competências e oportunidades." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: PainelPage,
 });
 
