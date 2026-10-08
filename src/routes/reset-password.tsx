@@ -14,6 +14,8 @@ export const Route = createFileRoute("/reset-password")({
       { name: "description", content: "Escolha uma nova senha para a sua conta Upgrade Educação." },
       { property: "og:title", content: "Definir nova senha — Upgrade Educação" },
       { property: "og:description", content: "Recuperação segura de acesso à sua conta." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: ResetPasswordPage,

@@ -14,6 +14,8 @@ export const Route = createFileRoute("/cursos/$slug")({
   head: () => ({
     meta: [
       { title: "Curso — Upgrade Educação" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         name: "description",
         content:

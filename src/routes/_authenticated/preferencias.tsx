@@ -12,6 +12,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/use-profile";
 
 export const Route = createFileRoute("/_authenticated/preferencias")({
+  head: () => ({ meta: [
+    { title: "Preferências de vagas — Upgrade Educação" },
+    { name: "description", content: "Defina suas preferências e consentimento para oportunidades." },
+    { property: "og:title", content: "Preferências de vagas — Upgrade Educação" },
+    { property: "og:description", content: "Sua carreira, suas escolhas." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: PreferencesPage,
 });
 

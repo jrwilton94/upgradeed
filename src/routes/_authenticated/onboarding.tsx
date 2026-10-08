@@ -10,6 +10,14 @@ import { PROFILES, type ProfileRole } from "@/lib/profiles";
 import { useProfile } from "@/hooks/use-profile";
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
+  head: () => ({ meta: [
+    { title: "Escolha seu perfil — Upgrade Educação" },
+    { name: "description", content: "Configure seu perfil na Upgrade Educação." },
+    { property: "og:title", content: "Escolha seu perfil — Upgrade Educação" },
+    { property: "og:description", content: "Comece sua jornada na Upgrade." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: OnboardingPage,
 });
 

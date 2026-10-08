@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { profileByRole, type ProfileRole } from "@/lib/profiles";
 import { useIsAdmin } from "@/hooks/use-plans";
+import { TestProfileSwitcher } from "@/components/test-profile-switcher";
 
 type NavItem = { to: LinkProps["to"]; label: string; icon: LucideIcon };
 
@@ -98,6 +99,8 @@ export function AppShell({
           </div>
         </div>
       </header>
+
+      <TestProfileSwitcher role={role} />
 
       <div className="mx-auto flex w-full max-w-7xl gap-8 px-5 py-8">
         <aside className="hidden w-56 shrink-0 lg:block">

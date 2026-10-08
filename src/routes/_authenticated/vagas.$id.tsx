@@ -11,6 +11,14 @@ import { useLearnerData } from "@/hooks/use-learner-data";
 import { computeMatch } from "@/lib/matching";
 
 export const Route = createFileRoute("/_authenticated/vagas/$id")({
+  head: () => ({ meta: [
+    { title: "Detalhes da vaga — Upgrade Educação" },
+    { name: "description", content: "Conheça requisitos e compatibilidade com uma oportunidade." },
+    { property: "og:title", content: "Detalhes da vaga — Upgrade Educação" },
+    { property: "og:description", content: "Candidatura com consentimento e decisão humana." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: JobDetailPage,
 });
 

@@ -25,6 +25,8 @@ export const Route = createFileRoute("/auth")({
       },
       { property: "og:title", content: "Entrar — Upgrade Educação" },
       { property: "og:description", content: "Login, cadastro e recuperação de senha." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: AuthPage,

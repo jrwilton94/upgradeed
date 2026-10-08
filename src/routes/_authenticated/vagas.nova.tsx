@@ -10,6 +10,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/use-profile";
 
 export const Route = createFileRoute("/_authenticated/vagas/nova")({
+  head: () => ({ meta: [
+    { title: "Publicar vaga — Upgrade Educação" },
+    { name: "description", content: "Cadastre uma oportunidade para sua empresa." },
+    { property: "og:title", content: "Publicar vaga — Upgrade Educação" },
+    { property: "og:description", content: "Conecte sua empresa a competências." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: NewJobPage,
 });
 

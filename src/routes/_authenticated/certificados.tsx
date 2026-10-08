@@ -5,6 +5,14 @@ import { useProfile } from "@/hooks/use-profile";
 import { useLearnerData } from "@/hooks/use-learner-data";
 
 export const Route = createFileRoute("/_authenticated/certificados")({
+  head: () => ({ meta: [
+    { title: "Meus certificados — Upgrade Educação" },
+    { name: "description", content: "Consulte certificados e horas complementares." },
+    { property: "og:title", content: "Meus certificados — Upgrade Educação" },
+    { property: "og:description", content: "Certificados da sua jornada de aprendizagem." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary_large_image" },
+  ] }),
   component: CertificatesPage,
 });
 
