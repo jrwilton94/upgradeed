@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
+import { PROFILES, type ProfileRole } from "@/lib/profiles";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -45,6 +46,7 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [testRoles, setTestRoles] = useState<ProfileRole[]>([]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -96,6 +98,11 @@ function AuthPage() {
         password: parsed.data.password,
       });
       if (error) throw error;
+      const { data: access } = await supabase.from("test_profile_access").select("role");
+      if (access && access.length > 0) {
+        setTestRoles(access.map((a) => a.role as ProfileRole));
+        return;
+      }
       navigate({ to: "/painel" });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Não foi possível concluir");
@@ -104,17 +111,14 @@ function AuthPage() {
     }
   }
 
-  async function handleGoogle() {
+  async function chooseProfile(role: ProfileRole) {
     setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      setLoading(false);
-      toast.error("Não foi possível entrar com o Google.");
+    const { error } = await supabase.rpc("switch_test_profile", { _role: role });
+    setLoading(false);
+    if (error) {
+      toast.error("Não foi possível entrar nesse perfil.");
       return;
     }
-    if (result.redirected) return;
     navigate({ to: "/painel" });
   }
 
@@ -150,7 +154,7 @@ function AuthPage() {
           <p className="mt-2 text-sm text-muted-foreground">
             {mode === "reset"
               ? "Enviaremos um link para você definir uma nova senha."
-              : "Use seu e-mail ou continue com o Google."}
+              : "Use seu e-mail e senha."}
           </p>
 
           {sent ? (
@@ -208,21 +212,21 @@ function AuthPage() {
             </form>
           )}
 
-          {mode !== "reset" && (
-            <>
-              <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
-                <span className="h-px flex-1 bg-border" /> ou <span className="h-px flex-1 bg-border" />
+          <Dialog open={testRoles.length > 0} onOpenChange={() => {}}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Em qual perfil deseja entrar?</DialogTitle>
+                <DialogDescription>Selecione o perfil para acessar a plataforma.</DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-2 sm:grid-cols-2">
+                {PROFILES.filter((p) => testRoles.includes(p.role)).map((p) => (
+                  <Button key={p.role} variant="outline" className="h-11" disabled={loading} onClick={() => chooseProfile(p.role)}>
+                    {p.label}
+                  </Button>
+                ))}
               </div>
-              <Button
-                variant="outline"
-                className="h-11 w-full"
-                onClick={handleGoogle}
-                disabled={loading}
-              >
-                <GoogleIcon /> Continuar com Google
-              </Button>
-            </>
-          )}
+            </DialogContent>
+          </Dialog>
 
           <div className="mt-8 space-y-2 text-sm text-muted-foreground">
             {mode === "login" && (
@@ -257,25 +261,5 @@ function AuthPage() {
         </div>
       </div>
     </div>
-  );
-}
-
-function GoogleIcon() {
-  return (
-    <svg viewBox="0 0 24 24" className="size-4" aria-hidden="true">
-      <path
-        fill="#4285F4"
-        d="M23.5 12.3c0-.9-.1-1.5-.2-2.2H12v4h6.6c-.1 1.1-.9 2.8-2.5 4l3.8 2.9c2.3-2.1 3.6-5.2 3.6-8.7Z"
-      />
-      <path
-        fill="#34A853"
-        d="M12 24c3.2 0 6-1.1 8-2.9l-3.8-3c-1 .7-2.4 1.2-4.2 1.2-3.2 0-5.9-2.1-6.8-5H1.2v3.1C3.2 21.3 7.3 24 12 24Z"
-      />
-      <path fill="#FBBC05" d="M5.2 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.2a12 12 0 0 0 0 10.8l4-3.1Z" />
-      <path
-        fill="#EA4335"
-        d="M12 4.8c1.8 0 3 .8 3.7 1.4l2.7-2.6C16.9 1.9 14.2.8 12 .8 7.3.8 3.2 3.5 1.2 7.4l4 3.1c1-2.9 3.6-5.7 6.8-5.7Z"
-      />
-    </svg>
   );
 }
