@@ -41,7 +41,7 @@ export function StudentDashboard({ profile }: { profile: Tables<"profiles"> }) {
   return <div className="workspace-shell">
     <WorkspaceHeader eyebrow={professional ? "Profissional / Carreira & competências" : "Estudante / Jornada acadêmica"} icon={professional ? Compass : GraduationCap}
       title={professional ? "Sua carreira, em movimento." : `Sua trajetória, ${profile.full_name.split(" ")[0]}.`}
-      subtitle={professional ? (profile.target_position ? `Próximo objetivo: ${profile.target_position}` : "Conhecimento, competências e novas possibilidades profissionais.") : [profile.course_name, profile.semester ? `${profile.semester}º semestre` : null].filter(Boolean).join(" · ") || "Aprendizado e horas complementares para o seu futuro."}
+      subtitle={professional ? (profile.target_position ? `Próximo objetivo: ${profile.target_position}` : "Conhecimento, competências e novas possibilidades profissionais.") : profile.education_level || "Aprendizado e horas complementares para o seu futuro."}
       action={<Button asChild><Link to={professional ? "/preferencias" : "/cursos"}>{professional ? "Meu objetivo profissional" : "Explorar cursos"}<ArrowUpRight className="size-4" /></Link></Button>} />
     <MetricStrip items={[
       {label:professional ? "Horas de desenvolvimento" : "Horas complementares",value:`${data.hours}h`,icon:BookOpen},
