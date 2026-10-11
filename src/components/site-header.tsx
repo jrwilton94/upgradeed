@@ -13,7 +13,6 @@ import {
 
 const LINKS = [
   { to: "/plataforma", label: "A plataforma" },
-  { to: "/cursos", label: "Cursos" },
 ] as const;
 
 const FOR_YOU = [
