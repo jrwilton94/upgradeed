@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Award, BookOpen, Flame, Sparkles, Target, TrendingUp } from "lucide-react";
-import { SectionCard, StatCard } from "@/components/app-shell";
+import { ArrowUpRight, Award, BookOpen, Compass, GraduationCap, Sparkles, Target } from "lucide-react";
+import { WorkspaceHeader, MetricStrip, WorkspaceSection, WorkspaceEmpty, ProgressOrbit } from "@/components/dashboard-workspace";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -11,171 +11,57 @@ import type { Tables } from "@/integrations/supabase/types";
 export function StudentDashboard({ profile }: { profile: Tables<"profiles"> }) {
   const { data, isLoading } = useLearnerData(profile.id);
   const { data: jobs } = useOpenJobs();
-
-  if (isLoading || !data) {
-    return <p className="text-muted-foreground">Carregando seu painel…</p>;
-  }
-
-  const inProgress = data.enrollments.filter((e) => e.progress < 100);
+  if (isLoading || !data) return <p className="text-muted-foreground">Carregando sua trajetória…</p>;
+  const professional = profile.role === "geral";
+  const inProgress = data.enrollments.filter(e => e.progress < 100);
   const matchingOn = profile.matching_enabled && (data.preferences?.matching_enabled ?? false);
-
-  const suggestions = matchingOn
-    ? (jobs ?? [])
-        .map((job) => ({
-          job,
-          match: computeMatch(job, {
-            completedSkills: data.skills,
-            interests: [],
-            studyHours: data.hours,
-            certificates: data.certificates.length,
-            behavioralDone: Boolean(data.behavioral),
-            preferences: data.preferences,
-          }),
-        }))
-        .sort((a, b) => b.match.score - a.match.score)
-        .slice(0, 3)
-    : [];
-
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-3xl font-extrabold text-foreground">
-          Olá, {profile.full_name.split(" ")[0]}
-        </h1>
-        <p className="mt-1 text-muted-foreground">
-          Aprendizado que vira oportunidade. Continue de onde você parou.
-        </p>
+  const completion = data.enrollments.length ? Math.round(data.completed.length / data.enrollments.length * 100) : 0;
+  const suggestions = matchingOn ? (jobs ?? []).map(job => ({ job, match: computeMatch(job, {
+    completedSkills: data.skills, interests: [], studyHours: data.hours, certificates: data.certificates.length,
+    behavioralDone: Boolean(data.behavioral), preferences: data.preferences,
+  }) })).sort((a,b) => b.match.score-a.match.score).slice(0,3) : [];
+  const learning = <WorkspaceSection title={professional ? "Seu próximo passo" : "Retomar aprendizado"} count={inProgress.length}
+    action={<Button asChild variant="ghost" size="sm"><Link to="/meus-cursos">Meus cursos<ArrowUpRight className="size-4" /></Link></Button>}>
+    {!inProgress.length ? <WorkspaceEmpty icon={BookOpen} title="Sua próxima competência começa aqui" text={professional ? "Escolha um curso alinhado ao seu objetivo profissional." : "Nenhum curso em andamento. Explore os módulos para iniciar sua trajetória acadêmica."} to="/cursos" label="Explorar catálogo" /> :
+      inProgress.map(e => <article key={e.id} className="workspace-row">
+        <div className="flex flex-wrap items-center justify-between gap-3"><div className="min-w-0"><p className="font-semibold text-foreground">{e.courses?.title}</p><p className="mt-1 text-xs text-muted-foreground">{e.courses?.level} · {e.courses?.hours}h · {e.progress}% concluído</p></div>
+          {e.courses?.slug && <Button asChild size="sm"><Link to="/cursos/$slug" params={{slug:e.courses.slug}}>Continuar<ArrowUpRight className="size-4" /></Link></Button>}
+        </div><Progress value={e.progress} className="mt-4 h-1.5" />
+      </article>)}
+  </WorkspaceSection>;
+  const opportunities = <WorkspaceSection title="Oportunidades para você" count={suggestions.length}
+    action={<Button asChild variant="ghost" size="sm"><Link to="/preferencias"><Target className="size-4" />Preferências</Link></Button>}>
+    {!matchingOn ? <WorkspaceEmpty icon={Compass} title="Matching desativado" text="Você decide se quer receber sugestões de vagas. Seu perfil só é enviado após confirmar uma candidatura." to="/preferencias" label="Definir objetivo" /> : !suggestions.length ?
+      <WorkspaceEmpty icon={Target} title="Nenhuma vaga disponível no momento" text="Suas preferências estão ativas. Continue ampliando suas competências." /> : suggestions.map(({job,match}) =>
+      <article className="workspace-row" key={job.id}><div className="flex flex-wrap items-center justify-between gap-2"><h3 className="font-semibold text-foreground">{job.title}</h3><Badge variant="secondary">{match.score}% compatível</Badge></div>
+        <p className="mt-2 text-xs text-muted-foreground">{job.companies?.name} · {job.modality}</p><p className="mt-2 text-xs text-muted-foreground">{match.reasons.slice(0,2).join(" · ")}</p>
+        <Button asChild variant="link" size="sm" className="mt-2 px-0"><Link to="/vagas/$id" params={{id:job.id}}>Avaliar oportunidade<ArrowUpRight className="size-4" /></Link></Button>
+      </article>)}
+  </WorkspaceSection>;
+  return <div className="workspace-shell">
+    <WorkspaceHeader eyebrow={professional ? "Profissional / Carreira & competências" : "Estudante / Jornada acadêmica"} icon={professional ? Compass : GraduationCap}
+      title={professional ? "Sua carreira, em movimento." : `Sua trajetória, ${profile.full_name.split(" ")[0]}.`}
+      subtitle={professional ? (profile.target_position ? `Próximo objetivo: ${profile.target_position}` : "Conhecimento, competências e novas possibilidades profissionais.") : profile.education_level || "Aprendizado e horas complementares para o seu futuro."}
+      action={<Button asChild><Link to={professional ? "/preferencias" : "/cursos"}>{professional ? "Meu objetivo profissional" : "Explorar cursos"}<ArrowUpRight className="size-4" /></Link></Button>} />
+    <MetricStrip items={[
+      {label:professional ? "Horas de desenvolvimento" : "Horas complementares",value:`${data.hours}h`,icon:BookOpen},
+      {label:"Competências verificadas",value:data.skills.length,icon:Sparkles},
+      {label:"Certificados",value:data.certificates.length,icon:Award},
+      {label:"Cursos concluídos",value:data.completed.length,icon:GraduationCap},
+    ]} />
+    <div className="workspace-grid"><div>{professional ? opportunities : learning}
+      <WorkspaceSection title="Mapa de competências" count={data.skills.length}>
+        {data.skills.length ? <div className="flex flex-wrap gap-2">{data.skills.map(skill => <Badge key={skill} variant="secondary" className="rounded-md px-3 py-2">{skill}</Badge>)}</div> : <WorkspaceEmpty icon={Sparkles} title="Competências ainda não verificadas" text="As competências dos cursos aprovados aparecem na sua trajetória." />}
+      </WorkspaceSection>{professional ? learning : opportunities}</div>
+      <div className="lg:border-l lg:border-border lg:pl-7">
+        <WorkspaceSection title={professional ? "Evolução profissional" : "Percurso acadêmico"}><ProgressOrbit value={completion} label="dos cursos iniciados foram concluídos" />
+          <div className="workspace-note mt-6 flex justify-between text-sm"><span className="text-muted-foreground">Experiência acumulada</span><span className="font-semibold text-foreground">{profile.xp} XP · Nível {profile.level}</span></div>
+          {!professional && <p className="mt-4 text-xs leading-relaxed text-muted-foreground">O aproveitamento de horas complementares depende da sua instituição.</p>}
+        </WorkspaceSection>
+        <WorkspaceSection title="Conquistas" count={data.certificates.length} action={<Button asChild variant="ghost" size="sm"><Link to="/certificados"><ArrowUpRight className="size-4" /><span className="sr-only">Ver certificados</span></Link></Button>}>
+          {!data.certificates.length ? <WorkspaceEmpty icon={Award} title="Seu primeiro certificado está por vir" /> : data.certificates.slice(0,4).map(c => <div key={c.id} className="workspace-row flex items-start gap-3"><Award className="mt-1 size-4 shrink-0 text-brand" /><div><p className="text-sm font-semibold text-foreground">{c.courses?.title}</p><p className="mt-1 text-xs text-muted-foreground">{c.hours}h certificadas</p></div></div>)}
+        </WorkspaceSection>
       </div>
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="XP acumulado" value={profile.xp} hint={`Nível ${profile.level}`} icon={TrendingUp} />
-        <StatCard label="Ofensiva" value={`${profile.streak} dias`} hint="Estude hoje para manter" icon={Flame} />
-        <StatCard label="Certificados" value={data.certificates.length} hint={`${data.hours}h complementares`} icon={Award} />
-        <StatCard label="Competências" value={data.skills.length} hint="Verificadas por avaliação" icon={Sparkles} />
-      </div>
-
-      <SectionCard
-        title="Continuar estudando"
-        description="Seus cursos em andamento."
-        action={
-          <Button asChild variant="outline" size="sm">
-            <Link to="/cursos">Ver catálogo</Link>
-          </Button>
-        }
-      >
-        {inProgress.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            Nenhum curso em andamento. Escolha um módulo de 60 minutos no catálogo.
-          </p>
-        ) : (
-          <ul className="space-y-4">
-            {inProgress.map((enrollment) => (
-              <li key={enrollment.id} className="rounded-xl border border-border p-4">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <p className="font-semibold text-foreground">{enrollment.courses?.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {enrollment.courses?.level} · {enrollment.courses?.hours}h
-                    </p>
-                  </div>
-                  <Button asChild size="sm">
-                    <Link to="/cursos/$slug" params={{ slug: enrollment.courses?.slug ?? "" }}>
-                      Continuar
-                    </Link>
-                  </Button>
-                </div>
-                <Progress value={enrollment.progress} className="mt-3" />
-              </li>
-            ))}
-          </ul>
-        )}
-      </SectionCard>
-
-      <SectionCard
-        title="Competências verificadas"
-        description="Construídas pelos cursos concluídos — a base do seu matching."
-      >
-        {data.skills.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            Conclua um curso e passe na avaliação final para registrar competências.
-          </p>
-        ) : (
-          <div className="flex flex-wrap gap-2">
-            {data.skills.map((skill) => (
-              <Badge key={skill} variant="secondary" className="px-3 py-1">
-                {skill}
-              </Badge>
-            ))}
-          </div>
-        )}
-      </SectionCard>
-
-      <SectionCard
-        title="Sugestões de vagas"
-        description="Sugestões informativas. Nada é enviado sem o seu aceite."
-        action={
-          <Button asChild variant="outline" size="sm">
-            <Link to="/preferencias">Preferências</Link>
-          </Button>
-        }
-      >
-        {!matchingOn ? (
-          <div className="rounded-xl border border-dashed border-border p-5 text-sm text-muted-foreground">
-            <Target className="mb-2 size-5 text-brand" />
-            O matching está desativado. Ative em Preferências de vaga para receber sugestões — você
-            continua no controle de cada envio.
-          </div>
-        ) : suggestions.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            Ainda não há vagas abertas compatíveis. Continue desenvolvendo competências.
-          </p>
-        ) : (
-          <ul className="space-y-4">
-            {suggestions.map(({ job, match }) => (
-              <li key={job.id} className="rounded-xl border border-border p-4">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <p className="font-semibold text-foreground">{job.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {job.companies?.name} · {job.modality} · {job.seniority}
-                    </p>
-                  </div>
-                  <Badge className="bg-brand text-brand-foreground">{match.score}% compatível</Badge>
-                </div>
-                <ul className="mt-3 space-y-1 text-xs text-muted-foreground">
-                  {match.reasons.slice(0, 3).map((reason) => (
-                    <li key={reason}>• {reason}</li>
-                  ))}
-                </ul>
-                <Button asChild size="sm" variant="outline" className="mt-3">
-                  <Link to="/vagas/$id" params={{ id: job.id }}>
-                    Ver vaga e decidir
-                  </Link>
-                </Button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </SectionCard>
-
-      <SectionCard title="Certificados" description="Emitidos após aprovação na avaliação final.">
-        {data.certificates.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Nenhum certificado ainda.</p>
-        ) : (
-          <ul className="space-y-2">
-            {data.certificates.map((certificate) => (
-              <li
-                key={certificate.id}
-                className="flex items-center gap-3 rounded-xl border border-border px-4 py-3 text-sm"
-              >
-                <BookOpen className="size-4 text-brand" />
-                <span className="flex-1 text-foreground">{certificate.courses?.title}</span>
-                <span className="text-xs text-muted-foreground">{certificate.hours}h</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </SectionCard>
     </div>
-  );
+  </div>;
 }

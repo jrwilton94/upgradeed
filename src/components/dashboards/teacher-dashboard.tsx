@@ -1,12 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { Clock, GaugeCircle, Star, Users } from "lucide-react";
-import { SectionCard, StatCard } from "@/components/app-shell";
+import { ArrowUpRight, BookOpen, Clock, GaugeCircle, Presentation, Star, Wallet } from "lucide-react";
+import { useState } from "react";
+import { WorkspaceHeader, MetricStrip, WorkspaceSection, WorkspaceEmpty, ProgressOrbit } from "@/components/dashboard-workspace";
+import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 
 export function TeacherDashboard({ profile }: { profile: Tables<"profiles"> }) {
+  const [tab, setTab] = useState("modules");
   const { data, isLoading } = useQuery({
     queryKey: ["teacher-courses", profile.id],
     queryFn: async () => {
@@ -31,74 +34,20 @@ export function TeacherDashboard({ profile }: { profile: Tables<"profiles"> }) {
     ? Math.round(courses.reduce((sum, c) => sum + Number(c.completion_rate), 0) / courses.length)
     : 0;
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-3xl font-extrabold text-foreground">Painel do professor</h1>
-        <p className="mt-1 text-muted-foreground">
-          Módulos de pelo menos uma hora, com jogo de fixação e avaliação final.
-        </p>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Alunos alcançados" value={students} icon={Users} />
-        <StatCard label="Minutos assistidos" value={minutes.toLocaleString("pt-BR")} icon={Clock} />
-        <StatCard label="Avaliação média" value={avgRating} icon={Star} />
-        <StatCard label="Taxa de conclusão" value={`${avgCompletion}%`} icon={GaugeCircle} />
-      </div>
-
-      <SectionCard
-        title="Seus módulos"
-        description="Desempenho por curso publicado."
-        action={
-          <Button asChild variant="outline" size="sm">
-            <Link to="/cursos">Ver catálogo</Link>
-          </Button>
-        }
-      >
-        {courses.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            Nenhum módulo publicado ainda.
-          </p>
-        ) : (
-          <ul className="space-y-3">
-            {courses.map((course) => (
-              <li
-                key={course.id}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border p-4"
-              >
-                <div>
-                  <p className="font-semibold text-foreground">{course.title}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {course.students_count} alunos · nota {course.rating} · conclusão{" "}
-                    {course.completion_rate}%
-                  </p>
-                </div>
-                <Button asChild size="sm" variant="outline">
-                  <Link to="/cursos/$slug" params={{ slug: course.slug }}>
-                    Abrir
-                  </Link>
-                </Button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </SectionCard>
-
-      <SectionCard title="Roteiro pedagógico Upgrade" description="Padrão de produção dos módulos.">
-        <ol className="space-y-2 text-sm text-muted-foreground">
-          <li>1. Abertura com o problema real que a competência resolve.</li>
-          <li>2. Explicação em blocos curtos, com exemplos aplicados.</li>
-          <li>3. Jogo de fixação ao final de cada bloco.</li>
-          <li>4. Avaliação final para liberar o certificado.</li>
-          <li>5. Indicação das competências geradas no perfil do aluno.</li>
-        </ol>
-      </SectionCard>
-
-      <SectionCard title="Remuneração">
-        <p className="text-sm text-muted-foreground">Fundo de professores: 25% da receita mensal, separado do fundo das IES. No MVP, o score considera audiência (50%), produção (40%) e conclusão (10%).</p>
-        <p className="mt-3 text-sm text-muted-foreground">Ainda não há demonstrativo de repasse disponível. O cálculo e a liquidação financeira não estão ativos neste MVP.</p>
-      </SectionCard>
-    </div>
-  );
+  const ranked = [...courses].sort((a,b) => b.minutes_watched-a.minutes_watched);
+  return <div className="workspace-shell">
+    <WorkspaceHeader eyebrow="Professor / Estúdio de conteúdo" title="Seu conhecimento. Seu impacto." subtitle={profile.full_name} icon={Presentation} />
+    <MetricStrip items={[
+      {label:"Módulos publicados",value:courses.length,icon:BookOpen},
+      {label:"Minutos assistidos",value:minutes.toLocaleString("pt-BR"),icon:Clock},
+      {label:"Conclusão média",value:`${avgCompletion}%`,icon:GaugeCircle},
+      {label:"Avaliação média",value:avgRating,icon:Star},
+    ]} />
+    <div className="workspace-tabs" role="tablist" aria-label="Estúdio do professor">{([['modules','Meus módulos'],['audience','Audiência'],['earnings','Remuneração']] as const).map(([key,label]) => <Button key={key} variant="ghost" role="tab" aria-selected={tab === key} onClick={() => setTab(key)}>{label}</Button>)}</div>
+    {tab === 'modules' && <div className="workspace-grid"><WorkspaceSection title="Biblioteca de módulos" count={courses.length}>
+      {!courses.length ? <WorkspaceEmpty icon={BookOpen} title="Nenhum módulo publicado ainda" text="O envio e a aprovação de novos conteúdos ainda não estão disponíveis neste painel." /> : courses.map(c => <article key={c.id} className="workspace-row"><div className="flex flex-wrap items-center justify-between gap-3"><div><h3 className="font-semibold text-foreground">{c.title}</h3><p className="mt-2 text-xs text-muted-foreground">{c.minutes_watched} min assistidos · {c.completion_rate}% conclusão</p></div><Button asChild variant="outline" size="sm"><Link to="/cursos/$slug" params={{slug:c.slug}}>Abrir<ArrowUpRight className="size-4" /></Link></Button></div></article>)}
+    </WorkspaceSection><div className="lg:border-l lg:border-border lg:pl-7"><WorkspaceSection title="Padrão de publicação"><ol className="space-y-5">{['Módulo com pelo menos 1 hora','4 aulas de 15 min ou 6 de 10 min','Jogo de fixação','Avaliação para liberar certificado'].map((text,i) => <li key={text} className="flex gap-3 text-sm text-muted-foreground"><span className="font-display font-bold text-brand">0{i+1}</span>{text}</li>)}</ol></WorkspaceSection><p className="workspace-note text-xs text-muted-foreground">Nenhum dado individual de alunos é exibido neste perfil.</p></div></div>}
+    {tab === 'audience' && <div className="workspace-grid"><WorkspaceSection title="Conteúdos mais assistidos" count={ranked.length}>{!ranked.length ? <WorkspaceEmpty icon={Clock} title="Ainda não há audiência registrada" /> : ranked.map((c,i) => <div key={c.id} className="workspace-row"><div className="flex justify-between gap-4"><p className="text-sm font-semibold text-foreground"><span className="mr-3 text-brand">{i+1}</span>{c.title}</p><p className="shrink-0 text-sm text-muted-foreground">{c.minutes_watched} min</p></div><Progress value={minutes ? c.minutes_watched/minutes*100 : 0} className="mt-3 h-1.5" /></div>)}</WorkspaceSection><WorkspaceSection title="Conclusão dos módulos"><ProgressOrbit value={avgCompletion} label="taxa média de conclusão" /><p className="workspace-note mt-6 text-sm text-muted-foreground">{students} matrículas nos seus conteúdos.</p></WorkspaceSection></div>}
+    {tab === 'earnings' && <div className="workspace-grid"><WorkspaceSection title="Demonstrativo de remuneração"><WorkspaceEmpty icon={Wallet} title="Nenhum repasse apurado" text="O cálculo do score, os pagamentos e as transferências bancárias ainda não estão ativos." /><div className="mt-6 grid grid-cols-2 gap-6"><div><p className="text-xs text-muted-foreground">Score para remuneração</p><p className="mt-2 text-xl font-bold text-foreground">Não apurado</p></div><div><p className="text-xs text-muted-foreground">Saldo disponível</p><p className="mt-2 text-xl font-bold text-foreground">Não disponível</p></div></div></WorkspaceSection><WorkspaceSection title="Composição do fundo"><p className="font-display text-4xl font-bold text-foreground">25%</p><p className="mt-2 text-sm text-muted-foreground">da receita mensal. Fundo separado das IES.</p><div className="workspace-note mt-6 space-y-3">{[['Audiência','50%'],['Produção','40%'],['Conclusão','10%']].map(([label,value]) => <p key={label} className="flex justify-between text-sm text-muted-foreground"><span>{label}</span><span className="font-semibold text-foreground">{value}</span></p>)}</div><p className="mt-5 text-xs text-muted-foreground">Pesos da fase MVP.</p></WorkspaceSection></div>}
+  </div>;
 }

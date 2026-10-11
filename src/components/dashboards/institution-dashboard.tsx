@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { Award, Download, GraduationCap, Layers, TrendingUp } from "lucide-react";
+import { Award, Download, GraduationCap, Landmark, Layers, ShieldCheck, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SectionCard, StatCard } from "@/components/app-shell";
-import { Progress } from "@/components/ui/progress";
+import { useState } from "react";
+import { WorkspaceHeader, MetricStrip, WorkspaceSection, WorkspaceEmpty, ProgressOrbit } from "@/components/dashboard-workspace";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 
 export function InstitutionDashboard({ profile }: { profile: Tables<"profiles"> }) {
+  const [tab, setTab] = useState("indicators");
   const { data, isLoading, isError } = useQuery({
     queryKey: ["institution", profile.institution_id],
     enabled: Boolean(profile.institution_id),
@@ -54,36 +55,17 @@ export function InstitutionDashboard({ profile }: { profile: Tables<"profiles"> 
     URL.revokeObjectURL(url);
   }
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-3xl font-extrabold text-foreground">
-          {data.institution?.name ?? "Painel institucional"}
-        </h1>
-        <p className="mt-1 text-muted-foreground">
-          Indicadores agregados de empregabilidade e horas complementares.
-        </p>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Estudantes vinculados" value={data.indicators?.students ?? 0} icon={GraduationCap} />
-        <StatCard label="Matrículas em cursos" value={data.indicators?.enrollments ?? 0} icon={Layers} />
-        <StatCard label="Horas complementares" value={`${hours}h`} icon={Award} />
-        <StatCard label="Taxa de conclusão" value={`${completion}%`} icon={TrendingUp} />
-      </div>
-
-      <SectionCard title="Engajamento" description="Conclusão média dos cursos iniciados.">
-        <Progress value={completion} />
-      </SectionCard>
-
-      <SectionCard title="Relatórios institucionais" action={
-        <Button variant="outline" size="sm" onClick={exportIndicators}>
-          <Download className="size-4" /> Exportar indicadores
-        </Button>
-      }>
-        <p className="text-sm text-muted-foreground">Indicadores agregados de aprendizagem, sem identificação de estudantes. Este relatório não substitui documentos oficiais exigidos pelo MEC.</p>
-      </SectionCard>
-
-    </div>
-  );
+  return <div className="workspace-shell">
+    <WorkspaceHeader eyebrow="IES / Inteligência institucional" title={data.institution?.name ?? "Observatório acadêmico"} subtitle="Aprendizagem e trajetória acadêmica em uma visão agregada." icon={Landmark} action={<Button onClick={exportIndicators}><Download className="size-4" />Exportar indicadores</Button>} />
+    <MetricStrip items={[
+      {label:"Estudantes vinculados",value:data.indicators?.students ?? 0,icon:GraduationCap},
+      {label:"Matrículas",value:data.indicators?.enrollments ?? 0,icon:Layers},
+      {label:"Horas complementares",value:`${hours}h`,icon:Award},
+      {label:"Taxa de conclusão",value:`${completion}%`,icon:TrendingUp},
+    ]} />
+    <div className="workspace-tabs" role="tablist" aria-label="Observatório institucional">{[['indicators','Observatório'],['content','Conteúdo institucional'],['fund','Participação no fundo']].map(([key,label]) => <Button key={key} role="tab" variant="ghost" aria-selected={tab === key} onClick={() => setTab(key)}>{label}</Button>)}</div>
+    {tab === 'indicators' && <div className="workspace-grid"><WorkspaceSection title="Conclusão e engajamento"><div className="flex flex-wrap items-center gap-8"><ProgressOrbit value={completion} label="conclusão média dos cursos iniciados" /><div><p className="font-display text-3xl font-bold text-foreground">{hours}h</p><p className="mt-2 text-sm text-muted-foreground">complementares registradas</p></div></div><div className="workspace-note mt-8"><h3 className="font-semibold text-foreground">Relatório de aprendizagem</h3><p className="mt-3 text-sm leading-relaxed text-muted-foreground">Estudantes vinculados, matrículas, horas e conclusão. Sem identificação individual.</p><Button variant="outline" className="mt-5" onClick={exportIndicators}><Download className="size-4" />Baixar relatório CSV</Button><p className="mt-4 text-xs text-muted-foreground">Não substitui documentos oficiais exigidos pelo MEC.</p></div></WorkspaceSection><div className="lg:border-l lg:border-border lg:pl-7"><WorkspaceSection title="Privacidade institucional"><ShieldCheck className="mb-4 size-7 text-brand" /><p className="text-sm leading-relaxed text-muted-foreground">Somente indicadores agregados dos estudantes vinculados à instituição.</p></WorkspaceSection><WorkspaceSection title="Empregabilidade"><WorkspaceEmpty icon={TrendingUp} title="Indicadores ainda não disponíveis" text="Dados sociais, econômicos e de empregabilidade não estão incluídos no relatório atual." /></WorkspaceSection></div></div>}
+    {tab === 'content' && <WorkspaceSection title="Vitrine de conteúdo"><WorkspaceEmpty icon={Layers} title="Publicação institucional ainda não disponível" text="O envio de aulas e a aprovação de conteúdos não estão ativos neste painel. Conteúdos livres não conferem diploma de graduação." /></WorkspaceSection>}
+    {tab === 'fund' && <div className="workspace-grid"><WorkspaceSection title="Fundo institucional"><p className="font-display text-5xl font-bold text-foreground">10%</p><p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">da receita mensal, em fundo separado para instituições com conteúdo ativo.</p></WorkspaceSection><WorkspaceSection title="Recebimentos"><WorkspaceEmpty icon={Award} title="Nenhum demonstrativo disponível" text="Apuração do score, cadastro bancário e transferências ainda não estão ativos." /></WorkspaceSection></div>}
+  </div>;
 }

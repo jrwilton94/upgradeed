@@ -15,3 +15,4 @@
 - Institution reporting must return aggregate values from an authorized database function, never individual student rows to the browser.
 - Institutional CSV exports use only the authorized aggregate report and do not claim to be official regulatory documents.
 - Refresh user-scoped queries after authorized test-profile switches so every view reflects the selected profile.
+- Use shared workspace presentation primitives for role-specific dashboards, while retaining role-specific data access and actions to preserve authorization boundaries.
