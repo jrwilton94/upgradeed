@@ -97,7 +97,7 @@ function CourseDetail() {
     if (!userId || !data?.course) return;
     const { error } = await supabase
       .from("enrollments")
-      .upsert({ user_id: userId, course_id: data.course.id, progress: 10 }, { onConflict: "user_id,course_id" });
+      .upsert({ user_id: userId, course_id: data.course.id, progress: 10 }, { onConflict: "user_id,course_id,profile_role" });
     if (error) return toast.error(error.message);
     toast.success("Curso iniciado! Bons estudos.");
     queryClient.invalidateQueries();
@@ -111,7 +111,7 @@ function CourseDetail() {
       .from("enrollments")
       .upsert(
         { user_id: userId, course_id: data.course.id, progress: next },
-        { onConflict: "user_id,course_id" },
+        { onConflict: "user_id,course_id,profile_role" },
       );
     if (error) return toast.error(error.message);
     queryClient.invalidateQueries();
@@ -132,13 +132,13 @@ function CourseDetail() {
         progress: 100,
         completed_at: new Date().toISOString(),
       },
-      { onConflict: "user_id,course_id" },
+      { onConflict: "user_id,course_id,profile_role" },
     );
     await supabase
       .from("certificates")
       .upsert(
         { user_id: userId, course_id: data.course.id, hours: data.course.hours },
-        { onConflict: "user_id,course_id" },
+        { onConflict: "user_id,course_id,profile_role" },
       );
     const { data: profile } = await supabase
       .from("profiles")
