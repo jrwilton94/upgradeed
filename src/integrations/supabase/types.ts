@@ -90,6 +90,7 @@ export type Database = {
           hours: number
           id: string
           issued_at: string
+          profile_role: Database["public"]["Enums"]["profile_role"]
           user_id: string
         }
         Insert: {
@@ -98,6 +99,7 @@ export type Database = {
           hours?: number
           id?: string
           issued_at?: string
+          profile_role?: Database["public"]["Enums"]["profile_role"]
           user_id: string
         }
         Update: {
@@ -106,6 +108,7 @@ export type Database = {
           hours?: number
           id?: string
           issued_at?: string
+          profile_role?: Database["public"]["Enums"]["profile_role"]
           user_id?: string
         }
         Relationships: [
@@ -279,6 +282,7 @@ export type Database = {
           course_id: string
           created_at: string
           id: string
+          profile_role: Database["public"]["Enums"]["profile_role"]
           progress: number
           user_id: string
         }
@@ -287,6 +291,7 @@ export type Database = {
           course_id: string
           created_at?: string
           id?: string
+          profile_role?: Database["public"]["Enums"]["profile_role"]
           progress?: number
           user_id: string
         }
@@ -295,6 +300,7 @@ export type Database = {
           course_id?: string
           created_at?: string
           id?: string
+          profile_role?: Database["public"]["Enums"]["profile_role"]
           progress?: number
           user_id?: string
         }
@@ -832,6 +838,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      current_profile_role: {
+        Args: never
+        Returns: Database["public"]["Enums"]["profile_role"]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
