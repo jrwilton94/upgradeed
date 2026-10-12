@@ -16,3 +16,5 @@
 - Institutional CSV exports use only the authorized aggregate report and do not claim to be official regulatory documents.
 - Refresh user-scoped queries after authorized test-profile switches so every view reflects the selected profile.
 - Use shared workspace presentation primitives for role-specific dashboards, while retaining role-specific data access and actions to preserve authorization boundaries.
+
+- Course enrollments and certificates are scoped by profile role via RLS and an insert trigger, so test profiles sharing one login keep separate learning history.
