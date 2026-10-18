@@ -1,4 +1,6 @@
 # Upgrade Educação
+- [ ] Aplicar a remessa de nove partes preservando dados e funções existentes: isolamento e autorizações, subperfis e auditoria, cadastros e vínculos, conteúdo e certificação, academia corporativa, matching, fundos e testes de aceite.
+- [ ] Entregar relatório único da remessa com criado, alterado, mantido, removido, migrações, dúvidas e checklist da Parte 9.
 - [x] Reorganizar os seis painéis com hierarquia visual própria para suas atribuições, preservando funções e privacidade.
 - [x] Remover Cursos do menu principal e verificar os seis perfis.
 - [x] Atualizar missão e nomenclatura Profissional, preservando a URL anterior por redirecionamento.
