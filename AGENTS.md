@@ -18,3 +18,5 @@
 - Use shared workspace presentation primitives for role-specific dashboards, while retaining role-specific data access and actions to preserve authorization boundaries.
 
 - Course enrollments and certificates are scoped by profile role via RLS and an insert trigger, so test profiles sharing one login keep separate learning history.
+- Organization permissions and scopes live in protected memberships; privileged mutations use authenticated database functions to enforce non-escalation and preserve audit history.
+- Share presentation primitives only; persona-specific data access must be independently authorized by database policies, including direct URL access.

@@ -38,6 +38,7 @@ import { Route as ParaProfissionalRouteImport } from './routes/para.profissional
 import { Route as ParaUsuarioGeralRouteImport } from './routes/para.usuario-geral'
 import { Route as AuthenticatedGestaoIndexRouteImport } from './routes/_authenticated/gestao.index'
 import { Route as AuthenticatedGestaoCadastrosRouteImport } from './routes/_authenticated/gestao.cadastros'
+import { Route as AuthenticatedOrganizacaoAcessosRouteImport } from './routes/_authenticated/organizacao.acessos'
 import { Route as AuthenticatedVagasIndexRouteImport } from './routes/_authenticated/vagas.index'
 import { Route as AuthenticatedVagasIdRouteImport } from './routes/_authenticated/vagas.$id'
 import { Route as AuthenticatedVagasNovaRouteImport } from './routes/_authenticated/vagas.nova'
@@ -190,6 +191,12 @@ const AuthenticatedGestaoCadastrosRoute =
     path: '/gestao/cadastros',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedOrganizacaoAcessosRoute =
+  AuthenticatedOrganizacaoAcessosRouteImport.update({
+    id: '/organizacao/acessos',
+    path: '/organizacao/acessos',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedVagasIndexRoute = AuthenticatedVagasIndexRouteImport.update({
   id: '/vagas/',
   path: '/vagas/',
@@ -234,6 +241,7 @@ export interface FileRoutesByFullPath {
   '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos/': typeof CursosIndexRoute
   '/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
+  '/organizacao/acessos': typeof AuthenticatedOrganizacaoAcessosRoute
   '/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/vagas/nova': typeof AuthenticatedVagasNovaRoute
   '/gestao/': typeof AuthenticatedGestaoIndexRoute
@@ -267,6 +275,7 @@ export interface FileRoutesByTo {
   '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos': typeof CursosIndexRoute
   '/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
+  '/organizacao/acessos': typeof AuthenticatedOrganizacaoAcessosRoute
   '/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/vagas/nova': typeof AuthenticatedVagasNovaRoute
   '/gestao': typeof AuthenticatedGestaoIndexRoute
@@ -302,6 +311,7 @@ export interface FileRoutesById {
   '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos/': typeof CursosIndexRoute
   '/_authenticated/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
+  '/_authenticated/organizacao/acessos': typeof AuthenticatedOrganizacaoAcessosRoute
   '/_authenticated/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/_authenticated/vagas/nova': typeof AuthenticatedVagasNovaRoute
   '/_authenticated/gestao/': typeof AuthenticatedGestaoIndexRoute
@@ -337,6 +347,7 @@ export interface FileRouteTypes {
     | '/para/usuario-geral'
     | '/cursos/'
     | '/gestao/cadastros'
+    | '/organizacao/acessos'
     | '/vagas/$id'
     | '/vagas/nova'
     | '/gestao/'
@@ -370,6 +381,7 @@ export interface FileRouteTypes {
     | '/para/usuario-geral'
     | '/cursos'
     | '/gestao/cadastros'
+    | '/organizacao/acessos'
     | '/vagas/$id'
     | '/vagas/nova'
     | '/gestao'
@@ -404,6 +416,7 @@ export interface FileRouteTypes {
     | '/para/usuario-geral'
     | '/cursos/'
     | '/_authenticated/gestao/cadastros'
+    | '/_authenticated/organizacao/acessos'
     | '/_authenticated/vagas/$id'
     | '/_authenticated/vagas/nova'
     | '/_authenticated/gestao/'
@@ -640,6 +653,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedGestaoCadastrosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/organizacao/acessos': {
+      id: '/_authenticated/organizacao/acessos'
+      path: '/organizacao/acessos'
+      fullPath: '/organizacao/acessos'
+      preLoaderRoute: typeof AuthenticatedOrganizacaoAcessosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/vagas/': {
       id: '/_authenticated/vagas/'
       path: '/vagas'
@@ -671,6 +691,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPainelRoute: typeof AuthenticatedPainelRoute
   AuthenticatedPreferenciasRoute: typeof AuthenticatedPreferenciasRoute
   AuthenticatedGestaoCadastrosRoute: typeof AuthenticatedGestaoCadastrosRoute
+  AuthenticatedOrganizacaoAcessosRoute: typeof AuthenticatedOrganizacaoAcessosRoute
   AuthenticatedVagasIdRoute: typeof AuthenticatedVagasIdRoute
   AuthenticatedVagasNovaRoute: typeof AuthenticatedVagasNovaRoute
   AuthenticatedGestaoIndexRoute: typeof AuthenticatedGestaoIndexRoute
@@ -684,6 +705,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPainelRoute: AuthenticatedPainelRoute,
   AuthenticatedPreferenciasRoute: AuthenticatedPreferenciasRoute,
   AuthenticatedGestaoCadastrosRoute: AuthenticatedGestaoCadastrosRoute,
+  AuthenticatedOrganizacaoAcessosRoute: AuthenticatedOrganizacaoAcessosRoute,
   AuthenticatedVagasIdRoute: AuthenticatedVagasIdRoute,
   AuthenticatedVagasNovaRoute: AuthenticatedVagasNovaRoute,
   AuthenticatedGestaoIndexRoute: AuthenticatedGestaoIndexRoute,
