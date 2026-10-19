@@ -8,6 +8,13 @@
       "when": 1791769446283,
       "tag": "0000_scope_learning_by_profile",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792368160582,
+      "tag": "0001_organization_access_and_profile_security",
+      "breakpoints": true
     }
   ]
 }

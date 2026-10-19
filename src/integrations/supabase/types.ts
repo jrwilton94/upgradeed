@@ -18,22 +18,34 @@ export type Database = {
         Row: {
           action: string
           created_at: string
+          entity: string | null
           id: string
           meta: Json
+          organization_id: string | null
+          organization_type: string | null
+          scope_id: string | null
           user_id: string
         }
         Insert: {
           action: string
           created_at?: string
+          entity?: string | null
           id?: string
           meta?: Json
+          organization_id?: string | null
+          organization_type?: string | null
+          scope_id?: string | null
           user_id: string
         }
         Update: {
           action?: string
           created_at?: string
+          entity?: string | null
           id?: string
           meta?: Json
+          organization_id?: string | null
+          organization_type?: string | null
+          scope_id?: string | null
           user_id?: string
         }
         Relationships: []
@@ -352,9 +364,11 @@ export type Database = {
           description: string
           desired_skills: string[]
           id: string
+          job_type: string
           modality: string
           required_skills: string[]
           salary_range: string | null
+          scope_id: string | null
           seniority: string
           state: string | null
           status: Database["public"]["Enums"]["job_status"]
@@ -370,9 +384,11 @@ export type Database = {
           description?: string
           desired_skills?: string[]
           id?: string
+          job_type?: string
           modality?: string
           required_skills?: string[]
           salary_range?: string | null
+          scope_id?: string | null
           seniority?: string
           state?: string | null
           status?: Database["public"]["Enums"]["job_status"]
@@ -388,9 +404,11 @@ export type Database = {
           description?: string
           desired_skills?: string[]
           id?: string
+          job_type?: string
           modality?: string
           required_skills?: string[]
           salary_range?: string | null
+          scope_id?: string | null
           seniority?: string
           state?: string | null
           status?: Database["public"]["Enums"]["job_status"]
@@ -402,6 +420,13 @@ export type Database = {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jobs_scope_id_fkey"
+            columns: ["scope_id"]
+            isOneToOne: false
+            referencedRelation: "organization_scopes"
             referencedColumns: ["id"]
           },
         ]
@@ -444,6 +469,7 @@ export type Database = {
           id: string
           job_id: string
           matched_skills: string[]
+          profile_role: Database["public"]["Enums"]["profile_role"]
           reasons: string[]
           score: number
           status: Database["public"]["Enums"]["match_status"]
@@ -454,6 +480,7 @@ export type Database = {
           id?: string
           job_id: string
           matched_skills?: string[]
+          profile_role?: Database["public"]["Enums"]["profile_role"]
           reasons?: string[]
           score?: number
           status?: Database["public"]["Enums"]["match_status"]
@@ -464,6 +491,7 @@ export type Database = {
           id?: string
           job_id?: string
           matched_skills?: string[]
+          profile_role?: Database["public"]["Enums"]["profile_role"]
           reasons?: string[]
           score?: number
           status?: Database["public"]["Enums"]["match_status"]
@@ -503,6 +531,81 @@ export type Database = {
           read?: boolean
           title?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      organization_memberships: {
+        Row: {
+          created_at: string
+          created_by: string
+          email: string
+          full_name: string
+          function_title: string
+          id: string
+          last_access_at: string | null
+          organization_id: string
+          organization_type: string
+          permissions: string[]
+          scope_ids: string[]
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          email: string
+          full_name: string
+          function_title?: string
+          id?: string
+          last_access_at?: string | null
+          organization_id: string
+          organization_type: string
+          permissions?: string[]
+          scope_ids?: string[]
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          email?: string
+          full_name?: string
+          function_title?: string
+          id?: string
+          last_access_at?: string | null
+          organization_id?: string
+          organization_type?: string
+          permissions?: string[]
+          scope_ids?: string[]
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      organization_scopes: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          name: string
+          organization_id: string
+          organization_type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind: string
+          name: string
+          organization_id: string
+          organization_type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          name?: string
+          organization_id?: string
+          organization_type?: string
         }
         Relationships: []
       }
@@ -838,6 +941,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accepted_candidate_profiles: {
+        Args: { _company: string }
+        Returns: {
+          email: string
+          full_name: string
+          match_id: string
+          skills: string[]
+        }[]
+      }
+      activate_organization: {
+        Args: { _id: string; _type: string }
+        Returns: undefined
+      }
       current_profile_role: {
         Args: never
         Returns: Database["public"]["Enums"]["profile_role"]
@@ -859,6 +975,31 @@ export type Database = {
         }[]
       }
       is_admin: { Args: never; Returns: boolean }
+      manage_organization_access: {
+        Args: { _action: string; _id: string; _payload: Json; _type: string }
+        Returns: string
+      }
+      organization_access: {
+        Args: { _id: string; _type: string }
+        Returns: Json
+      }
+      organization_member: {
+        Args: { _id: string; _type: string }
+        Returns: boolean
+      }
+      organization_owner: {
+        Args: { _id: string; _type: string }
+        Returns: string
+      }
+      organization_permission: {
+        Args: {
+          _id: string
+          _permission: string
+          _scope?: string
+          _type: string
+        }
+        Returns: boolean
+      }
       owns_company: { Args: { _company_id: string }; Returns: boolean }
       owns_job: { Args: { _job_id: string }; Returns: boolean }
       switch_test_profile: {
