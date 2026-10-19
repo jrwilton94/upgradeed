@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { AppShell, SectionCard } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -22,6 +22,7 @@ function MyCoursesPage() {
   const { data } = useLearnerData(profile?.id);
 
   if (!profile) return <p className="p-10 text-muted-foreground">Carregando…</p>;
+  if (!["estudante","geral","colaborador"].includes(profile.role ?? "")) return <Navigate to="/painel" />;
 
   const enrollments = data?.enrollments ?? [];
 
@@ -31,7 +32,7 @@ function MyCoursesPage() {
         <div>
           <h1 className="font-display text-3xl font-extrabold text-foreground">Meus cursos</h1>
           <p className="mt-1 text-muted-foreground">
-            Módulos curtos de até 60 minutos com avaliação final.
+            Seu aprendizado e suas avaliações.
           </p>
         </div>
 

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { AppShell, SectionCard } from "@/components/app-shell";
 import { Badge } from "@/components/ui/badge";
@@ -26,12 +26,12 @@ function JobsPage() {
     queryKey: ["jobs-list", profile?.id, isCompany],
     enabled: Boolean(profile),
     queryFn: async () => {
+      if (!profile || !["empresa","estudante","geral","colaborador"].includes(profile.role ?? "")) return [];
       let query = supabase.from("jobs").select("*, companies(name)").order("created_at", {
         ascending: false,
       });
-      query = isCompany
-        ? query.eq("company_id", profile!.company_id!)
-        : query.eq("status", "aberta");
+      if (isCompany) { if (!profile.company_id) return []; query = query.eq("company_id", profile.company_id); }
+      else query = query.eq("status", "aberta");
       const { data, error } = await query;
       if (error) throw error;
       return data ?? [];
@@ -39,6 +39,7 @@ function JobsPage() {
   });
 
   if (!profile) return <p className="p-10 text-muted-foreground">Carregando…</p>;
+  if (profile.role === "professor" || profile.role === "ies") return <Navigate to="/painel" />;
 
   return (
     <AppShell role={profile.role} userName={profile.full_name}>

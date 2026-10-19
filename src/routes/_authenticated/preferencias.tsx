@@ -40,10 +40,11 @@ function PreferencesPage() {
     queryKey: ["preferences", profile?.id],
     enabled: Boolean(profile?.id),
     queryFn: async () => {
+      if (!profile) return null;
       const { data: prefs } = await supabase
         .from("employability_preferences")
         .select("*")
-        .eq("user_id", profile!.id)
+        .eq("user_id", profile.id)
         .maybeSingle();
       return prefs;
     },
@@ -64,7 +65,7 @@ function PreferencesPage() {
   }, [data]);
 
   if (!profile) return <p className="p-10 text-muted-foreground">Carregando…</p>;
-  if (profile.role === "colaborador" || profile.role === "empresa") {
+  if (profile.role !== "estudante" && profile.role !== "geral") {
     return <Navigate to="/painel" />;
   }
 

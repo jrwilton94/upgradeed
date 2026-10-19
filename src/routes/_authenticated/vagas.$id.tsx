@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
@@ -29,7 +29,8 @@ function JobDetailPage() {
   const queryClient = useQueryClient();
 
   const { data: job } = useQuery({
-    queryKey: ["job", id],
+    queryKey: ["job", id, profile?.role],
+    enabled: Boolean(profile && ["empresa","estudante","geral","colaborador"].includes(profile.role ?? "")),
     queryFn: async () => {
       const { data, error } = await supabase
         .from("jobs")
@@ -42,6 +43,7 @@ function JobDetailPage() {
   });
 
   if (!profile) return <p className="p-10 text-muted-foreground">Carregando…</p>;
+  if (profile.role === "professor" || profile.role === "ies") return <Navigate to="/painel" />;
   if (!job) {
     return (
       <AppShell role={profile.role} userName={profile.full_name}>
@@ -103,7 +105,7 @@ function JobDetailPage() {
           </div>
         </SectionCard>
 
-        {profile.role !== "empresa" && match && (
+        {(profile.role === "colaborador" || ((profile.role === "estudante" || profile.role === "geral") && profile.matching_enabled)) && match && (
           <SectionCard
             title={`Compatibilidade estimada: ${match.score}%`}
             description="Explicação transparente do cálculo. A IA não decide nada por você."

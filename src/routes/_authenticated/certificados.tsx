@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { Award } from "lucide-react";
 import { AppShell, SectionCard, StatCard } from "@/components/app-shell";
 import { useProfile } from "@/hooks/use-profile";
@@ -21,6 +21,7 @@ function CertificatesPage() {
   const { data } = useLearnerData(profile?.id);
 
   if (!profile) return <p className="p-10 text-muted-foreground">Carregando…</p>;
+  if (!["estudante","geral","colaborador"].includes(profile.role ?? "")) return <Navigate to="/painel" />;
   const certificates = data?.certificates ?? [];
 
   return (

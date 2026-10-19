@@ -20,6 +20,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { profileByRole, type ProfileRole } from "@/lib/profiles";
 import { useIsAdmin } from "@/hooks/use-plans";
 import { TestProfileSwitcher } from "@/components/test-profile-switcher";
+import { useOrganization } from "@/hooks/use-organization";
+import { hasPermission } from "@/lib/organization";
 
 type NavItem = { to: LinkProps["to"]; label: string; icon: LucideIcon };
 
@@ -63,8 +65,10 @@ export function AppShell({
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data: isAdmin } = useIsAdmin();
+  const organization = useOrganization();
   const items = [
-    ...navForRole(role),
+    ...navForRole(role).filter(item => item.to !== "/vagas" || hasPermission(organization.data, "vagas_internas") || hasPermission(organization.data, "vagas_externas")),
+    ...(hasPermission(organization.data, "subperfis") ? [{ to: "/organizacao/acessos" as LinkProps["to"], label: "Subperfis", icon: Settings2 }] : []),
     ...(isAdmin
       ? [{ to: "/gestao" as LinkProps["to"], label: "Gestão", icon: BadgeDollarSign }]
       : []),
