@@ -50,10 +50,49 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_attempts: {
+        Row: {
+          created_at: string
+          id: string
+          module_id: string
+          passed: boolean
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          score: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          module_id: string
+          passed: boolean
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          score: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          module_id?: string
+          passed?: boolean
+          profile_role?: Database["public"]["Enums"]["profile_role"]
+          score?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_attempts_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "course_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       behavioral_tests: {
         Row: {
           id: string
           profile_label: string | null
+          profile_role: Database["public"]["Enums"]["profile_role"]
           result: Json
           taken_at: string
           user_id: string
@@ -61,6 +100,7 @@ export type Database = {
         Insert: {
           id?: string
           profile_label?: string | null
+          profile_role?: Database["public"]["Enums"]["profile_role"]
           result?: Json
           taken_at?: string
           user_id: string
@@ -68,6 +108,7 @@ export type Database = {
         Update: {
           id?: string
           profile_label?: string | null
+          profile_role?: Database["public"]["Enums"]["profile_role"]
           result?: Json
           taken_at?: string
           user_id?: string
@@ -97,38 +138,64 @@ export type Database = {
       }
       certificates: {
         Row: {
+          assessment_id: string | null
           code: string
+          complementary: boolean
           course_id: string
           hours: number
           id: string
           issued_at: string
+          legacy: boolean
+          module_id: string | null
           profile_role: Database["public"]["Enums"]["profile_role"]
           user_id: string
         }
         Insert: {
+          assessment_id?: string | null
           code?: string
+          complementary?: boolean
           course_id: string
           hours?: number
           id?: string
           issued_at?: string
+          legacy?: boolean
+          module_id?: string | null
           profile_role?: Database["public"]["Enums"]["profile_role"]
           user_id: string
         }
         Update: {
+          assessment_id?: string | null
           code?: string
+          complementary?: boolean
           course_id?: string
           hours?: number
           id?: string
           issued_at?: string
+          legacy?: boolean
+          module_id?: string | null
           profile_role?: Database["public"]["Enums"]["profile_role"]
           user_id?: string
         }
         Relationships: [
           {
+            foreignKeyName: "certificates_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_attempts"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "certificates_course_id_fkey"
             columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certificates_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "course_modules"
             referencedColumns: ["id"]
           },
         ]
@@ -159,6 +226,157 @@ export type Database = {
           owner_id?: string | null
         }
         Relationships: []
+      }
+      company_employees: {
+        Row: {
+          company_id: string
+          current_position_id: string | null
+          email: string
+          ended_at: string | null
+          full_name: string
+          id: string
+          scope_id: string | null
+          started_at: string
+          target_position_id: string | null
+          user_id: string
+        }
+        Insert: {
+          company_id: string
+          current_position_id?: string | null
+          email: string
+          ended_at?: string | null
+          full_name: string
+          id?: string
+          scope_id?: string | null
+          started_at?: string
+          target_position_id?: string | null
+          user_id: string
+        }
+        Update: {
+          company_id?: string
+          current_position_id?: string | null
+          email?: string
+          ended_at?: string | null
+          full_name?: string
+          id?: string
+          scope_id?: string | null
+          started_at?: string
+          target_position_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_employees_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_employees_current_position_id_fkey"
+            columns: ["current_position_id"]
+            isOneToOne: false
+            referencedRelation: "company_positions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_employees_scope_id_fkey"
+            columns: ["scope_id"]
+            isOneToOne: false
+            referencedRelation: "organization_scopes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_employees_target_position_id_fkey"
+            columns: ["target_position_id"]
+            isOneToOne: false
+            referencedRelation: "company_positions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_positions: {
+        Row: {
+          area: string
+          company_id: string
+          course_ids: string[]
+          id: string
+          name: string
+          required_skills: string[]
+          scope_id: string | null
+        }
+        Insert: {
+          area?: string
+          company_id: string
+          course_ids?: string[]
+          id?: string
+          name: string
+          required_skills?: string[]
+          scope_id?: string | null
+        }
+        Update: {
+          area?: string
+          company_id?: string
+          course_ids?: string[]
+          id?: string
+          name?: string
+          required_skills?: string[]
+          scope_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_positions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_positions_scope_id_fkey"
+            columns: ["scope_id"]
+            isOneToOne: false
+            referencedRelation: "organization_scopes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      course_modules: {
+        Row: {
+          course_id: string
+          game: Json
+          hours: number
+          id: string
+          legacy: boolean
+          position: number
+          title: string
+        }
+        Insert: {
+          course_id: string
+          game?: Json
+          hours?: number
+          id?: string
+          legacy?: boolean
+          position?: number
+          title: string
+        }
+        Update: {
+          course_id?: string
+          game?: Json
+          hours?: number
+          id?: string
+          legacy?: boolean
+          position?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_modules_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       course_skills: {
         Row: {
@@ -198,13 +416,17 @@ export type Database = {
           description: string
           hours: number
           id: string
+          institution_id: string | null
           instructor_id: string | null
           instructor_name: string
           level: string
+          media_approved: boolean
           minutes_watched: number
           published: boolean
           rating: number
+          scope_id: string | null
           slug: string
+          status: string
           students_count: number
           title: string
         }
@@ -215,13 +437,17 @@ export type Database = {
           description?: string
           hours?: number
           id?: string
+          institution_id?: string | null
           instructor_id?: string | null
           instructor_name?: string
           level?: string
+          media_approved?: boolean
           minutes_watched?: number
           published?: boolean
           rating?: number
+          scope_id?: string | null
           slug: string
+          status?: string
           students_count?: number
           title: string
         }
@@ -232,13 +458,17 @@ export type Database = {
           description?: string
           hours?: number
           id?: string
+          institution_id?: string | null
           instructor_id?: string | null
           instructor_name?: string
           level?: string
+          media_approved?: boolean
           minutes_watched?: number
           published?: boolean
           rating?: number
+          scope_id?: string | null
           slug?: string
+          status?: string
           students_count?: number
           title?: string
         }
@@ -250,6 +480,20 @@ export type Database = {
             referencedRelation: "categories"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "courses_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "courses_scope_id_fkey"
+            columns: ["scope_id"]
+            isOneToOne: false
+            referencedRelation: "organization_scopes"
+            referencedColumns: ["id"]
+          },
         ]
       }
       employability_preferences: {
@@ -258,6 +502,7 @@ export type Database = {
           city: string | null
           contract_type: string | null
           matching_enabled: boolean
+          profile_role: Database["public"]["Enums"]["profile_role"]
           salary_range: string | null
           state: string | null
           updated_at: string
@@ -269,6 +514,7 @@ export type Database = {
           city?: string | null
           contract_type?: string | null
           matching_enabled?: boolean
+          profile_role?: Database["public"]["Enums"]["profile_role"]
           salary_range?: string | null
           state?: string | null
           updated_at?: string
@@ -280,6 +526,7 @@ export type Database = {
           city?: string | null
           contract_type?: string | null
           matching_enabled?: boolean
+          profile_role?: Database["public"]["Enums"]["profile_role"]
           salary_range?: string | null
           state?: string | null
           updated_at?: string
@@ -431,27 +678,104 @@ export type Database = {
           },
         ]
       }
+      learner_profiles: {
+        Row: {
+          classroom: string | null
+          course_name: string | null
+          education_level: string | null
+          employer_name: string | null
+          institution_id: string | null
+          institution_name: string | null
+          level: number
+          matching_enabled: boolean
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          registration_number: string | null
+          school_year: string | null
+          seeks_job: boolean
+          semester: string | null
+          target_area: string | null
+          target_position: string | null
+          user_id: string
+          works: boolean
+          xp: number
+        }
+        Insert: {
+          classroom?: string | null
+          course_name?: string | null
+          education_level?: string | null
+          employer_name?: string | null
+          institution_id?: string | null
+          institution_name?: string | null
+          level?: number
+          matching_enabled?: boolean
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          registration_number?: string | null
+          school_year?: string | null
+          seeks_job?: boolean
+          semester?: string | null
+          target_area?: string | null
+          target_position?: string | null
+          user_id: string
+          works?: boolean
+          xp?: number
+        }
+        Update: {
+          classroom?: string | null
+          course_name?: string | null
+          education_level?: string | null
+          employer_name?: string | null
+          institution_id?: string | null
+          institution_name?: string | null
+          level?: number
+          matching_enabled?: boolean
+          profile_role?: Database["public"]["Enums"]["profile_role"]
+          registration_number?: string | null
+          school_year?: string | null
+          seeks_job?: boolean
+          semester?: string | null
+          target_area?: string | null
+          target_position?: string | null
+          user_id?: string
+          works?: boolean
+          xp?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "learner_profiles_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lessons: {
         Row: {
           course_id: string
           duration_min: number
           id: string
+          module_id: string | null
           position: number
           title: string
+          video_path: string | null
         }
         Insert: {
           course_id: string
           duration_min?: number
           id?: string
+          module_id?: string | null
           position?: number
           title: string
+          video_path?: string | null
         }
         Update: {
           course_id?: string
           duration_min?: number
           id?: string
+          module_id?: string | null
           position?: number
           title?: string
+          video_path?: string | null
         }
         Relationships: [
           {
@@ -459,6 +783,13 @@ export type Database = {
             columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lessons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "course_modules"
             referencedColumns: ["id"]
           },
         ]
@@ -507,11 +838,41 @@ export type Database = {
           },
         ]
       }
+      module_assessments: {
+        Row: {
+          id: string
+          minimum_score: number
+          module_id: string
+          questions: Json
+        }
+        Insert: {
+          id?: string
+          minimum_score?: number
+          module_id: string
+          questions: Json
+        }
+        Update: {
+          id?: string
+          minimum_score?: number
+          module_id?: string
+          questions?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "module_assessments_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: true
+            referencedRelation: "course_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           body: string | null
           created_at: string
           id: string
+          profile_role: Database["public"]["Enums"]["profile_role"] | null
           read: boolean
           title: string
           user_id: string
@@ -520,6 +881,7 @@ export type Database = {
           body?: string | null
           created_at?: string
           id?: string
+          profile_role?: Database["public"]["Enums"]["profile_role"] | null
           read?: boolean
           title: string
           user_id: string
@@ -528,6 +890,7 @@ export type Database = {
           body?: string | null
           created_at?: string
           id?: string
+          profile_role?: Database["public"]["Enums"]["profile_role"] | null
           read?: boolean
           title?: string
           user_id?: string
@@ -803,6 +1166,63 @@ export type Database = {
         }
         Relationships: []
       }
+      student_verifications: {
+        Row: {
+          file_path: string
+          id: string
+          institution_id: string | null
+          rejection_reason: string | null
+          scope_id: string | null
+          status: string
+          submitted_at: string
+          user_id: string
+          valid_until: string | null
+          validated_at: string | null
+          validated_by: string | null
+        }
+        Insert: {
+          file_path: string
+          id?: string
+          institution_id?: string | null
+          rejection_reason?: string | null
+          scope_id?: string | null
+          status?: string
+          submitted_at?: string
+          user_id: string
+          valid_until?: string | null
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Update: {
+          file_path?: string
+          id?: string
+          institution_id?: string | null
+          rejection_reason?: string | null
+          scope_id?: string | null
+          status?: string
+          submitted_at?: string
+          user_id?: string
+          valid_until?: string | null
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_verifications_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_verifications_scope_id_fkey"
+            columns: ["scope_id"]
+            isOneToOne: false
+            referencedRelation: "organization_scopes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscriptions: {
         Row: {
           amount_cents: number
@@ -954,10 +1374,29 @@ export type Database = {
         Args: { _id: string; _type: string }
         Returns: undefined
       }
+      can_validate_student: {
+        Args: { _institution: string; _scope?: string }
+        Returns: boolean
+      }
+      configure_profile: {
+        Args: {
+          _details: Json
+          _role: Database["public"]["Enums"]["profile_role"]
+        }
+        Returns: undefined
+      }
       current_profile_role: {
         Args: never
         Returns: Database["public"]["Enums"]["profile_role"]
       }
+      employee_competencies: {
+        Args: { _company: string }
+        Returns: {
+          employee_id: string
+          skill: string
+        }[]
+      }
+      get_assessment: { Args: { _module: string }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -975,6 +1414,10 @@ export type Database = {
         }[]
       }
       is_admin: { Args: never; Returns: boolean }
+      manage_company: {
+        Args: { _action: string; _company: string; _payload: Json }
+        Returns: string
+      }
       manage_organization_access: {
         Args: { _action: string; _id: string; _payload: Json; _type: string }
         Returns: string
@@ -1002,8 +1445,23 @@ export type Database = {
       }
       owns_company: { Args: { _company_id: string }; Returns: boolean }
       owns_job: { Args: { _job_id: string }; Returns: boolean }
+      set_matching: { Args: { _enabled: boolean }; Returns: undefined }
+      submit_assessment: {
+        Args: { _answers: Json; _complementary?: boolean; _module: string }
+        Returns: Json
+      }
+      submit_student_verification: { Args: { _file: string }; Returns: string }
       switch_test_profile: {
         Args: { _role: Database["public"]["Enums"]["profile_role"] }
+        Returns: undefined
+      }
+      validate_student_verification: {
+        Args: {
+          _approved: boolean
+          _id: string
+          _reason: string
+          _until: string
+        }
         Returns: undefined
       }
     }

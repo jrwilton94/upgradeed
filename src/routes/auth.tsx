@@ -1,5 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Logo } from "@/components/logo";
@@ -41,6 +43,8 @@ const credentialsSchema = z.object({
 function AuthPage() {
   const { mode } = Route.useSearch();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -50,7 +54,12 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/painel", replace: true });
+    if (data.session) {
+      supabase.from("test_profile_access").select("role").then(({ data: access }) => {
+        if (access?.length) setTestRoles(access.map(a => a.role));
+        else navigate({ to: "/painel", replace: true });
+      });
+    }
     });
   }, [navigate]);
 
@@ -119,6 +128,8 @@ function AuthPage() {
       toast.error("Não foi possível entrar nesse perfil.");
       return;
     }
+    await queryClient.invalidateQueries();
+    await router.invalidate();
     navigate({ to: "/painel" });
   }
 

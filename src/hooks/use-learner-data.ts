@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useProfile } from "@/hooks/use-profile";
 
 export type LearnerData = Awaited<ReturnType<typeof fetchLearnerData>>;
 
@@ -30,7 +31,7 @@ export async function fetchLearnerData(userId: string) {
       ),
     ),
   ) as string[];
-  const hours = completed.reduce((sum, e) => sum + (e.courses?.hours ?? 0), 0);
+  const hours = (certificatesRes.data ?? []).reduce((sum, e) => sum + e.hours, 0);
 
   return {
     enrollments,
@@ -45,16 +46,19 @@ export async function fetchLearnerData(userId: string) {
 }
 
 export function useLearnerData(userId?: string | null) {
+  const { data: profile } = useProfile();
   return useQuery({
-    queryKey: ["learner", userId],
-    enabled: Boolean(userId),
-    queryFn: () => fetchLearnerData(userId as string),
+    queryKey: ["learner", userId, profile?.role],
+    enabled: Boolean(userId && ["estudante","geral","colaborador"].includes(profile?.role ?? "")),
+    queryFn: () => { if (!userId) throw new Error("Usuário indisponível"); return fetchLearnerData(userId); },
   });
 }
 
 export function useOpenJobs() {
+  const { data: profile } = useProfile();
   return useQuery({
-    queryKey: ["open-jobs"],
+    queryKey: ["open-jobs",profile?.role,profile?.matching_enabled],
+    enabled: Boolean(profile && (profile.role === "colaborador" || (["estudante","geral"].includes(profile.role ?? "") && profile.matching_enabled))),
     queryFn: async () => {
       const { data, error } = await supabase
         .from("jobs")

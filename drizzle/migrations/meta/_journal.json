@@ -15,6 +15,27 @@
       "when": 1792368160582,
       "tag": "0001_organization_access_and_profile_security",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793574225577,
+      "tag": "0002_learner_profiles_and_onboarding",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793574328938,
+      "tag": "0003_modules_assessments_and_student_certification",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793574359452,
+      "tag": "0004_corporate_roles_and_lifecycle",
+      "breakpoints": true
     }
   ]
 }
