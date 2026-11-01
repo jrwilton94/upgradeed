@@ -37,7 +37,7 @@ function PreferencesPage() {
   });
 
   const { data } = useQuery({
-    queryKey: ["preferences", profile?.id],
+    queryKey: ["preferences", profile?.id, profile?.role],
     enabled: Boolean(profile?.id),
     queryFn: async () => {
       if (!profile) return null;
@@ -82,13 +82,11 @@ function PreferencesPage() {
         salary_range: form.salary_range || null,
         matching_enabled: form.matching_enabled,
       },
-      { onConflict: "user_id" },
+      { onConflict: "user_id,profile_role" },
     );
     if (error) return toast.error(error.message);
-    await supabase
-      .from("profiles")
-      .update({ matching_enabled: form.matching_enabled })
-      .eq("id", profile.id);
+    const matching = await supabase.rpc("set_matching", { _enabled: form.matching_enabled });
+    if (matching.error) return toast.error("Não foi possível atualizar o matching.");
     queryClient.invalidateQueries();
     toast.success("Preferências salvas.");
   }
@@ -134,7 +132,12 @@ function PreferencesPage() {
             </div>
             <Switch
               checked={form.matching_enabled}
-              onCheckedChange={(checked) => setForm((f) => ({ ...f, matching_enabled: checked }))}
+              onCheckedChange={async (checked) => {
+                const { error } = await supabase.rpc("set_matching", { _enabled: checked });
+                if (error) return toast.error("Não foi possível atualizar o matching.");
+                setForm(f => ({ ...f, matching_enabled: checked }));
+                await queryClient.invalidateQueries();
+              }}
             />
           </div>
         </SectionCard>
