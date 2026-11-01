@@ -54,6 +54,7 @@ export type Database = {
         Row: {
           id: string
           profile_label: string | null
+          profile_role: Database["public"]["Enums"]["profile_role"]
           result: Json
           taken_at: string
           user_id: string
@@ -61,6 +62,7 @@ export type Database = {
         Insert: {
           id?: string
           profile_label?: string | null
+          profile_role?: Database["public"]["Enums"]["profile_role"]
           result?: Json
           taken_at?: string
           user_id: string
@@ -68,6 +70,7 @@ export type Database = {
         Update: {
           id?: string
           profile_label?: string | null
+          profile_role?: Database["public"]["Enums"]["profile_role"]
           result?: Json
           taken_at?: string
           user_id?: string
@@ -258,6 +261,7 @@ export type Database = {
           city: string | null
           contract_type: string | null
           matching_enabled: boolean
+          profile_role: Database["public"]["Enums"]["profile_role"]
           salary_range: string | null
           state: string | null
           updated_at: string
@@ -269,6 +273,7 @@ export type Database = {
           city?: string | null
           contract_type?: string | null
           matching_enabled?: boolean
+          profile_role?: Database["public"]["Enums"]["profile_role"]
           salary_range?: string | null
           state?: string | null
           updated_at?: string
@@ -280,6 +285,7 @@ export type Database = {
           city?: string | null
           contract_type?: string | null
           matching_enabled?: boolean
+          profile_role?: Database["public"]["Enums"]["profile_role"]
           salary_range?: string | null
           state?: string | null
           updated_at?: string
@@ -431,6 +437,77 @@ export type Database = {
           },
         ]
       }
+      learner_profiles: {
+        Row: {
+          classroom: string | null
+          course_name: string | null
+          education_level: string | null
+          employer_name: string | null
+          institution_id: string | null
+          institution_name: string | null
+          level: number
+          matching_enabled: boolean
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          registration_number: string | null
+          school_year: string | null
+          seeks_job: boolean
+          semester: string | null
+          target_area: string | null
+          target_position: string | null
+          user_id: string
+          works: boolean
+          xp: number
+        }
+        Insert: {
+          classroom?: string | null
+          course_name?: string | null
+          education_level?: string | null
+          employer_name?: string | null
+          institution_id?: string | null
+          institution_name?: string | null
+          level?: number
+          matching_enabled?: boolean
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          registration_number?: string | null
+          school_year?: string | null
+          seeks_job?: boolean
+          semester?: string | null
+          target_area?: string | null
+          target_position?: string | null
+          user_id: string
+          works?: boolean
+          xp?: number
+        }
+        Update: {
+          classroom?: string | null
+          course_name?: string | null
+          education_level?: string | null
+          employer_name?: string | null
+          institution_id?: string | null
+          institution_name?: string | null
+          level?: number
+          matching_enabled?: boolean
+          profile_role?: Database["public"]["Enums"]["profile_role"]
+          registration_number?: string | null
+          school_year?: string | null
+          seeks_job?: boolean
+          semester?: string | null
+          target_area?: string | null
+          target_position?: string | null
+          user_id?: string
+          works?: boolean
+          xp?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "learner_profiles_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lessons: {
         Row: {
           course_id: string
@@ -512,6 +589,7 @@ export type Database = {
           body: string | null
           created_at: string
           id: string
+          profile_role: Database["public"]["Enums"]["profile_role"] | null
           read: boolean
           title: string
           user_id: string
@@ -520,6 +598,7 @@ export type Database = {
           body?: string | null
           created_at?: string
           id?: string
+          profile_role?: Database["public"]["Enums"]["profile_role"] | null
           read?: boolean
           title: string
           user_id: string
@@ -528,6 +607,7 @@ export type Database = {
           body?: string | null
           created_at?: string
           id?: string
+          profile_role?: Database["public"]["Enums"]["profile_role"] | null
           read?: boolean
           title?: string
           user_id?: string
@@ -954,6 +1034,13 @@ export type Database = {
         Args: { _id: string; _type: string }
         Returns: undefined
       }
+      configure_profile: {
+        Args: {
+          _details: Json
+          _role: Database["public"]["Enums"]["profile_role"]
+        }
+        Returns: undefined
+      }
       current_profile_role: {
         Args: never
         Returns: Database["public"]["Enums"]["profile_role"]
@@ -1002,6 +1089,7 @@ export type Database = {
       }
       owns_company: { Args: { _company_id: string }; Returns: boolean }
       owns_job: { Args: { _job_id: string }; Returns: boolean }
+      set_matching: { Args: { _enabled: boolean }; Returns: undefined }
       switch_test_profile: {
         Args: { _role: Database["public"]["Enums"]["profile_role"] }
         Returns: undefined
