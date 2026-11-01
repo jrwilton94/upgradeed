@@ -22,6 +22,13 @@
       "when": 1793574225577,
       "tag": "0002_learner_profiles_and_onboarding",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793574328938,
+      "tag": "0003_modules_assessments_and_student_certification",
+      "breakpoints": true
     }
   ]
 }

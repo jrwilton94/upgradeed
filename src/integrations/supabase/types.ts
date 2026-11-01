@@ -50,6 +50,44 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_attempts: {
+        Row: {
+          created_at: string
+          id: string
+          module_id: string
+          passed: boolean
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          score: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          module_id: string
+          passed: boolean
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          score: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          module_id?: string
+          passed?: boolean
+          profile_role?: Database["public"]["Enums"]["profile_role"]
+          score?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_attempts_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "course_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       behavioral_tests: {
         Row: {
           id: string
@@ -100,38 +138,64 @@ export type Database = {
       }
       certificates: {
         Row: {
+          assessment_id: string | null
           code: string
+          complementary: boolean
           course_id: string
           hours: number
           id: string
           issued_at: string
+          legacy: boolean
+          module_id: string | null
           profile_role: Database["public"]["Enums"]["profile_role"]
           user_id: string
         }
         Insert: {
+          assessment_id?: string | null
           code?: string
+          complementary?: boolean
           course_id: string
           hours?: number
           id?: string
           issued_at?: string
+          legacy?: boolean
+          module_id?: string | null
           profile_role?: Database["public"]["Enums"]["profile_role"]
           user_id: string
         }
         Update: {
+          assessment_id?: string | null
           code?: string
+          complementary?: boolean
           course_id?: string
           hours?: number
           id?: string
           issued_at?: string
+          legacy?: boolean
+          module_id?: string | null
           profile_role?: Database["public"]["Enums"]["profile_role"]
           user_id?: string
         }
         Relationships: [
           {
+            foreignKeyName: "certificates_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_attempts"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "certificates_course_id_fkey"
             columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "certificates_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "course_modules"
             referencedColumns: ["id"]
           },
         ]
@@ -162,6 +226,44 @@ export type Database = {
           owner_id?: string | null
         }
         Relationships: []
+      }
+      course_modules: {
+        Row: {
+          course_id: string
+          game: Json
+          hours: number
+          id: string
+          legacy: boolean
+          position: number
+          title: string
+        }
+        Insert: {
+          course_id: string
+          game?: Json
+          hours?: number
+          id?: string
+          legacy?: boolean
+          position?: number
+          title: string
+        }
+        Update: {
+          course_id?: string
+          game?: Json
+          hours?: number
+          id?: string
+          legacy?: boolean
+          position?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_modules_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       course_skills: {
         Row: {
@@ -201,13 +303,17 @@ export type Database = {
           description: string
           hours: number
           id: string
+          institution_id: string | null
           instructor_id: string | null
           instructor_name: string
           level: string
+          media_approved: boolean
           minutes_watched: number
           published: boolean
           rating: number
+          scope_id: string | null
           slug: string
+          status: string
           students_count: number
           title: string
         }
@@ -218,13 +324,17 @@ export type Database = {
           description?: string
           hours?: number
           id?: string
+          institution_id?: string | null
           instructor_id?: string | null
           instructor_name?: string
           level?: string
+          media_approved?: boolean
           minutes_watched?: number
           published?: boolean
           rating?: number
+          scope_id?: string | null
           slug: string
+          status?: string
           students_count?: number
           title: string
         }
@@ -235,13 +345,17 @@ export type Database = {
           description?: string
           hours?: number
           id?: string
+          institution_id?: string | null
           instructor_id?: string | null
           instructor_name?: string
           level?: string
+          media_approved?: boolean
           minutes_watched?: number
           published?: boolean
           rating?: number
+          scope_id?: string | null
           slug?: string
+          status?: string
           students_count?: number
           title?: string
         }
@@ -251,6 +365,20 @@ export type Database = {
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "courses_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "courses_scope_id_fkey"
+            columns: ["scope_id"]
+            isOneToOne: false
+            referencedRelation: "organization_scopes"
             referencedColumns: ["id"]
           },
         ]
@@ -513,22 +641,28 @@ export type Database = {
           course_id: string
           duration_min: number
           id: string
+          module_id: string | null
           position: number
           title: string
+          video_path: string | null
         }
         Insert: {
           course_id: string
           duration_min?: number
           id?: string
+          module_id?: string | null
           position?: number
           title: string
+          video_path?: string | null
         }
         Update: {
           course_id?: string
           duration_min?: number
           id?: string
+          module_id?: string | null
           position?: number
           title?: string
+          video_path?: string | null
         }
         Relationships: [
           {
@@ -536,6 +670,13 @@ export type Database = {
             columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lessons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "course_modules"
             referencedColumns: ["id"]
           },
         ]
@@ -580,6 +721,35 @@ export type Database = {
             columns: ["job_id"]
             isOneToOne: false
             referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      module_assessments: {
+        Row: {
+          id: string
+          minimum_score: number
+          module_id: string
+          questions: Json
+        }
+        Insert: {
+          id?: string
+          minimum_score?: number
+          module_id: string
+          questions: Json
+        }
+        Update: {
+          id?: string
+          minimum_score?: number
+          module_id?: string
+          questions?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "module_assessments_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: true
+            referencedRelation: "course_modules"
             referencedColumns: ["id"]
           },
         ]
@@ -883,6 +1053,63 @@ export type Database = {
         }
         Relationships: []
       }
+      student_verifications: {
+        Row: {
+          file_path: string
+          id: string
+          institution_id: string | null
+          rejection_reason: string | null
+          scope_id: string | null
+          status: string
+          submitted_at: string
+          user_id: string
+          valid_until: string | null
+          validated_at: string | null
+          validated_by: string | null
+        }
+        Insert: {
+          file_path: string
+          id?: string
+          institution_id?: string | null
+          rejection_reason?: string | null
+          scope_id?: string | null
+          status?: string
+          submitted_at?: string
+          user_id: string
+          valid_until?: string | null
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Update: {
+          file_path?: string
+          id?: string
+          institution_id?: string | null
+          rejection_reason?: string | null
+          scope_id?: string | null
+          status?: string
+          submitted_at?: string
+          user_id?: string
+          valid_until?: string | null
+          validated_at?: string | null
+          validated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_verifications_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_verifications_scope_id_fkey"
+            columns: ["scope_id"]
+            isOneToOne: false
+            referencedRelation: "organization_scopes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscriptions: {
         Row: {
           amount_cents: number
@@ -1034,6 +1261,10 @@ export type Database = {
         Args: { _id: string; _type: string }
         Returns: undefined
       }
+      can_validate_student: {
+        Args: { _institution: string; _scope?: string }
+        Returns: boolean
+      }
       configure_profile: {
         Args: {
           _details: Json
@@ -1045,6 +1276,7 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["profile_role"]
       }
+      get_assessment: { Args: { _module: string }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1090,8 +1322,22 @@ export type Database = {
       owns_company: { Args: { _company_id: string }; Returns: boolean }
       owns_job: { Args: { _job_id: string }; Returns: boolean }
       set_matching: { Args: { _enabled: boolean }; Returns: undefined }
+      submit_assessment: {
+        Args: { _answers: Json; _complementary?: boolean; _module: string }
+        Returns: Json
+      }
+      submit_student_verification: { Args: { _file: string }; Returns: string }
       switch_test_profile: {
         Args: { _role: Database["public"]["Enums"]["profile_role"] }
+        Returns: undefined
+      }
+      validate_student_verification: {
+        Args: {
+          _approved: boolean
+          _id: string
+          _reason: string
+          _until: string
+        }
         Returns: undefined
       }
     }
