@@ -227,6 +227,119 @@ export type Database = {
         }
         Relationships: []
       }
+      company_employees: {
+        Row: {
+          company_id: string
+          current_position_id: string | null
+          email: string
+          ended_at: string | null
+          full_name: string
+          id: string
+          scope_id: string | null
+          started_at: string
+          target_position_id: string | null
+          user_id: string
+        }
+        Insert: {
+          company_id: string
+          current_position_id?: string | null
+          email: string
+          ended_at?: string | null
+          full_name: string
+          id?: string
+          scope_id?: string | null
+          started_at?: string
+          target_position_id?: string | null
+          user_id: string
+        }
+        Update: {
+          company_id?: string
+          current_position_id?: string | null
+          email?: string
+          ended_at?: string | null
+          full_name?: string
+          id?: string
+          scope_id?: string | null
+          started_at?: string
+          target_position_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_employees_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_employees_current_position_id_fkey"
+            columns: ["current_position_id"]
+            isOneToOne: false
+            referencedRelation: "company_positions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_employees_scope_id_fkey"
+            columns: ["scope_id"]
+            isOneToOne: false
+            referencedRelation: "organization_scopes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_employees_target_position_id_fkey"
+            columns: ["target_position_id"]
+            isOneToOne: false
+            referencedRelation: "company_positions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_positions: {
+        Row: {
+          area: string
+          company_id: string
+          course_ids: string[]
+          id: string
+          name: string
+          required_skills: string[]
+          scope_id: string | null
+        }
+        Insert: {
+          area?: string
+          company_id: string
+          course_ids?: string[]
+          id?: string
+          name: string
+          required_skills?: string[]
+          scope_id?: string | null
+        }
+        Update: {
+          area?: string
+          company_id?: string
+          course_ids?: string[]
+          id?: string
+          name?: string
+          required_skills?: string[]
+          scope_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_positions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_positions_scope_id_fkey"
+            columns: ["scope_id"]
+            isOneToOne: false
+            referencedRelation: "organization_scopes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       course_modules: {
         Row: {
           course_id: string
@@ -1276,6 +1389,13 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["profile_role"]
       }
+      employee_competencies: {
+        Args: { _company: string }
+        Returns: {
+          employee_id: string
+          skill: string
+        }[]
+      }
       get_assessment: { Args: { _module: string }; Returns: Json }
       has_role: {
         Args: {
@@ -1294,6 +1414,10 @@ export type Database = {
         }[]
       }
       is_admin: { Args: never; Returns: boolean }
+      manage_company: {
+        Args: { _action: string; _company: string; _payload: Json }
+        Returns: string
+      }
       manage_organization_access: {
         Args: { _action: string; _id: string; _payload: Json; _type: string }
         Returns: string
