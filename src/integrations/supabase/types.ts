@@ -1547,10 +1547,27 @@ export type Database = {
         Returns: undefined
       }
       author_assessment: { Args: { _module: string }; Returns: Json }
+      author_metrics: {
+        Args: { _month?: string }
+        Returns: {
+          approved_minutes: number
+          audience: number
+          completion: number
+          course_id: string
+          eligible_minutes: number
+          estimated_cents: number
+          fund_type: string
+          owner_id: string
+          production: number
+          score: number
+          title: string
+        }[]
+      }
       can_validate_student: {
         Args: { _institution: string; _scope?: string }
         Returns: boolean
       }
+      close_month: { Args: { _month: string }; Returns: undefined }
       configure_profile: {
         Args: {
           _details: Json
@@ -1598,6 +1615,10 @@ export type Database = {
       manage_organization_access: {
         Args: { _action: string; _id: string; _payload: Json; _type: string }
         Returns: string
+      }
+      mark_author_payment: {
+        Args: { _id: string; _reference: string }
+        Returns: undefined
       }
       organization_access: {
         Args: { _id: string; _type: string }
