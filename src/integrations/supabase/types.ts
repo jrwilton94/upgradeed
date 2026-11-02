@@ -1374,6 +1374,7 @@ export type Database = {
         Args: { _id: string; _type: string }
         Returns: undefined
       }
+      author_assessment: { Args: { _module: string }; Returns: Json }
       can_validate_student: {
         Args: { _institution: string; _scope?: string }
         Returns: boolean
@@ -1383,6 +1384,10 @@ export type Database = {
           _details: Json
           _role: Database["public"]["Enums"]["profile_role"]
         }
+        Returns: undefined
+      }
+      course_action: {
+        Args: { _action: string; _course: string }
         Returns: undefined
       }
       current_profile_role: {
@@ -1445,6 +1450,10 @@ export type Database = {
       }
       owns_company: { Args: { _company_id: string }; Returns: boolean }
       owns_job: { Args: { _job_id: string }; Returns: boolean }
+      save_course_content: {
+        Args: { _course: string; _payload: Json }
+        Returns: string
+      }
       set_matching: { Args: { _enabled: boolean }; Returns: undefined }
       submit_assessment: {
         Args: { _answers: Json; _complementary?: boolean; _module: string }
