@@ -88,6 +88,53 @@ export type Database = {
           },
         ]
       }
+      author_scores: {
+        Row: {
+          amount_cents: number
+          audience: number
+          completion: number
+          final_score: number
+          fund_type: string
+          id: string
+          month: string
+          owner_id: string
+          payment_status: string
+          production: number
+        }
+        Insert: {
+          amount_cents: number
+          audience: number
+          completion: number
+          final_score: number
+          fund_type: string
+          id?: string
+          month: string
+          owner_id: string
+          payment_status?: string
+          production: number
+        }
+        Update: {
+          amount_cents?: number
+          audience?: number
+          completion?: number
+          final_score?: number
+          fund_type?: string
+          id?: string
+          month?: string
+          owner_id?: string
+          payment_status?: string
+          production?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "author_scores_month_fkey"
+            columns: ["month"]
+            isOneToOne: false
+            referencedRelation: "monthly_funds"
+            referencedColumns: ["month"]
+          },
+        ]
+      }
       behavioral_tests: {
         Row: {
           id: string
@@ -573,6 +620,33 @@ export type Database = {
           },
         ]
       }
+      fund_settings: {
+        Row: {
+          audience_weight: number
+          completion_weight: number
+          id: boolean
+          preset: string
+          production_weight: number
+          updated_at: string
+        }
+        Insert: {
+          audience_weight?: number
+          completion_weight?: number
+          id?: boolean
+          preset?: string
+          production_weight?: number
+          updated_at?: string
+        }
+        Update: {
+          audience_weight?: number
+          completion_weight?: number
+          id?: boolean
+          preset?: string
+          production_weight?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       institutions: {
         Row: {
           city: string | null
@@ -749,6 +823,44 @@ export type Database = {
           },
         ]
       }
+      lesson_views: {
+        Row: {
+          created_at: string
+          id: string
+          lesson_id: string
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          seconds_watched: number
+          user_id: string
+          viewed_on: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lesson_id: string
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          seconds_watched: number
+          user_id: string
+          viewed_on?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          profile_role?: Database["public"]["Enums"]["profile_role"]
+          seconds_watched?: number
+          user_id?: string
+          viewed_on?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_views_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lessons: {
         Row: {
           course_id: string
@@ -866,6 +978,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      monthly_funds: {
+        Row: {
+          closed_at: string
+          ies_fund_cents: number
+          month: string
+          teacher_fund_cents: number
+          total_revenue_cents: number
+          weights: Json
+        }
+        Insert: {
+          closed_at?: string
+          ies_fund_cents: number
+          month: string
+          teacher_fund_cents: number
+          total_revenue_cents: number
+          weights: Json
+        }
+        Update: {
+          closed_at?: string
+          ies_fund_cents?: number
+          month?: string
+          teacher_fund_cents?: number
+          total_revenue_cents?: number
+          weights?: Json
+        }
+        Relationships: []
       }
       notifications: {
         Row: {
@@ -1021,6 +1160,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      payout_accounts: {
+        Row: {
+          account: string
+          bank_code: string
+          branch: string
+          holder_name: string
+          owner_id: string
+          owner_type: string
+          pix_key: string | null
+          updated_at: string
+        }
+        Insert: {
+          account: string
+          bank_code: string
+          branch: string
+          holder_name: string
+          owner_id: string
+          owner_type: string
+          pix_key?: string | null
+          updated_at?: string
+        }
+        Update: {
+          account?: string
+          bank_code?: string
+          branch?: string
+          holder_name?: string
+          owner_id?: string
+          owner_type?: string
+          pix_key?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       plans: {
         Row: {
@@ -1450,10 +1622,15 @@ export type Database = {
       }
       owns_company: { Args: { _company_id: string }; Returns: boolean }
       owns_job: { Args: { _job_id: string }; Returns: boolean }
+      record_lesson_view: {
+        Args: { _lesson: string; _seconds: number }
+        Returns: undefined
+      }
       save_course_content: {
         Args: { _course: string; _payload: Json }
         Returns: string
       }
+      save_payout_account: { Args: { _payload: Json }; Returns: undefined }
       set_matching: { Args: { _enabled: boolean }; Returns: undefined }
       submit_assessment: {
         Args: { _answers: Json; _complementary?: boolean; _module: string }

@@ -43,6 +43,13 @@
       "when": 1793577733053,
       "tag": "0005_content_authoring_functions",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793577852903,
+      "tag": "0006_watch_accounting_and_fund_schema",
+      "breakpoints": true
     }
   ]
 }
