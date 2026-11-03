@@ -908,34 +908,43 @@ export type Database = {
       }
       matches: {
         Row: {
+          accepted_at: string | null
           created_at: string
           id: string
           job_id: string
           matched_skills: string[]
           profile_role: Database["public"]["Enums"]["profile_role"]
           reasons: string[]
+          registration_link: string | null
+          review_status: string
           score: number
           status: Database["public"]["Enums"]["match_status"]
           user_id: string
         }
         Insert: {
+          accepted_at?: string | null
           created_at?: string
           id?: string
           job_id: string
           matched_skills?: string[]
           profile_role?: Database["public"]["Enums"]["profile_role"]
           reasons?: string[]
+          registration_link?: string | null
+          review_status?: string
           score?: number
           status?: Database["public"]["Enums"]["match_status"]
           user_id: string
         }
         Update: {
+          accepted_at?: string | null
           created_at?: string
           id?: string
           job_id?: string
           matched_skills?: string[]
           profile_role?: Database["public"]["Enums"]["profile_role"]
           reasons?: string[]
+          registration_link?: string | null
+          review_status?: string
           score?: number
           status?: Database["public"]["Enums"]["match_status"]
           user_id?: string
@@ -1568,6 +1577,10 @@ export type Database = {
         Returns: boolean
       }
       close_month: { Args: { _month: string }; Returns: undefined }
+      company_update_match: {
+        Args: { _link?: string; _match: string; _status: string }
+        Returns: undefined
+      }
       configure_profile: {
         Args: {
           _details: Json
@@ -1590,6 +1603,7 @@ export type Database = {
           skill: string
         }[]
       }
+      generate_job_matches: { Args: { _job: string }; Returns: number }
       get_assessment: { Args: { _module: string }; Returns: Json }
       has_role: {
         Args: {
@@ -1645,6 +1659,10 @@ export type Database = {
       owns_job: { Args: { _job_id: string }; Returns: boolean }
       record_lesson_view: {
         Args: { _lesson: string; _seconds: number }
+        Returns: undefined
+      }
+      respond_match: {
+        Args: { _accept: boolean; _match: string }
         Returns: undefined
       }
       save_course_content: {

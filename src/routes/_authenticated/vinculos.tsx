@@ -1,0 +1,22 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery,useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { Check, X, FileText } from "lucide-react";
+import { toast } from "sonner";
+import { AppShell } from "@/components/app-shell";
+import { WorkspaceHeader, WorkspaceSection } from "@/components/dashboard-workspace";
+import { StudentVerification } from "@/components/student-verification";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
+import { useProfile } from "@/hooks/use-profile";
+import { useIsAdmin } from "@/hooks/use-plans";
+import { useOrganization } from "@/hooks/use-organization";
+import { hasPermission } from "@/lib/organization";
+export const Route=createFileRoute("/_authenticated/vinculos")({head:()=>({meta:[{title:"Vínculos estudantis — Upgrade Educação"},{name:"description",content:"Declarações e validação autorizada de vínculos estudantis."},{property:"og:title",content:"Vínculos estudantis — Upgrade Educação"},{property:"og:description",content:"Comprovação de vínculo para horas complementares."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}),component:VerificationPage});
+function VerificationPage(){ const {data:profile}=useProfile(); const {data:admin}=useIsAdmin(); const org=useOrganization(); const qc=useQueryClient(); const [reason,setReason]=useState("");const [until,setUntil]=useState(""); const allowed=(admin && ["estudante","geral"].includes(profile?.role??""))||hasPermission(org.data,"validar_vinculos");
+ const {data}=useQuery({queryKey:["verification-queue",profile?.id,profile?.role],enabled:Boolean(allowed),queryFn:async()=>{const {data,error}=await supabase.from("student_verifications").select("*").eq("status","pendente").order("submitted_at");if(error)throw error;return data??[];}});
+ async function validate(id:string,approved:boolean){const {error}=await supabase.rpc("validate_student_verification",{_id:id,_approved:approved,_reason:reason,_until:until?new Date(`${until}T23:59:59`).toISOString():""});if(error)return toast.error(error.message);await qc.invalidateQueries();toast.success("Validação registrada.");}
+ async function document(path:string){const {data,error}=await supabase.storage.from("student-declarations").createSignedUrl(path,60);if(error||!data)return toast.error("Documento não autorizado.");window.open(data.signedUrl,"_blank","noopener,noreferrer");}
+ if(!profile)return <p className="p-8">Carregando…</p>;return <AppShell role={profile.role} userName={profile.full_name}>{profile.role==="estudante"&&!allowed?<StudentVerification userId={profile.id}/>:!allowed?<p className="text-muted-foreground">Acesso não autorizado.</p>:<div className="workspace-shell"><WorkspaceHeader icon={FileText} eyebrow="Validação / Acesso restrito" title="Vínculos estudantis." subtitle="Documentos pendentes de análise"/><WorkspaceSection title="Fila de validação" count={data?.length??0}><div className="grid gap-4 sm:grid-cols-2"><div><Label htmlFor="valid-until">Validade</Label><Input id="valid-until" type="date" value={until} onChange={e=>setUntil(e.target.value)}/></div><div><Label htmlFor="rejection-reason">Motivo da recusa</Label><Input id="rejection-reason" value={reason} onChange={e=>setReason(e.target.value)} maxLength={1000}/></div></div>{!data?.length&&<p className="py-6 text-muted-foreground">Nenhum vínculo pendente.</p>}{data?.map(v=><article className="workspace-row" key={v.id}><p className="text-sm font-semibold">Envio {new Date(v.submitted_at).toLocaleDateString("pt-BR")}</p><div className="mt-3 flex flex-wrap gap-2"><Button variant="outline" onClick={()=>document(v.file_path)}><FileText className="size-4"/>Ver declaração</Button><Button onClick={()=>validate(v.id,true)} disabled={!until}><Check className="size-4"/>Aprovar</Button><Button variant="outline" disabled={reason.trim().length<3} onClick={()=>validate(v.id,false)}><X className="size-4"/>Recusar</Button></div></article>)}</WorkspaceSection></div>}</AppShell>;}
