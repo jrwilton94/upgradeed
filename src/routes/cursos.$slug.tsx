@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
+import { ModuleLearning } from "@/components/module-learning";
+import { useProfile } from "@/hooks/use-profile";
 
 export const Route = createFileRoute("/cursos/$slug")({
   head: () => ({
@@ -28,41 +30,18 @@ export const Route = createFileRoute("/cursos/$slug")({
   component: CourseDetail,
 });
 
-const QUIZ = [
-  {
-    question: "O certificado é liberado após qual etapa?",
-    options: ["Após a primeira aula", "Após a avaliação final do módulo", "Após 30 dias"],
-    answer: 1,
-  },
-  {
-    question: "Quantas perguntas tem a avaliação final de cada módulo?",
-    options: ["5", "10", "20"],
-    answer: 1,
-  },
-  {
-    question: "O que as competências deste curso alimentam?",
-    options: [
-      "Um ranking público de alunos",
-      "Seu perfil de competências verificadas",
-      "Nada além do certificado",
-    ],
-    answer: 1,
-  },
-];
-
 function CourseDetail() {
   const { slug } = Route.useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [quizOpen, setQuizOpen] = useState(false);
-  const [answers, setAnswers] = useState<Record<number, number>>({});
+  const { data: profile } = useProfile();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["course", slug],
+    queryKey: ["course", slug, profile?.role],
     queryFn: async () => {
       const { data: course, error } = await supabase
         .from("courses")
-        .select("*, lessons(*), course_skills(skills(name))")
+        .select("*, lessons(*), course_modules(*), course_skills(skills(name))")
         .eq("slug", slug)
         .maybeSingle();
       if (error) throw error;
@@ -100,63 +79,6 @@ function CourseDetail() {
       .upsert({ user_id: userId, course_id: data.course.id, progress: 10 }, { onConflict: "user_id,course_id,profile_role" });
     if (error) return toast.error(error.message);
     toast.success("Curso iniciado! Bons estudos.");
-    queryClient.invalidateQueries();
-  }
-
-  async function advance() {
-    const userId = await requireAuth();
-    if (!userId || !data?.course) return;
-    const next = Math.min(100, (data.enrollment?.progress ?? 0) + 30);
-    const { error } = await supabase
-      .from("enrollments")
-      .upsert(
-        { user_id: userId, course_id: data.course.id, progress: next },
-        { onConflict: "user_id,course_id,profile_role" },
-      );
-    if (error) return toast.error(error.message);
-    queryClient.invalidateQueries();
-  }
-
-  async function submitQuiz() {
-    const userId = await requireAuth();
-    if (!userId || !data?.course) return;
-    const correct = QUIZ.filter((q, i) => answers[i] === q.answer).length;
-    if (correct < QUIZ.length) {
-      toast.error(`Você acertou ${correct} de ${QUIZ.length}. Revise as aulas e tente novamente.`);
-      return;
-    }
-    await supabase.from("enrollments").upsert(
-      {
-        user_id: userId,
-        course_id: data.course.id,
-        progress: 100,
-        completed_at: new Date().toISOString(),
-      },
-      { onConflict: "user_id,course_id,profile_role" },
-    );
-    await supabase
-      .from("certificates")
-      .upsert(
-        { user_id: userId, course_id: data.course.id, hours: data.course.hours },
-        { onConflict: "user_id,course_id,profile_role" },
-      );
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("xp, level")
-      .eq("id", userId)
-      .maybeSingle();
-    const xp = (profile?.xp ?? 0) + 120;
-    await supabase
-      .from("profiles")
-      .update({ xp, level: Math.max(1, Math.floor(xp / 500) + 1) })
-      .eq("id", userId);
-    await supabase.from("activity_logs").insert({
-      user_id: userId,
-      action: "curso_concluido",
-      meta: { course: data.course.title },
-    });
-    toast.success("Aprovado! Certificado emitido e +120 XP.");
-    setQuizOpen(false);
     queryClient.invalidateQueries();
   }
 
@@ -247,50 +169,7 @@ function CourseDetail() {
               </div>
             </section>
 
-            <section className="rounded-2xl border border-border bg-card p-6">
-              <h2 className="font-display text-xl font-bold text-foreground">Avaliação final</h2>
-              <p className="mt-2 text-sm text-muted-foreground">
-                A avaliação libera o certificado com carga horária. Sem pegadinhas — o objetivo é
-                confirmar o aprendizado.
-              </p>
-              {!quizOpen ? (
-                <Button className="mt-4" onClick={() => setQuizOpen(true)}>
-                  Iniciar avaliação
-                </Button>
-              ) : (
-                <div className="mt-6 space-y-6">
-                  {QUIZ.map((q, index) => (
-                    <div key={q.question}>
-                      <p className="text-sm font-semibold text-foreground">
-                        {index + 1}. {q.question}
-                      </p>
-                      <div className="mt-2 space-y-2">
-                        {q.options.map((option, optionIndex) => (
-                          <label
-                            key={option}
-                            className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm ${
-                              answers[index] === optionIndex
-                                ? "border-brand bg-brand-soft"
-                                : "border-border"
-                            }`}
-                          >
-                            <input
-                              type="radio"
-                              name={`q-${index}`}
-                              className="accent-[var(--brand)]"
-                              checked={answers[index] === optionIndex}
-                              onChange={() => setAnswers((a) => ({ ...a, [index]: optionIndex }))}
-                            />
-                            {option}
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                  <Button onClick={submitQuiz}>Enviar respostas</Button>
-                </div>
-              )}
-            </section>
+            {(course.course_modules ?? []).map(module => <ModuleLearning key={module.id} module={module} lessons={lessons.filter(l => l.module_id === module.id)} role={profile?.role} />)}
           </div>
 
           <aside className="space-y-4">
@@ -303,9 +182,7 @@ function CourseDetail() {
                   Começar curso
                 </Button>
               ) : progress < 100 ? (
-                <Button className="mt-4 w-full" onClick={advance}>
-                  Marcar aulas assistidas
-                </Button>
+                <p className="mt-4 text-sm text-muted-foreground">Conclua as avaliações dos módulos para avançar.</p>
               ) : (
                 <p className="mt-4 flex items-center gap-2 text-sm font-semibold text-brand">
                   <CheckCircle2 className="size-4" /> Curso concluído
@@ -316,8 +193,7 @@ function CourseDetail() {
               <Award className="size-5 text-brand" />
               <p className="mt-3 font-display font-bold text-foreground">Certificado</p>
               <p className="mt-1 text-sm text-muted-foreground">
-                {course.hours}h complementares emitidas automaticamente após a aprovação na
-                avaliação final.
+                {course.hours}h de aprendizado. Aprovação obrigatória; horas complementares dependem de vínculo estudantil validado.
               </p>
             </div>
           </aside>

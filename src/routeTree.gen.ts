@@ -27,6 +27,7 @@ import { Route as AuthenticatedMeusCursosRouteImport } from './routes/_authentic
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated/painel'
 import { Route as AuthenticatedPreferenciasRouteImport } from './routes/_authenticated/preferencias'
+import { Route as AuthenticatedVinculosRouteImport } from './routes/_authenticated/vinculos'
 import { Route as CursosIndexRouteImport } from './routes/cursos.index'
 import { Route as CursosSlugRouteImport } from './routes/cursos.$slug'
 import { Route as ParaColaboradorRouteImport } from './routes/para.colaborador'
@@ -134,6 +135,11 @@ const AuthenticatedPreferenciasRoute =
     path: '/preferencias',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedVinculosRoute = AuthenticatedVinculosRouteImport.update({
+  id: '/vinculos',
+  path: '/vinculos',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const CursosIndexRoute = CursosIndexRouteImport.update({
   id: '/cursos/',
   path: '/cursos/',
@@ -231,6 +237,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/painel': typeof AuthenticatedPainelRoute
   '/preferencias': typeof AuthenticatedPreferenciasRoute
+  '/vinculos': typeof AuthenticatedVinculosRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/para/colaborador': typeof ParaColaboradorRoute
   '/para/empresa': typeof ParaEmpresaRoute
@@ -265,6 +272,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/painel': typeof AuthenticatedPainelRoute
   '/preferencias': typeof AuthenticatedPreferenciasRoute
+  '/vinculos': typeof AuthenticatedVinculosRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/para/colaborador': typeof ParaColaboradorRoute
   '/para/empresa': typeof ParaEmpresaRoute
@@ -301,6 +309,7 @@ export interface FileRoutesById {
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/painel': typeof AuthenticatedPainelRoute
   '/_authenticated/preferencias': typeof AuthenticatedPreferenciasRoute
+  '/_authenticated/vinculos': typeof AuthenticatedVinculosRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/para/colaborador': typeof ParaColaboradorRoute
   '/para/empresa': typeof ParaEmpresaRoute
@@ -337,6 +346,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/painel'
     | '/preferencias'
+    | '/vinculos'
     | '/cursos/$slug'
     | '/para/colaborador'
     | '/para/empresa'
@@ -371,6 +381,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/painel'
     | '/preferencias'
+    | '/vinculos'
     | '/cursos/$slug'
     | '/para/colaborador'
     | '/para/empresa'
@@ -406,6 +417,7 @@ export interface FileRouteTypes {
     | '/_authenticated/onboarding'
     | '/_authenticated/painel'
     | '/_authenticated/preferencias'
+    | '/_authenticated/vinculos'
     | '/cursos/$slug'
     | '/para/colaborador'
     | '/para/empresa'
@@ -576,6 +588,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPreferenciasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/vinculos': {
+      id: '/_authenticated/vinculos'
+      path: '/vinculos'
+      fullPath: '/vinculos'
+      preLoaderRoute: typeof AuthenticatedVinculosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/cursos/': {
       id: '/cursos/'
       path: '/cursos'
@@ -690,6 +709,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPainelRoute: typeof AuthenticatedPainelRoute
   AuthenticatedPreferenciasRoute: typeof AuthenticatedPreferenciasRoute
+  AuthenticatedVinculosRoute: typeof AuthenticatedVinculosRoute
   AuthenticatedGestaoCadastrosRoute: typeof AuthenticatedGestaoCadastrosRoute
   AuthenticatedOrganizacaoAcessosRoute: typeof AuthenticatedOrganizacaoAcessosRoute
   AuthenticatedVagasIdRoute: typeof AuthenticatedVagasIdRoute
@@ -704,6 +724,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPainelRoute: AuthenticatedPainelRoute,
   AuthenticatedPreferenciasRoute: AuthenticatedPreferenciasRoute,
+  AuthenticatedVinculosRoute: AuthenticatedVinculosRoute,
   AuthenticatedGestaoCadastrosRoute: AuthenticatedGestaoCadastrosRoute,
   AuthenticatedOrganizacaoAcessosRoute: AuthenticatedOrganizacaoAcessosRoute,
   AuthenticatedVagasIdRoute: AuthenticatedVagasIdRoute,
