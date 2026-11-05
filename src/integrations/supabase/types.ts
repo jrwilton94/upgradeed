@@ -1603,6 +1603,7 @@ export type Database = {
           skill: string
         }[]
       }
+      expire_student_verifications: { Args: never; Returns: number }
       generate_job_matches: { Args: { _job: string }; Returns: number }
       get_assessment: { Args: { _module: string }; Returns: Json }
       has_role: {
@@ -1637,6 +1638,14 @@ export type Database = {
       organization_access: {
         Args: { _id: string; _type: string }
         Returns: Json
+      }
+      organization_access_options: {
+        Args: never
+        Returns: {
+          name: string
+          organization_id: string
+          organization_type: string
+        }[]
       }
       organization_member: {
         Args: { _id: string; _type: string }

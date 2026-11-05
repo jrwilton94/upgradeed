@@ -10,6 +10,7 @@ import { WorkspaceSection } from "@/components/dashboard-workspace";
 export function StudentVerification({ userId }: { userId: string }) {
   const qc = useQueryClient(); const [file, setFile] = useState<File | null>(null); const [busy,setBusy] = useState(false);
   const { data } = useQuery({ queryKey: ["student-verifications",userId], queryFn: async () => {
+    await supabase.rpc("expire_student_verifications",{});
     const { data,error } = await supabase.from("student_verifications").select("*").eq("user_id",userId).order("submitted_at",{ascending:false}); if(error) throw error; return data ?? [];
   }});
   const latest=data?.[0]; const expired=latest?.status === "validado" && (!latest.valid_until || new Date(latest.valid_until).getTime()<=Date.now());

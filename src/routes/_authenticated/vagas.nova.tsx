@@ -8,6 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/use-profile";
+import { useOrganization } from "@/hooks/use-organization";
+import { hasPermission } from "@/lib/organization";
+import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_authenticated/vagas/nova")({
   head: () => ({ meta: [
@@ -24,6 +27,9 @@ export const Route = createFileRoute("/_authenticated/vagas/nova")({
 function NewJobPage() {
   const { data: profile } = useProfile();
   const navigate = useNavigate();
+  const org=useOrganization();
+  const [jobType,setJobType]=useState("externa");const [scope,setScope]=useState("");
+  const {data:scopes}=useQuery({queryKey:["job-scopes",org.id],enabled:Boolean(org.id),queryFn:async()=>{if(!org.id)return [];const {data}=await supabase.from("organization_scopes").select("*").eq("organization_id",org.id);return data??[];}});
   const [form, setForm] = useState({
     title: "",
     area: "",
@@ -48,7 +54,7 @@ function NewJobPage() {
       return toast.error("Preencha título e descrição da vaga.");
     }
     setLoading(true);
-    const { error } = await supabase.from("jobs").insert({
+    const { data:created,error } = await supabase.from("jobs").insert({
       company_id: profile.company_id,
       title: form.title.trim(),
       area: form.area.trim() || "Geral",
@@ -61,9 +67,11 @@ function NewJobPage() {
       city: form.city.trim() || null,
       state: form.state.trim() || null,
       salary_range: form.salary_range.trim() || null,
-    });
+      job_type:jobType,scope_id:scope||null,
+    }).select("id").single();
     setLoading(false);
     if (error) return toast.error(error.message);
+    if(created){const generated=await supabase.rpc("generate_job_matches",{_job:created.id});if(generated.error)toast.error("Vaga salva, mas não foi possível gerar sugestões.");}
     toast.success("Vaga publicada!");
     navigate({ to: "/vagas" });
   }
@@ -90,6 +98,8 @@ function NewJobPage() {
           description="Descreva competências, não perfis pessoais. Dados sensíveis não são usados no matching."
         >
           <div className="grid gap-4 sm:grid-cols-2">
+            <div><Label htmlFor="job-type">Tipo de vaga</Label><select id="job-type" className="h-10 w-full rounded-md border border-input bg-background px-3" value={jobType} onChange={e=>setJobType(e.target.value)}>{hasPermission(org.data,"vagas_externas")&&<option value="externa">Externa</option>}{hasPermission(org.data,"vagas_internas")&&<option value="interna">Interna</option>}</select></div>
+            <div><Label htmlFor="job-scope">Escopo</Label><select id="job-scope" className="h-10 w-full rounded-md border border-input bg-background px-3" value={scope} onChange={e=>setScope(e.target.value)}><option value="">Toda a organização</option>{scopes?.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
             {field("title", "Título", "Analista de Dados Jr.")}
             {field("area", "Área", "Tecnologia")}
             {field("required_skills", "Competências obrigatórias", "SQL, Excel")}

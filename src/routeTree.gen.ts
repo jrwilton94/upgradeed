@@ -28,6 +28,7 @@ import { Route as AuthenticatedMeusCursosRouteImport } from './routes/_authentic
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated/painel'
 import { Route as AuthenticatedPreferenciasRouteImport } from './routes/_authenticated/preferencias'
+import { Route as AuthenticatedRecebimentosRouteImport } from './routes/_authenticated/recebimentos'
 import { Route as AuthenticatedVinculosRouteImport } from './routes/_authenticated/vinculos'
 import { Route as CursosIndexRouteImport } from './routes/cursos.index'
 import { Route as CursosSlugRouteImport } from './routes/cursos.$slug'
@@ -41,6 +42,7 @@ import { Route as ParaUsuarioGeralRouteImport } from './routes/para.usuario-gera
 import { Route as AuthenticatedEmpresaEquipeRouteImport } from './routes/_authenticated/empresa.equipe'
 import { Route as AuthenticatedGestaoIndexRouteImport } from './routes/_authenticated/gestao.index'
 import { Route as AuthenticatedGestaoCadastrosRouteImport } from './routes/_authenticated/gestao.cadastros'
+import { Route as AuthenticatedGestaoFundosRouteImport } from './routes/_authenticated/gestao.fundos'
 import { Route as AuthenticatedOrganizacaoAcessosRouteImport } from './routes/_authenticated/organizacao.acessos'
 import { Route as AuthenticatedVagasIndexRouteImport } from './routes/_authenticated/vagas.index'
 import { Route as AuthenticatedVagasIdRouteImport } from './routes/_authenticated/vagas.$id'
@@ -142,6 +144,12 @@ const AuthenticatedPreferenciasRoute =
     path: '/preferencias',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedRecebimentosRoute =
+  AuthenticatedRecebimentosRouteImport.update({
+    id: '/recebimentos',
+    path: '/recebimentos',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedVinculosRoute = AuthenticatedVinculosRouteImport.update({
   id: '/vinculos',
   path: '/vinculos',
@@ -210,6 +218,12 @@ const AuthenticatedGestaoCadastrosRoute =
     path: '/gestao/cadastros',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedGestaoFundosRoute =
+  AuthenticatedGestaoFundosRouteImport.update({
+    id: '/gestao/fundos',
+    path: '/gestao/fundos',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedOrganizacaoAcessosRoute =
   AuthenticatedOrganizacaoAcessosRouteImport.update({
     id: '/organizacao/acessos',
@@ -251,6 +265,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/painel': typeof AuthenticatedPainelRoute
   '/preferencias': typeof AuthenticatedPreferenciasRoute
+  '/recebimentos': typeof AuthenticatedRecebimentosRoute
   '/vinculos': typeof AuthenticatedVinculosRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/para/colaborador': typeof ParaColaboradorRoute
@@ -263,6 +278,7 @@ export interface FileRoutesByFullPath {
   '/cursos/': typeof CursosIndexRoute
   '/empresa/equipe': typeof AuthenticatedEmpresaEquipeRoute
   '/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
+  '/gestao/fundos': typeof AuthenticatedGestaoFundosRoute
   '/organizacao/acessos': typeof AuthenticatedOrganizacaoAcessosRoute
   '/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/vagas/nova': typeof AuthenticatedVagasNovaRoute
@@ -288,6 +304,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/painel': typeof AuthenticatedPainelRoute
   '/preferencias': typeof AuthenticatedPreferenciasRoute
+  '/recebimentos': typeof AuthenticatedRecebimentosRoute
   '/vinculos': typeof AuthenticatedVinculosRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/para/colaborador': typeof ParaColaboradorRoute
@@ -300,6 +317,7 @@ export interface FileRoutesByTo {
   '/cursos': typeof CursosIndexRoute
   '/empresa/equipe': typeof AuthenticatedEmpresaEquipeRoute
   '/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
+  '/gestao/fundos': typeof AuthenticatedGestaoFundosRoute
   '/organizacao/acessos': typeof AuthenticatedOrganizacaoAcessosRoute
   '/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/vagas/nova': typeof AuthenticatedVagasNovaRoute
@@ -327,6 +345,7 @@ export interface FileRoutesById {
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/painel': typeof AuthenticatedPainelRoute
   '/_authenticated/preferencias': typeof AuthenticatedPreferenciasRoute
+  '/_authenticated/recebimentos': typeof AuthenticatedRecebimentosRoute
   '/_authenticated/vinculos': typeof AuthenticatedVinculosRoute
   '/cursos/$slug': typeof CursosSlugRoute
   '/para/colaborador': typeof ParaColaboradorRoute
@@ -339,6 +358,7 @@ export interface FileRoutesById {
   '/cursos/': typeof CursosIndexRoute
   '/_authenticated/empresa/equipe': typeof AuthenticatedEmpresaEquipeRoute
   '/_authenticated/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
+  '/_authenticated/gestao/fundos': typeof AuthenticatedGestaoFundosRoute
   '/_authenticated/organizacao/acessos': typeof AuthenticatedOrganizacaoAcessosRoute
   '/_authenticated/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/_authenticated/vagas/nova': typeof AuthenticatedVagasNovaRoute
@@ -366,6 +386,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/painel'
     | '/preferencias'
+    | '/recebimentos'
     | '/vinculos'
     | '/cursos/$slug'
     | '/para/colaborador'
@@ -378,6 +399,7 @@ export interface FileRouteTypes {
     | '/cursos/'
     | '/empresa/equipe'
     | '/gestao/cadastros'
+    | '/gestao/fundos'
     | '/organizacao/acessos'
     | '/vagas/$id'
     | '/vagas/nova'
@@ -403,6 +425,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/painel'
     | '/preferencias'
+    | '/recebimentos'
     | '/vinculos'
     | '/cursos/$slug'
     | '/para/colaborador'
@@ -415,6 +438,7 @@ export interface FileRouteTypes {
     | '/cursos'
     | '/empresa/equipe'
     | '/gestao/cadastros'
+    | '/gestao/fundos'
     | '/organizacao/acessos'
     | '/vagas/$id'
     | '/vagas/nova'
@@ -441,6 +465,7 @@ export interface FileRouteTypes {
     | '/_authenticated/onboarding'
     | '/_authenticated/painel'
     | '/_authenticated/preferencias'
+    | '/_authenticated/recebimentos'
     | '/_authenticated/vinculos'
     | '/cursos/$slug'
     | '/para/colaborador'
@@ -453,6 +478,7 @@ export interface FileRouteTypes {
     | '/cursos/'
     | '/_authenticated/empresa/equipe'
     | '/_authenticated/gestao/cadastros'
+    | '/_authenticated/gestao/fundos'
     | '/_authenticated/organizacao/acessos'
     | '/_authenticated/vagas/$id'
     | '/_authenticated/vagas/nova'
@@ -620,6 +646,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPreferenciasRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/recebimentos': {
+      id: '/_authenticated/recebimentos'
+      path: '/recebimentos'
+      fullPath: '/recebimentos'
+      preLoaderRoute: typeof AuthenticatedRecebimentosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/vinculos': {
       id: '/_authenticated/vinculos'
       path: '/vinculos'
@@ -711,6 +744,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedGestaoCadastrosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/gestao/fundos': {
+      id: '/_authenticated/gestao/fundos'
+      path: '/gestao/fundos'
+      fullPath: '/gestao/fundos'
+      preLoaderRoute: typeof AuthenticatedGestaoFundosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/organizacao/acessos': {
       id: '/_authenticated/organizacao/acessos'
       path: '/organizacao/acessos'
@@ -749,9 +789,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPainelRoute: typeof AuthenticatedPainelRoute
   AuthenticatedPreferenciasRoute: typeof AuthenticatedPreferenciasRoute
+  AuthenticatedRecebimentosRoute: typeof AuthenticatedRecebimentosRoute
   AuthenticatedVinculosRoute: typeof AuthenticatedVinculosRoute
   AuthenticatedEmpresaEquipeRoute: typeof AuthenticatedEmpresaEquipeRoute
   AuthenticatedGestaoCadastrosRoute: typeof AuthenticatedGestaoCadastrosRoute
+  AuthenticatedGestaoFundosRoute: typeof AuthenticatedGestaoFundosRoute
   AuthenticatedOrganizacaoAcessosRoute: typeof AuthenticatedOrganizacaoAcessosRoute
   AuthenticatedVagasIdRoute: typeof AuthenticatedVagasIdRoute
   AuthenticatedVagasNovaRoute: typeof AuthenticatedVagasNovaRoute
@@ -766,9 +808,11 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPainelRoute: AuthenticatedPainelRoute,
   AuthenticatedPreferenciasRoute: AuthenticatedPreferenciasRoute,
+  AuthenticatedRecebimentosRoute: AuthenticatedRecebimentosRoute,
   AuthenticatedVinculosRoute: AuthenticatedVinculosRoute,
   AuthenticatedEmpresaEquipeRoute: AuthenticatedEmpresaEquipeRoute,
   AuthenticatedGestaoCadastrosRoute: AuthenticatedGestaoCadastrosRoute,
+  AuthenticatedGestaoFundosRoute: AuthenticatedGestaoFundosRoute,
   AuthenticatedOrganizacaoAcessosRoute: AuthenticatedOrganizacaoAcessosRoute,
   AuthenticatedVagasIdRoute: AuthenticatedVagasIdRoute,
   AuthenticatedVagasNovaRoute: AuthenticatedVagasNovaRoute,

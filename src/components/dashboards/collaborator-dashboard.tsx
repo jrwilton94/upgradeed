@@ -5,10 +5,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useLearnerData } from "@/hooks/use-learner-data";
+import { useOpenJobs } from "@/hooks/use-learner-data";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 
 export function CollaboratorDashboard({ profile }: { profile: Tables<"profiles"> }) {
   const { data, isLoading } = useLearnerData(profile.id);
+  const {data:jobs}=useOpenJobs();
+  const {data:employment}=useQuery({queryKey:["my-employment",profile.id,profile.company_id],queryFn:async()=>{const {data:employee}=await supabase.from("company_employees").select("*").eq("user_id",profile.id).is("ended_at",null).maybeSingle();if(!employee)return null;const {data:positions}=await supabase.from("company_positions").select("*").eq("company_id",employee.company_id);const current=positions?.find(p=>p.id===employee.current_position_id);const target=positions?.find(p=>p.id===employee.target_position_id);const {data:trail}=target?.course_ids.length?await supabase.from("courses").select("id,title,slug").in("id",target.course_ids):{data:[]};return{current,target,trail:trail??[]};}});
   if (isLoading || !data) return <p className="text-muted-foreground">Carregando desenvolvimento…</p>;
   const inProgress = data.enrollments.filter(e => e.progress < 100);
   const completion = data.enrollments.length ? Math.round(data.completed.length / data.enrollments.length * 100) : 0;
@@ -26,7 +31,8 @@ export function CollaboratorDashboard({ profile }: { profile: Tables<"profiles">
       <WorkspaceSection title="Competências desenvolvidas" count={data.skills.length}>{data.skills.length ? <div className="flex flex-wrap gap-2">{data.skills.map(s => <Badge key={s} variant="secondary" className="rounded-md px-3 py-2">{s}</Badge>)}</div> : <WorkspaceEmpty icon={Sparkles} title="Seu mapa de competências está começando" />}</WorkspaceSection>
     </div><div className="lg:border-l lg:border-border lg:pl-7">
       <WorkspaceSection title="Seu desenvolvimento"><MetricStrip items={[{label:"Cursos concluídos",value:data.completed.length,icon:BookOpen},{label:"Certificados",value:data.certificates.length,icon:Award},{label:"Horas de estudo",value:`${data.hours}h`,icon:RouteIcon},{label:"Experiência",value:`${profile.xp} XP`,icon:Sparkles}]} /></WorkspaceSection>
-      <WorkspaceSection title="Mobilidade interna"><p className="text-sm leading-relaxed text-muted-foreground">Nenhuma oportunidade interna disponível neste momento.</p><p className="workspace-note mt-5 text-xs leading-relaxed text-muted-foreground">A academia corporativa e a gestão de oportunidades internas ainda não estão ativas. Este perfil não participa do matching externo.</p></WorkspaceSection>
+      <WorkspaceSection title="Cargo-alvo e trilha"><p className="font-semibold">{employment?.target?.name??"Cargo-alvo não definido"}</p><p className="mt-3 text-sm text-muted-foreground">Competências pendentes: {employment?.target?.required_skills.filter(s=>!data.skills.some(v=>v.toLowerCase()===s.toLowerCase())).join(", ")||"Nenhuma pendência registrada"}</p>{employment?.trail.map(c=><div className="workspace-row" key={c.id}><Link to="/cursos/$slug" params={{slug:c.slug}}>{c.title}</Link></div>)}</WorkspaceSection>
+      <WorkspaceSection title="Mobilidade interna" count={jobs?.length??0}>{!jobs?.length?<p className="text-sm text-muted-foreground">Nenhuma vaga interna aberta.</p>:jobs.map(j=><div className="workspace-row" key={j.id}><Link to="/vagas/$id" params={{id:j.id}}>{j.title}</Link></div>)}</WorkspaceSection>
       <Button asChild variant="outline"><Link to="/certificados"><Award className="size-4" />Meus certificados</Link></Button>
     </div></div>
   </div>;

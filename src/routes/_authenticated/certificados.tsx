@@ -3,6 +3,8 @@ import { Award } from "lucide-react";
 import { AppShell, SectionCard, StatCard } from "@/components/app-shell";
 import { useProfile } from "@/hooks/use-profile";
 import { useLearnerData } from "@/hooks/use-learner-data";
+import { Link } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/certificados")({
   head: () => ({ meta: [
@@ -40,6 +42,7 @@ function CertificatesPage() {
         </div>
 
         <SectionCard title="Seus certificados">
+          {profile.role === "estudante" && <Button asChild variant="outline" className="mb-5"><Link to="/vinculos">Vínculo para horas complementares</Link></Button>}
           {certificates.length === 0 ? (
             <p className="text-sm text-muted-foreground">Nenhum certificado emitido ainda.</p>
           ) : (

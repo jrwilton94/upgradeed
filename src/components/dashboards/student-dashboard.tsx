@@ -12,7 +12,7 @@ export function StudentDashboard({ profile }: { profile: Tables<"profiles"> }) {
   const { data, isLoading } = useLearnerData(profile.id);
   const { data: jobs } = useOpenJobs();
   if (isLoading || !data) return <p className="text-muted-foreground">Carregando sua trajetória…</p>;
-  const professional = profile.role === "geral";
+  const professional = false;
   const inProgress = data.enrollments.filter(e => e.progress < 100);
   const matchingOn = profile.matching_enabled && (data.preferences?.matching_enabled ?? false);
   const completion = data.enrollments.length ? Math.round(data.completed.length / data.enrollments.length * 100) : 0;

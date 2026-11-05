@@ -27,6 +27,10 @@ function JobDetailPage() {
   const { data: profile } = useProfile();
   const { data: learner } = useLearnerData(profile?.id);
   const queryClient = useQueryClient();
+  const {data:suggestion}=useQuery({queryKey:["job-suggestion",id,profile?.id,profile?.role],enabled:Boolean(profile && ["estudante","geral","colaborador"].includes(profile.role??"")),queryFn:async()=>{
+    if(!profile)return null;
+    const {data,error}=await supabase.from("matches").select("*").eq("job_id",id).eq("user_id",profile.id).eq("profile_role",profile.role??"estudante").maybeSingle();if(error)throw error;return data;
+  }});
 
   const { data: job } = useQuery({
     queryKey: ["job", id, profile?.role],
@@ -67,15 +71,8 @@ function JobDetailPage() {
     : null;
 
   async function accept() {
-    if (!profile || !match || !job) return;
-    const { error } = await supabase.from("matches").insert({
-      user_id: profile.id,
-      job_id: job.id,
-      score: match.score,
-      matched_skills: match.matchedSkills,
-      reasons: match.reasons,
-      status: "aceita",
-    });
+    if (!suggestion) return;
+    const { error } = await supabase.rpc("respond_match",{_match:suggestion.id,_accept:true});
     if (error) return toast.error(error.message);
     toast.success("Perfil apresentado à empresa com seu consentimento.");
     queryClient.invalidateQueries();
@@ -105,13 +102,13 @@ function JobDetailPage() {
           </div>
         </SectionCard>
 
-        {(profile.role === "colaborador" || ((profile.role === "estudante" || profile.role === "geral") && profile.matching_enabled)) && match && (
+        {(profile.role === "colaborador" || ((profile.role === "estudante" || profile.role === "geral") && profile.matching_enabled)) && suggestion && (
           <SectionCard
-            title={`Compatibilidade estimada: ${match.score}%`}
+            title={`Compatibilidade estimada: ${suggestion.score}%`}
             description="Explicação transparente do cálculo. A IA não decide nada por você."
           >
             <ul className="space-y-1 text-sm text-muted-foreground">
-              {match.reasons.map((reason) => (
+              {suggestion.reasons.map((reason) => (
                 <li key={reason}>• {reason}</li>
               ))}
             </ul>
@@ -122,9 +119,10 @@ function JobDetailPage() {
                 enviado automaticamente.
               </p>
             </div>
-            <Button className="mt-4" onClick={accept}>
+            <Button className="mt-4" onClick={accept} disabled={suggestion.status!=="sugerida"}>
               Aceitar e apresentar meu perfil
             </Button>
+            {suggestion.status==="sugerida"&&<Button className="ml-3 mt-4" variant="outline" onClick={async()=>{const {error}=await supabase.rpc("respond_match",{_match:suggestion.id,_accept:false});if(error)return toast.error(error.message);await queryClient.invalidateQueries();}}>Não me candidatar</Button>}
           </SectionCard>
         )}
       </div>

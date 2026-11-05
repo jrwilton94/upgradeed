@@ -51,13 +51,14 @@ function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [testRoles, setTestRoles] = useState<ProfileRole[]>([]);
+  const [organizations,setOrganizations]=useState<{organization_id:string;organization_type:string;name:string}[]>([]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
     if (data.session) {
       supabase.from("test_profile_access").select("role").then(({ data: access }) => {
         if (access?.length) setTestRoles(access.map(a => a.role));
-        else navigate({ to: "/painel", replace: true });
+        else supabase.rpc("organization_access_options",{}).then(({data:options})=>{if(options?.length)setOrganizations(options);else navigate({to:"/painel",replace:true});});
       });
     }
     });
@@ -112,6 +113,8 @@ function AuthPage() {
         setTestRoles(access.map((a) => a.role as ProfileRole));
         return;
       }
+      const {data:options}=await supabase.rpc("organization_access_options",{});
+      if(options?.length){setOrganizations(options);return;}
       navigate({ to: "/painel" });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Não foi possível concluir");
@@ -223,7 +226,7 @@ function AuthPage() {
             </form>
           )}
 
-          <Dialog open={testRoles.length > 0} onOpenChange={() => {}}>
+          <Dialog open={testRoles.length > 0 || organizations.length>0} onOpenChange={() => {}}>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Em qual perfil deseja entrar?</DialogTitle>
@@ -235,6 +238,7 @@ function AuthPage() {
                     {p.label}
                   </Button>
                 ))}
+                {organizations.map(o=><Button key={o.organization_id} variant="outline" className="h-auto min-h-11 whitespace-normal" disabled={loading} onClick={async()=>{setLoading(true);const {error}=await supabase.rpc("activate_organization",{_id:o.organization_id,_type:o.organization_type});if(error){setLoading(false);return toast.error("Acesso organizacional indisponível.");}await queryClient.invalidateQueries();await router.invalidate();navigate({to:"/painel"});}}>{o.name}</Button>)}
               </div>
             </DialogContent>
           </Dialog>

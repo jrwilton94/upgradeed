@@ -41,9 +41,9 @@ function navForRole(role?: ProfileRole | null): NavItem[] {
         { to: "/preferencias", label: "Preferências de vaga", icon: Settings2 },
       ];
     case "colaborador":
-      return [...base, ...learning];
+      return [...base, ...learning, { to: "/vagas", label: "Vagas internas", icon: Briefcase }];
     case "professor":
-      return [...base, { to: "/cursos", label: "Catálogo", icon: LibraryBig }];
+      return [...base, { to: "/conteudo", label: "Meus conteúdos", icon: BookOpen }, { to: "/recebimentos", label: "Recebimentos", icon: BadgeDollarSign }];
     case "ies":
       return [...base, { to: "/cursos", label: "Catálogo", icon: LibraryBig }];
     case "empresa":
@@ -67,10 +67,14 @@ export function AppShell({
   const { data: isAdmin } = useIsAdmin();
   const organization = useOrganization();
   const items = [
-    ...navForRole(role).filter(item => item.to !== "/vagas" || hasPermission(organization.data, "vagas_internas") || hasPermission(organization.data, "vagas_externas")),
+    ...navForRole(role).filter(item => item.to !== "/vagas" || role === "colaborador" || hasPermission(organization.data, "vagas_internas") || hasPermission(organization.data, "vagas_externas")),
+    ...(role === "empresa" && ["colaboradores","competencias","cargos"].some(p=>hasPermission(organization.data,p)) ? [{to:"/empresa/equipe" as LinkProps["to"],label:"Equipe e cargos",icon:BookOpen}] : []),
+    ...(role === "ies" && hasPermission(organization.data,"conteudo") ? [{to:"/conteudo" as LinkProps["to"],label:"Conteúdo",icon:BookOpen}] : []),
+    ...(role === "ies" && hasPermission(organization.data,"bancarios") ? [{to:"/recebimentos" as LinkProps["to"],label:"Recebimentos",icon:BadgeDollarSign}] : []),
+    ...(role === "estudante" || (role === "ies" && hasPermission(organization.data,"validar_vinculos")) ? [{to:"/vinculos" as LinkProps["to"],label:"Vínculos estudantis",icon:Award}] : []),
     ...(hasPermission(organization.data, "subperfis") ? [{ to: "/organizacao/acessos" as LinkProps["to"], label: "Subperfis", icon: Settings2 }] : []),
-    ...(isAdmin
-      ? [{ to: "/gestao" as LinkProps["to"], label: "Gestão", icon: BadgeDollarSign }]
+    ...(isAdmin && (role === "estudante" || role === "geral")
+      ? [{ to: "/gestao" as LinkProps["to"], label: "Gestão", icon: BadgeDollarSign },{to:"/gestao/fundos" as LinkProps["to"],label:"Fundos",icon:BadgeDollarSign},{to:"/conteudo" as LinkProps["to"],label:"Revisar conteúdo",icon:BookOpen}]
       : []),
   ];
   const definition = profileByRole(role);

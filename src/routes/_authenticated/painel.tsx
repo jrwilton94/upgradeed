@@ -1,6 +1,7 @@
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { AppShell } from "@/components/app-shell";
 import { StudentDashboard } from "@/components/dashboards/student-dashboard";
+import { ProfessionalDashboard } from "@/components/dashboards/professional-dashboard";
 import { CollaboratorDashboard } from "@/components/dashboards/collaborator-dashboard";
 import { TeacherDashboard } from "@/components/dashboards/teacher-dashboard";
 import { InstitutionDashboard } from "@/components/dashboards/institution-dashboard";
@@ -30,9 +31,10 @@ function PainelPage() {
 
   return (
     <AppShell role={profile.role} userName={profile.full_name}>
-      {(profile.role === "estudante" || profile.role === "geral") && (
+      {profile.role === "estudante" && (
         <StudentDashboard profile={profile} />
       )}
+      {profile.role === "geral" && <ProfessionalDashboard profile={profile} />}
       {profile.role === "colaborador" && <CollaboratorDashboard profile={profile} />}
       {profile.role === "professor" && <TeacherDashboard profile={profile} />}
       {profile.role === "ies" && <InstitutionDashboard profile={profile} />}
