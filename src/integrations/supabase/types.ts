@@ -1572,6 +1572,15 @@ export type Database = {
           title: string
         }[]
       }
+      can_manage_membership: {
+        Args: {
+          _id: string
+          _permissions: string[]
+          _scopes: string[]
+          _type: string
+        }
+        Returns: boolean
+      }
       can_validate_student: {
         Args: { _institution: string; _scope?: string }
         Returns: boolean
