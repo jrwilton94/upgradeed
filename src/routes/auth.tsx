@@ -58,7 +58,7 @@ function AuthPage() {
     if (data.session) {
       supabase.from("test_profile_access").select("role").then(({ data: access }) => {
         if (access?.length) setTestRoles(access.map(a => a.role));
-        else supabase.rpc("organization_access_options",{}).then(({data:options})=>{if(options?.length)setOrganizations(options);else navigate({to:"/painel",replace:true});});
+        else supabase.rpc("organization_access_options").then(({data:options})=>{if(options?.length)setOrganizations(options);else navigate({to:"/painel",replace:true});});
       });
     }
     });
@@ -113,7 +113,7 @@ function AuthPage() {
         setTestRoles(access.map((a) => a.role as ProfileRole));
         return;
       }
-      const {data:options}=await supabase.rpc("organization_access_options",{});
+      const {data:options}=await supabase.rpc("organization_access_options");
       if(options?.length){setOrganizations(options);return;}
       navigate({ to: "/painel" });
     } catch (error) {
