@@ -14,6 +14,19 @@ export const ORGANIZATION_PERMISSIONS = {
     ["subperfis", "Gerenciar subperfis"],
   ],
 } as const;
+export const PERMISSION_THEMES = {
+  empresa: [
+    ["Pessoas e cargos", ["colaboradores", "competencias", "cargos"]],
+    ["Vagas e candidatos", ["vagas_internas", "vagas_externas", "candidatos"]],
+    ["Análises", ["relatorios"]],
+    ["Financeiro e administração", ["faturamento", "subperfis"]],
+  ],
+  ies: [
+    ["Conteúdo e docentes", ["conteudo", "professores", "cursos"]],
+    ["Alunos e indicadores", ["validar_vinculos", "relatorios"]],
+    ["Financeiro e administração", ["bancarios", "subperfis"]],
+  ],
+} as const;
 export type OrganizationAccess = { owner: boolean; permissions: string[]; scope_ids: string[] };
 export function hasPermission(access: OrganizationAccess | null | undefined, permission: string) {
   return Boolean(access?.owner || access?.permissions.includes(permission));
