@@ -1572,6 +1572,22 @@ export type Database = {
           title: string
         }[]
       }
+      calculate_author_fund: {
+        Args: { _month: string }
+        Returns: {
+          approved_minutes: number
+          audience: number
+          completion: number
+          course_id: string
+          eligible_minutes: number
+          estimated_cents: number
+          fund_type: string
+          owner_id: string
+          production: number
+          score: number
+          title: string
+        }[]
+      }
       can_manage_membership: {
         Args: {
           _id: string
