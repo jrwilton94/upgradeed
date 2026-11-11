@@ -113,6 +113,62 @@
       "when": 1794177722550,
       "tag": "0015_replace_open_read_rules",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1794178722550,
+      "tag": "0016_remessa_foundations",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1794179722550,
+      "tag": "0017_student_institution_link",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1794180722550,
+      "tag": "0018_user_competencies",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1794181722550,
+      "tag": "0019_matching_single_engine",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1794182722550,
+      "tag": "0020_certificates_per_module",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1794183722550,
+      "tag": "0021_student_eligibility_lifecycle",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1794184722550,
+      "tag": "0022_author_score_teacher_ies_reports",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1794185722550,
+      "tag": "0023_profile_tests_billing_reports_teachers",
+      "breakpoints": true
     }
   ]
 }
