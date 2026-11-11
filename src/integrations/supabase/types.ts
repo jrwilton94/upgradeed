@@ -137,6 +137,7 @@ export type Database = {
       }
       behavioral_tests: {
         Row: {
+          test_type: string
           id: string
           profile_label: string | null
           profile_role: Database["public"]["Enums"]["profile_role"]
@@ -145,6 +146,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          test_type?: string
           id?: string
           profile_label?: string | null
           profile_role?: Database["public"]["Enums"]["profile_role"]
@@ -153,6 +155,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          test_type?: string
           id?: string
           profile_label?: string | null
           profile_role?: Database["public"]["Enums"]["profile_role"]
@@ -185,6 +188,7 @@ export type Database = {
       }
       certificates: {
         Row: {
+          kind: string
           assessment_id: string | null
           code: string
           complementary: boolean
@@ -198,6 +202,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          kind?: string
           assessment_id?: string | null
           code?: string
           complementary?: boolean
@@ -211,6 +216,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          kind?: string
           assessment_id?: string | null
           code?: string
           complementary?: boolean
@@ -249,6 +255,8 @@ export type Database = {
       }
       companies: {
         Row: {
+          status: string
+          cnpj: string | null
           code: string
           created_at: string
           id: string
@@ -257,6 +265,8 @@ export type Database = {
           owner_id: string | null
         }
         Insert: {
+          status?: string
+          cnpj?: string | null
           code: string
           created_at?: string
           id?: string
@@ -265,6 +275,8 @@ export type Database = {
           owner_id?: string | null
         }
         Update: {
+          status?: string
+          cnpj?: string | null
           code?: string
           created_at?: string
           id?: string
@@ -649,6 +661,8 @@ export type Database = {
       }
       institutions: {
         Row: {
+          status: string
+          cnpj: string | null
           city: string | null
           created_at: string
           id: string
@@ -657,6 +671,8 @@ export type Database = {
           state: string | null
         }
         Insert: {
+          status?: string
+          cnpj?: string | null
           city?: string | null
           created_at?: string
           id?: string
@@ -665,6 +681,8 @@ export type Database = {
           state?: string | null
         }
         Update: {
+          status?: string
+          cnpj?: string | null
           city?: string | null
           created_at?: string
           id?: string
@@ -754,6 +772,10 @@ export type Database = {
       }
       learner_profiles: {
         Row: {
+          migrated_notice_for: string | null
+          warned_for: string | null
+          grace_until: string | null
+          scope_id: string | null
           classroom: string | null
           course_name: string | null
           education_level: string | null
@@ -774,6 +796,10 @@ export type Database = {
           xp: number
         }
         Insert: {
+          migrated_notice_for?: string | null
+          warned_for?: string | null
+          grace_until?: string | null
+          scope_id?: string | null
           classroom?: string | null
           course_name?: string | null
           education_level?: string | null
@@ -794,6 +820,10 @@ export type Database = {
           xp?: number
         }
         Update: {
+          migrated_notice_for?: string | null
+          warned_for?: string | null
+          grace_until?: string | null
+          scope_id?: string | null
           classroom?: string | null
           course_name?: string | null
           education_level?: string | null
@@ -1349,7 +1379,9 @@ export type Database = {
       }
       student_verifications: {
         Row: {
-          file_path: string
+          invite_id: string | null
+          source: string
+          file_path: string | null
           id: string
           institution_id: string | null
           rejection_reason: string | null
@@ -1362,7 +1394,9 @@ export type Database = {
           validated_by: string | null
         }
         Insert: {
-          file_path: string
+          invite_id?: string | null
+          source?: string
+          file_path?: string | null
           id?: string
           institution_id?: string | null
           rejection_reason?: string | null
@@ -1375,6 +1409,8 @@ export type Database = {
           validated_by?: string | null
         }
         Update: {
+          invite_id?: string | null
+          source?: string
           file_path?: string
           id?: string
           institution_id?: string | null
@@ -1406,6 +1442,8 @@ export type Database = {
       }
       subscriptions: {
         Row: {
+          pending_effective_at: string | null
+          pending_plan_id: string | null
           amount_cents: number
           company_id: string | null
           created_at: string
@@ -1421,6 +1459,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          pending_effective_at?: string | null
+          pending_plan_id?: string | null
           amount_cents?: number
           company_id?: string | null
           created_at?: string
@@ -1436,6 +1476,8 @@ export type Database = {
           user_id: string
         }
         Update: {
+          pending_effective_at?: string | null
+          pending_plan_id?: string | null
           amount_cents?: number
           company_id?: string | null
           created_at?: string
@@ -1537,11 +1579,283 @@ export type Database = {
         }
         Relationships: []
       }
+      academic_documents: {
+        Row: {
+          created_at: string
+          extracted_skills: string[]
+          file_path: string
+          id: string
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          extracted_skills?: string[]
+          file_path: string
+          id?: string
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          extracted_skills?: string[]
+          file_path: string
+          id?: string
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          status?: string
+          user_id: string
+        }
+        Relationships: []
+      }
+      data_migration_log: {
+        Row: {
+          created_at: string
+          id: string
+          metric: string
+          migration: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metric: string
+          migration: string
+          value: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metric: string
+          migration: string
+          value: number
+        }
+        Relationships: []
+      }
+      ies_teachers: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          institution_id: string
+          professor_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          institution_id: string
+          professor_id: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          created_by: string
+          id?: string
+          institution_id: string
+          professor_id: string
+          status?: string
+        }
+        Relationships: []
+      }
+      platform_settings: {
+        Row: {
+          id: boolean
+          student_grace_days: number
+          student_warning_days: number
+          test_profile_switch_enabled: boolean
+          updated_at: string
+        }
+        Insert: {
+          id?: boolean
+          student_grace_days?: number
+          student_warning_days?: number
+          test_profile_switch_enabled?: boolean
+          updated_at?: string
+        }
+        Update: {
+          id?: boolean
+          student_grace_days?: number
+          student_warning_days?: number
+          test_profile_switch_enabled?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profile_tests: {
+        Row: {
+          questions: Json
+          test_type: string
+          title: string
+        }
+        Insert: {
+          questions: Json
+          test_type: string
+          title: string
+        }
+        Update: {
+          questions: Json
+          test_type: string
+          title: string
+        }
+        Relationships: []
+      }
+      student_import_batches: {
+        Row: {
+          accepted: number
+          created_at: string
+          created_by: string
+          filename: string | null
+          id: string
+          institution_id: string
+          rejected: number
+        }
+        Insert: {
+          accepted?: number
+          created_at?: string
+          created_by: string
+          filename?: string | null
+          id?: string
+          institution_id: string
+          rejected?: number
+        }
+        Update: {
+          accepted?: number
+          created_at?: string
+          created_by: string
+          filename?: string | null
+          id?: string
+          institution_id: string
+          rejected?: number
+        }
+        Relationships: []
+      }
+      student_invites: {
+        Row: {
+          batch_id: string
+          claimed_at: string | null
+          claimed_by: string | null
+          classroom: string | null
+          course_name: string | null
+          created_at: string
+          created_by: string
+          education_level: string
+          email: string
+          full_name: string
+          id: string
+          institution_id: string
+          registration_number: string | null
+          school_year: string | null
+          scope_id: string | null
+          semester: string | null
+          status: string
+          valid_until: string
+        }
+        Insert: {
+          batch_id: string
+          claimed_at?: string | null
+          claimed_by?: string | null
+          classroom?: string | null
+          course_name?: string | null
+          created_at?: string
+          created_by: string
+          education_level: string
+          email: string
+          full_name: string
+          id?: string
+          institution_id: string
+          registration_number?: string | null
+          school_year?: string | null
+          scope_id?: string | null
+          semester?: string | null
+          status?: string
+          valid_until: string
+        }
+        Update: {
+          batch_id: string
+          claimed_at?: string | null
+          claimed_by?: string | null
+          classroom?: string | null
+          course_name?: string | null
+          created_at?: string
+          created_by: string
+          education_level: string
+          email: string
+          full_name: string
+          id?: string
+          institution_id: string
+          registration_number?: string | null
+          school_year?: string | null
+          scope_id?: string | null
+          semester?: string | null
+          status?: string
+          valid_until: string
+        }
+        Relationships: []
+      }
+      user_competencies: {
+        Row: {
+          acquired_at: string
+          id: string
+          level: number
+          origin: string
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          skill_id: string
+          user_id: string
+          verified: boolean
+        }
+        Insert: {
+          acquired_at?: string
+          id?: string
+          level?: number
+          origin: string
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          skill_id: string
+          user_id: string
+          verified?: boolean
+        }
+        Update: {
+          acquired_at?: string
+          id?: string
+          level?: number
+          origin: string
+          profile_role: Database["public"]["Enums"]["profile_role"]
+          skill_id: string
+          user_id: string
+          verified?: boolean
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      run_student_lifecycle: { Args: never; Returns: Json }
+      admin_register_professor: { Args: { _email: string }; Returns: string }
+      admin_run_student_lifecycle: { Args: never; Returns: Json }
+      apply_academic_extraction: { Args: { _doc: string; _skills: string[] }; Returns: number }
+      claim_student_invites: { Args: never; Returns: number }
+      company_billing: { Args: { _company: string }; Returns: Json }
+      company_report: { Args: { _company: string }; Returns: Json }
+      get_profile_test: { Args: { _type: string }; Returns: Json }
+      ies_aggregate_report: { Args: { _institution: string }; Returns: Json }
+      ies_link_teacher: { Args: { _email: string; _institution: string }; Returns: string }
+      ies_list_courses: { Args: { _institution: string }; Returns: { course_id: string; title: string; status: string; hours: number; scope_id: string | null; scope_name: string | null; modules: number; enrollments: number }[] }
+      ies_list_teachers: { Args: { _institution: string }; Returns: { link_id: string; full_name: string; email: string | null; status: string; linked_at: string }[] }
+      ies_set_course_scope: { Args: { _course: string; _scope: string | null }; Returns: undefined }
+      ies_unlink_teacher: { Args: { _link: string }; Returns: undefined }
+      import_student_invites: { Args: { _confirm?: boolean; _filename?: string; _institution: string; _rows: Json }; Returns: Json }
+      is_upgrade_staff: { Args: never; Returns: boolean }
+      my_competencies: { Args: never; Returns: { skill_id: string; name: string; level: number; origin: string; verified: boolean; acquired_at: string }[] }
+      register_academic_document: { Args: { _path: string }; Returns: string }
+      search_institutions: { Args: { _query: string }; Returns: { id: string; name: string; city: string | null; state: string | null }[] }
+      student_status: { Args: never; Returns: Json }
+      submit_profile_test: { Args: { _answers: Json; _type: string }; Returns: Json }
+      teacher_dashboard: { Args: { _month?: string }; Returns: Json }
+      test_switch_enabled: { Args: never; Returns: boolean }
       accepted_candidate_profiles: {
         Args: { _company: string }
         Returns: {
@@ -1705,10 +2019,7 @@ export type Database = {
       }
       save_payout_account: { Args: { _payload: Json }; Returns: undefined }
       set_matching: { Args: { _enabled: boolean }; Returns: undefined }
-      submit_assessment: {
-        Args: { _answers: Json; _complementary?: boolean; _module: string }
-        Returns: Json
-      }
+      submit_assessment: { Args: { _answers: Json; _module: string }; Returns: Json }
       submit_student_verification: { Args: { _file: string }; Returns: string }
       switch_test_profile: {
         Args: { _role: Database["public"]["Enums"]["profile_role"] }

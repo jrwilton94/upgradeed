@@ -1,6 +1,7 @@
 # Upgrade Educação
-- [ ] Aplicar a remessa de nove partes preservando dados e funções existentes: isolamento e autorizações, subperfis e auditoria, cadastros e vínculos, conteúdo e certificação, academia corporativa, matching, fundos e testes de aceite.
-- [ ] Entregar relatório único da remessa com criado, alterado, mantido, removido, migrações, dúvidas e checklist da Parte 9.
+- [x] Remessa de nove partes (blocos A–I) implementada na branch `ajustes-remessa-9-partes`, com 48 testes de banco; pendente de aplicação das migrações 0016–0024 e de verificação em telas/celular.
+- [x] Relatório único da remessa em `docs/relatorio-remessa.md` (Parte 9: 19 atendidos, itens 15 e 18 não marcados, item 21 não verificado).
+- [ ] Verificar em tela e no celular as telas novas; confirmar agenda diária do ciclo do Estudante (`pg_cron` ou rota com segredo); implementar extração do histórico acadêmico quando houver provedor de IA.
 - [x] Reorganizar os seis painéis com hierarquia visual própria para suas atribuições, preservando funções e privacidade.
 - [x] Remover Cursos do menu principal e verificar os seis perfis.
 - [x] Atualizar missão e nomenclatura Profissional, preservando a URL anterior por redirecionamento.
@@ -9,4 +10,4 @@
 - [x] Preparar uma conta com acesso autorizado aos seis perfis de teste e verificar o acesso.
 - [x] Verificar páginas, troca dos seis perfis, exportação institucional e atualização obrigatória de pacotes.
 
-Limitações identificadas do MVP: apuração e pagamento de repasses ainda não ativos; academia corporativa e gestão completa de colaboradores ainda não implementadas; exportação institucional é agregada, não um documento oficial do MEC.
+Limitações identificadas do MVP: transferência bancária de repasses depende de provedor financeiro; extração automática de histórico acadêmico ainda não ativa; turmas representadas apenas por escopos; exportação institucional é agregada, não um documento oficial do MEC.

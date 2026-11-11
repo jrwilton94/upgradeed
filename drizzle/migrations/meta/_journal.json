@@ -169,6 +169,13 @@
       "when": 1794185722550,
       "tag": "0023_profile_tests_billing_reports_teachers",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1794186722550,
+      "tag": "0024_offboarding_history",
+      "breakpoints": true
     }
   ]
 }

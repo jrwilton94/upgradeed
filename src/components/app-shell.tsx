@@ -43,7 +43,11 @@ function navForRole(role?: ProfileRole | null): NavItem[] {
     case "colaborador":
       return [...base, ...learning, { to: "/vagas", label: "Vagas internas", icon: Briefcase }];
     case "professor":
-      return [...base, { to: "/conteudo", label: "Meus conteúdos", icon: BookOpen }, { to: "/recebimentos", label: "Recebimentos", icon: BadgeDollarSign }];
+      return [
+        ...base,
+        { to: "/conteudo", label: "Meus conteúdos", icon: BookOpen },
+        { to: "/recebimentos", label: "Recebimentos", icon: BadgeDollarSign },
+      ];
     case "ies":
       return [...base, { to: "/cursos", label: "Catálogo", icon: LibraryBig }];
     case "empresa":
@@ -67,14 +71,67 @@ export function AppShell({
   const { data: isAdmin } = useIsAdmin();
   const organization = useOrganization();
   const items = [
-    ...navForRole(role).filter(item => item.to !== "/vagas" || role === "colaborador" || hasPermission(organization.data, "vagas_internas") || hasPermission(organization.data, "vagas_externas")),
-    ...(role === "empresa" && ["colaboradores","competencias","cargos"].some(p=>hasPermission(organization.data,p)) ? [{to:"/empresa/equipe" as LinkProps["to"],label:"Equipe e cargos",icon:BookOpen}] : []),
-    ...(role === "ies" && hasPermission(organization.data,"conteudo") ? [{to:"/conteudo" as LinkProps["to"],label:"Conteúdo",icon:BookOpen}] : []),
-    ...(role === "ies" && hasPermission(organization.data,"bancarios") ? [{to:"/recebimentos" as LinkProps["to"],label:"Recebimentos",icon:BadgeDollarSign}] : []),
-    ...(role === "estudante" || (role === "ies" && hasPermission(organization.data,"validar_vinculos")) ? [{to:"/vinculos" as LinkProps["to"],label:"Vínculos estudantis",icon:Award}] : []),
-    ...(hasPermission(organization.data, "subperfis") ? [{ to: "/organizacao/acessos" as LinkProps["to"], label: "Subperfis", icon: Settings2 }] : []),
+    ...navForRole(role).filter(
+      (item) =>
+        item.to !== "/vagas" ||
+        role === "colaborador" ||
+        hasPermission(organization.data, "vagas_internas") ||
+        hasPermission(organization.data, "vagas_externas"),
+    ),
+    ...(role === "empresa" &&
+    ["colaboradores", "competencias", "cargos"].some((p) => hasPermission(organization.data, p))
+      ? [{ to: "/empresa/equipe" as LinkProps["to"], label: "Equipe e cargos", icon: BookOpen }]
+      : []),
+    ...((role === "empresa" && organization.data?.permissions.includes("relatorios")) ||
+    (role === "empresa" && organization.data?.owner)
+      ? [{ to: "/empresa/relatorios" as LinkProps["to"], label: "Relatórios", icon: BookOpen }]
+      : []),
+    ...(role === "empresa" &&
+    hasPermission(organization.data, "faturamento") &&
+    !organization.data?.scope_ids.length
+      ? [
+          {
+            to: "/empresa/faturamento" as LinkProps["to"],
+            label: "Licenças e faturamento",
+            icon: BadgeDollarSign,
+          },
+        ]
+      : []),
+    ...(role === "ies" && hasPermission(organization.data, "relatorios")
+      ? [
+          {
+            to: "/ies/relatorios" as LinkProps["to"],
+            label: "Relatórios agregados",
+            icon: BookOpen,
+          },
+        ]
+      : []),
+    ...(role === "ies" && hasPermission(organization.data, "professores")
+      ? [{ to: "/ies/professores" as LinkProps["to"], label: "Professores", icon: BookOpen }]
+      : []),
+    ...(role === "ies" && hasPermission(organization.data, "cursos")
+      ? [{ to: "/ies/cursos" as LinkProps["to"], label: "Cursos e turmas", icon: BookOpen }]
+      : []),
+    ...(role === "ies" && hasPermission(organization.data, "conteudo")
+      ? [{ to: "/conteudo" as LinkProps["to"], label: "Conteúdo", icon: BookOpen }]
+      : []),
+    ...(role === "ies" && hasPermission(organization.data, "bancarios")
+      ? [{ to: "/recebimentos" as LinkProps["to"], label: "Recebimentos", icon: BadgeDollarSign }]
+      : []),
+    ...(role === "estudante" ||
+    role === "geral" ||
+    (role === "ies" && hasPermission(organization.data, "validar_vinculos"))
+      ? [{ to: "/vinculos" as LinkProps["to"], label: "Vínculos estudantis", icon: Award }]
+      : []),
+    ...(hasPermission(organization.data, "subperfis")
+      ? [{ to: "/organizacao/acessos" as LinkProps["to"], label: "Subperfis", icon: Settings2 }]
+      : []),
     ...(isAdmin && (role === "estudante" || role === "geral")
-      ? [{ to: "/gestao" as LinkProps["to"], label: "Gestão", icon: BadgeDollarSign },{to:"/gestao/fundos" as LinkProps["to"],label:"Fundos",icon:BadgeDollarSign},{to:"/conteudo" as LinkProps["to"],label:"Revisar conteúdo",icon:BookOpen}]
+      ? [
+          { to: "/gestao" as LinkProps["to"], label: "Gestão", icon: BadgeDollarSign },
+          { to: "/gestao/fundos" as LinkProps["to"], label: "Fundos", icon: BadgeDollarSign },
+          { to: "/conteudo" as LinkProps["to"], label: "Revisar conteúdo", icon: BookOpen },
+        ]
       : []),
   ];
   const definition = profileByRole(role);

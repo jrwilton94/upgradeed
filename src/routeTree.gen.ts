@@ -40,13 +40,19 @@ import { Route as ParaProfessorRouteImport } from './routes/para.professor'
 import { Route as ParaProfissionalRouteImport } from './routes/para.profissional'
 import { Route as ParaUsuarioGeralRouteImport } from './routes/para.usuario-geral'
 import { Route as AuthenticatedEmpresaEquipeRouteImport } from './routes/_authenticated/empresa.equipe'
+import { Route as AuthenticatedEmpresaFaturamentoRouteImport } from './routes/_authenticated/empresa.faturamento'
+import { Route as AuthenticatedEmpresaRelatoriosRouteImport } from './routes/_authenticated/empresa.relatorios'
 import { Route as AuthenticatedGestaoIndexRouteImport } from './routes/_authenticated/gestao.index'
 import { Route as AuthenticatedGestaoCadastrosRouteImport } from './routes/_authenticated/gestao.cadastros'
 import { Route as AuthenticatedGestaoFundosRouteImport } from './routes/_authenticated/gestao.fundos'
+import { Route as AuthenticatedIesCursosRouteImport } from './routes/_authenticated/ies.cursos'
+import { Route as AuthenticatedIesProfessoresRouteImport } from './routes/_authenticated/ies.professores'
+import { Route as AuthenticatedIesRelatoriosRouteImport } from './routes/_authenticated/ies.relatorios'
 import { Route as AuthenticatedOrganizacaoAcessosRouteImport } from './routes/_authenticated/organizacao.acessos'
 import { Route as AuthenticatedVagasIndexRouteImport } from './routes/_authenticated/vagas.index'
 import { Route as AuthenticatedVagasIdRouteImport } from './routes/_authenticated/vagas.$id'
 import { Route as AuthenticatedVagasNovaRouteImport } from './routes/_authenticated/vagas.nova'
+import { Route as ApiPublicRunStudentLifecycleRouteImport } from './routes/api/public/run-student-lifecycle'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -206,6 +212,18 @@ const AuthenticatedEmpresaEquipeRoute =
     path: '/empresa/equipe',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedEmpresaFaturamentoRoute =
+  AuthenticatedEmpresaFaturamentoRouteImport.update({
+    id: '/empresa/faturamento',
+    path: '/empresa/faturamento',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEmpresaRelatoriosRoute =
+  AuthenticatedEmpresaRelatoriosRouteImport.update({
+    id: '/empresa/relatorios',
+    path: '/empresa/relatorios',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedGestaoIndexRoute =
   AuthenticatedGestaoIndexRouteImport.update({
     id: '/gestao/',
@@ -222,6 +240,23 @@ const AuthenticatedGestaoFundosRoute =
   AuthenticatedGestaoFundosRouteImport.update({
     id: '/gestao/fundos',
     path: '/gestao/fundos',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedIesCursosRoute = AuthenticatedIesCursosRouteImport.update({
+  id: '/ies/cursos',
+  path: '/ies/cursos',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedIesProfessoresRoute =
+  AuthenticatedIesProfessoresRouteImport.update({
+    id: '/ies/professores',
+    path: '/ies/professores',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedIesRelatoriosRoute =
+  AuthenticatedIesRelatoriosRouteImport.update({
+    id: '/ies/relatorios',
+    path: '/ies/relatorios',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedOrganizacaoAcessosRoute =
@@ -245,6 +280,12 @@ const AuthenticatedVagasNovaRoute = AuthenticatedVagasNovaRouteImport.update({
   path: '/vagas/nova',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicRunStudentLifecycleRoute =
+  ApiPublicRunStudentLifecycleRouteImport.update({
+    id: '/api/public/run-student-lifecycle',
+    path: '/api/public/run-student-lifecycle',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -277,11 +318,17 @@ export interface FileRoutesByFullPath {
   '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos/': typeof CursosIndexRoute
   '/empresa/equipe': typeof AuthenticatedEmpresaEquipeRoute
+  '/empresa/faturamento': typeof AuthenticatedEmpresaFaturamentoRoute
+  '/empresa/relatorios': typeof AuthenticatedEmpresaRelatoriosRoute
   '/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
   '/gestao/fundos': typeof AuthenticatedGestaoFundosRoute
+  '/ies/cursos': typeof AuthenticatedIesCursosRoute
+  '/ies/professores': typeof AuthenticatedIesProfessoresRoute
+  '/ies/relatorios': typeof AuthenticatedIesRelatoriosRoute
   '/organizacao/acessos': typeof AuthenticatedOrganizacaoAcessosRoute
   '/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/vagas/nova': typeof AuthenticatedVagasNovaRoute
+  '/api/public/run-student-lifecycle': typeof ApiPublicRunStudentLifecycleRoute
   '/gestao/': typeof AuthenticatedGestaoIndexRoute
   '/vagas/': typeof AuthenticatedVagasIndexRoute
 }
@@ -316,11 +363,17 @@ export interface FileRoutesByTo {
   '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos': typeof CursosIndexRoute
   '/empresa/equipe': typeof AuthenticatedEmpresaEquipeRoute
+  '/empresa/faturamento': typeof AuthenticatedEmpresaFaturamentoRoute
+  '/empresa/relatorios': typeof AuthenticatedEmpresaRelatoriosRoute
   '/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
   '/gestao/fundos': typeof AuthenticatedGestaoFundosRoute
+  '/ies/cursos': typeof AuthenticatedIesCursosRoute
+  '/ies/professores': typeof AuthenticatedIesProfessoresRoute
+  '/ies/relatorios': typeof AuthenticatedIesRelatoriosRoute
   '/organizacao/acessos': typeof AuthenticatedOrganizacaoAcessosRoute
   '/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/vagas/nova': typeof AuthenticatedVagasNovaRoute
+  '/api/public/run-student-lifecycle': typeof ApiPublicRunStudentLifecycleRoute
   '/gestao': typeof AuthenticatedGestaoIndexRoute
   '/vagas': typeof AuthenticatedVagasIndexRoute
 }
@@ -357,11 +410,17 @@ export interface FileRoutesById {
   '/para/usuario-geral': typeof ParaUsuarioGeralRoute
   '/cursos/': typeof CursosIndexRoute
   '/_authenticated/empresa/equipe': typeof AuthenticatedEmpresaEquipeRoute
+  '/_authenticated/empresa/faturamento': typeof AuthenticatedEmpresaFaturamentoRoute
+  '/_authenticated/empresa/relatorios': typeof AuthenticatedEmpresaRelatoriosRoute
   '/_authenticated/gestao/cadastros': typeof AuthenticatedGestaoCadastrosRoute
   '/_authenticated/gestao/fundos': typeof AuthenticatedGestaoFundosRoute
+  '/_authenticated/ies/cursos': typeof AuthenticatedIesCursosRoute
+  '/_authenticated/ies/professores': typeof AuthenticatedIesProfessoresRoute
+  '/_authenticated/ies/relatorios': typeof AuthenticatedIesRelatoriosRoute
   '/_authenticated/organizacao/acessos': typeof AuthenticatedOrganizacaoAcessosRoute
   '/_authenticated/vagas/$id': typeof AuthenticatedVagasIdRoute
   '/_authenticated/vagas/nova': typeof AuthenticatedVagasNovaRoute
+  '/api/public/run-student-lifecycle': typeof ApiPublicRunStudentLifecycleRoute
   '/_authenticated/gestao/': typeof AuthenticatedGestaoIndexRoute
   '/_authenticated/vagas/': typeof AuthenticatedVagasIndexRoute
 }
@@ -398,11 +457,17 @@ export interface FileRouteTypes {
     | '/para/usuario-geral'
     | '/cursos/'
     | '/empresa/equipe'
+    | '/empresa/faturamento'
+    | '/empresa/relatorios'
     | '/gestao/cadastros'
     | '/gestao/fundos'
+    | '/ies/cursos'
+    | '/ies/professores'
+    | '/ies/relatorios'
     | '/organizacao/acessos'
     | '/vagas/$id'
     | '/vagas/nova'
+    | '/api/public/run-student-lifecycle'
     | '/gestao/'
     | '/vagas/'
   fileRoutesByTo: FileRoutesByTo
@@ -437,11 +502,17 @@ export interface FileRouteTypes {
     | '/para/usuario-geral'
     | '/cursos'
     | '/empresa/equipe'
+    | '/empresa/faturamento'
+    | '/empresa/relatorios'
     | '/gestao/cadastros'
     | '/gestao/fundos'
+    | '/ies/cursos'
+    | '/ies/professores'
+    | '/ies/relatorios'
     | '/organizacao/acessos'
     | '/vagas/$id'
     | '/vagas/nova'
+    | '/api/public/run-student-lifecycle'
     | '/gestao'
     | '/vagas'
   id:
@@ -477,11 +548,17 @@ export interface FileRouteTypes {
     | '/para/usuario-geral'
     | '/cursos/'
     | '/_authenticated/empresa/equipe'
+    | '/_authenticated/empresa/faturamento'
+    | '/_authenticated/empresa/relatorios'
     | '/_authenticated/gestao/cadastros'
     | '/_authenticated/gestao/fundos'
+    | '/_authenticated/ies/cursos'
+    | '/_authenticated/ies/professores'
+    | '/_authenticated/ies/relatorios'
     | '/_authenticated/organizacao/acessos'
     | '/_authenticated/vagas/$id'
     | '/_authenticated/vagas/nova'
+    | '/api/public/run-student-lifecycle'
     | '/_authenticated/gestao/'
     | '/_authenticated/vagas/'
   fileRoutesById: FileRoutesById
@@ -509,6 +586,7 @@ export interface RootRouteChildren {
   ParaProfissionalRoute: typeof ParaProfissionalRoute
   ParaUsuarioGeralRoute: typeof ParaUsuarioGeralRoute
   CursosIndexRoute: typeof CursosIndexRoute
+  ApiPublicRunStudentLifecycleRoute: typeof ApiPublicRunStudentLifecycleRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -730,6 +808,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEmpresaEquipeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/empresa/faturamento': {
+      id: '/_authenticated/empresa/faturamento'
+      path: '/empresa/faturamento'
+      fullPath: '/empresa/faturamento'
+      preLoaderRoute: typeof AuthenticatedEmpresaFaturamentoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/empresa/relatorios': {
+      id: '/_authenticated/empresa/relatorios'
+      path: '/empresa/relatorios'
+      fullPath: '/empresa/relatorios'
+      preLoaderRoute: typeof AuthenticatedEmpresaRelatoriosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/gestao/': {
       id: '/_authenticated/gestao/'
       path: '/gestao'
@@ -749,6 +841,27 @@ declare module '@tanstack/react-router' {
       path: '/gestao/fundos'
       fullPath: '/gestao/fundos'
       preLoaderRoute: typeof AuthenticatedGestaoFundosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/ies/cursos': {
+      id: '/_authenticated/ies/cursos'
+      path: '/ies/cursos'
+      fullPath: '/ies/cursos'
+      preLoaderRoute: typeof AuthenticatedIesCursosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/ies/professores': {
+      id: '/_authenticated/ies/professores'
+      path: '/ies/professores'
+      fullPath: '/ies/professores'
+      preLoaderRoute: typeof AuthenticatedIesProfessoresRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/ies/relatorios': {
+      id: '/_authenticated/ies/relatorios'
+      path: '/ies/relatorios'
+      fullPath: '/ies/relatorios'
+      preLoaderRoute: typeof AuthenticatedIesRelatoriosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/organizacao/acessos': {
@@ -779,6 +892,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVagasNovaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/run-student-lifecycle': {
+      id: '/api/public/run-student-lifecycle'
+      path: '/api/public/run-student-lifecycle'
+      fullPath: '/api/public/run-student-lifecycle'
+      preLoaderRoute: typeof ApiPublicRunStudentLifecycleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -792,8 +912,13 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedRecebimentosRoute: typeof AuthenticatedRecebimentosRoute
   AuthenticatedVinculosRoute: typeof AuthenticatedVinculosRoute
   AuthenticatedEmpresaEquipeRoute: typeof AuthenticatedEmpresaEquipeRoute
+  AuthenticatedEmpresaFaturamentoRoute: typeof AuthenticatedEmpresaFaturamentoRoute
+  AuthenticatedEmpresaRelatoriosRoute: typeof AuthenticatedEmpresaRelatoriosRoute
   AuthenticatedGestaoCadastrosRoute: typeof AuthenticatedGestaoCadastrosRoute
   AuthenticatedGestaoFundosRoute: typeof AuthenticatedGestaoFundosRoute
+  AuthenticatedIesCursosRoute: typeof AuthenticatedIesCursosRoute
+  AuthenticatedIesProfessoresRoute: typeof AuthenticatedIesProfessoresRoute
+  AuthenticatedIesRelatoriosRoute: typeof AuthenticatedIesRelatoriosRoute
   AuthenticatedOrganizacaoAcessosRoute: typeof AuthenticatedOrganizacaoAcessosRoute
   AuthenticatedVagasIdRoute: typeof AuthenticatedVagasIdRoute
   AuthenticatedVagasNovaRoute: typeof AuthenticatedVagasNovaRoute
@@ -811,8 +936,13 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedRecebimentosRoute: AuthenticatedRecebimentosRoute,
   AuthenticatedVinculosRoute: AuthenticatedVinculosRoute,
   AuthenticatedEmpresaEquipeRoute: AuthenticatedEmpresaEquipeRoute,
+  AuthenticatedEmpresaFaturamentoRoute: AuthenticatedEmpresaFaturamentoRoute,
+  AuthenticatedEmpresaRelatoriosRoute: AuthenticatedEmpresaRelatoriosRoute,
   AuthenticatedGestaoCadastrosRoute: AuthenticatedGestaoCadastrosRoute,
   AuthenticatedGestaoFundosRoute: AuthenticatedGestaoFundosRoute,
+  AuthenticatedIesCursosRoute: AuthenticatedIesCursosRoute,
+  AuthenticatedIesProfessoresRoute: AuthenticatedIesProfessoresRoute,
+  AuthenticatedIesRelatoriosRoute: AuthenticatedIesRelatoriosRoute,
   AuthenticatedOrganizacaoAcessosRoute: AuthenticatedOrganizacaoAcessosRoute,
   AuthenticatedVagasIdRoute: AuthenticatedVagasIdRoute,
   AuthenticatedVagasNovaRoute: AuthenticatedVagasNovaRoute,
@@ -846,6 +976,7 @@ const rootRouteChildren: RootRouteChildren = {
   ParaProfissionalRoute: ParaProfissionalRoute,
   ParaUsuarioGeralRoute: ParaUsuarioGeralRoute,
   CursosIndexRoute: CursosIndexRoute,
+  ApiPublicRunStudentLifecycleRoute: ApiPublicRunStudentLifecycleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

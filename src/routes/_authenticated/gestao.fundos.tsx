@@ -1,16 +1,188 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery,useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Save,Wallet,Check } from "lucide-react";
+import { Save, Wallet, Check } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/app-shell";
-import { WorkspaceHeader,WorkspaceSection } from "@/components/dashboard-workspace";
+import { WorkspaceHeader, WorkspaceSection } from "@/components/dashboard-workspace";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useProfile } from "@/hooks/use-profile";
 import { useIsAdmin } from "@/hooks/use-plans";
+import { AdminGate } from "@/components/admin-gate";
 import { supabase } from "@/integrations/supabase/client";
-export const Route=createFileRoute("/_authenticated/gestao/fundos")({head:()=>({meta:[{title:"Fundos e apuração — Upgrade Educação"},{name:"description",content:"Configuração autorizada de pesos e fechamentos mensais dos fundos."},{property:"og:title",content:"Fundos e apuração — Upgrade Educação"},{property:"og:description",content:"Apuração e registro administrativo de repasses."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}]}),component:FundsPage});
-const presets={mvp:[.5,.4,.1],tracao:[.55,.25,.2],escala:[.6,.2,.2]} as const;
-function FundsPage(){const {data:profile}=useProfile();const {data:admin}=useIsAdmin();const qc=useQueryClient();const [preset,setPreset]=useState<keyof typeof presets>("tracao");const [month,setMonth]=useState("");const [reference,setReference]=useState("");const allowed=admin&&["estudante","geral"].includes(profile?.role??"");const {data}=useQuery({queryKey:["fund-admin"],enabled:Boolean(allowed),queryFn:async()=>{const [settings,funds,scores]=await Promise.all([supabase.from("fund_settings").select("*").single(),supabase.from("monthly_funds").select("*").order("month",{ascending:false}),supabase.from("author_scores").select("*").order("month",{ascending:false})]);if(settings.error||funds.error||scores.error)throw settings.error||funds.error||scores.error;return{settings:settings.data,funds:funds.data??[],scores:scores.data??[]};}});async function save(){const weights=presets[preset];const {error}=await supabase.from("fund_settings").update({preset,audience_weight:weights[0],production_weight:weights[1],completion_weight:weights[2]}).eq("id",true);if(error)return toast.error(error.message);await qc.invalidateQueries();toast.success("Pesos atualizados.");}async function close(){const {error}=await supabase.rpc("close_month",{_month:`${month}-01`});if(error)return toast.error(error.message);await qc.invalidateQueries();toast.success("Mês fechado.");}async function paid(id:string){const {error}=await supabase.rpc("mark_author_payment",{_id:id,_reference:reference});if(error)return toast.error(error.message);await qc.invalidateQueries();toast.success("Pagamento registrado.");}if(!profile)return <p>Carregando…</p>;return <AppShell role={profile.role} userName={profile.full_name}>{!allowed?<p>Acesso não autorizado.</p>:<div><WorkspaceHeader icon={Wallet} eyebrow="Upgrade / Financeiro" title="Fundos e apuração mensal." subtitle="Professores 25% · Instituições 10%"/><WorkspaceSection title="Pesos do score"><p className="mb-4 text-sm text-muted-foreground">Configuração atual: {data?.settings.preset} · {Number(data?.settings.audience_weight??0)*100}% / {Number(data?.settings.production_weight??0)*100}% / {Number(data?.settings.completion_weight??0)*100}%</p><div className="flex flex-wrap gap-3"><select aria-label="Fase do score" className="h-10 rounded-md border border-input bg-background px-3" value={preset} onChange={e=>setPreset(e.target.value as keyof typeof presets)}><option value="mvp">MVP — 50 / 40 / 10</option><option value="tracao">Tração — 55 / 25 / 20</option><option value="escala">Escala — 60 / 20 / 20</option></select><Button onClick={save}><Save className="size-4"/>Salvar pesos</Button></div></WorkspaceSection><WorkspaceSection title="Fechamento"><Label htmlFor="fund-month">Mês encerrado</Label><div className="mt-2 flex flex-wrap gap-3"><Input id="fund-month" className="max-w-xs" type="month" value={month} onChange={e=>setMonth(e.target.value)}/><Button disabled={!month} onClick={close}>Fechar mês</Button></div>{data?.funds.map(f=><div className="workspace-row" key={f.month}><p>{f.month} · Receita {(Number(f.total_revenue_cents)/100).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}</p></div>)}</WorkspaceSection><WorkspaceSection title="Repasses"><Label htmlFor="payment-reference">Referência de pagamento realizado</Label><Input id="payment-reference" value={reference} onChange={e=>setReference(e.target.value)} maxLength={160}/>{data?.scores.map(s=><div className="workspace-row" key={s.id}><p>{s.month} · {s.fund_type} · {(Number(s.amount_cents)/100).toLocaleString("pt-BR",{style:"currency",currency:"BRL"})} · {s.payment_status}</p>{s.payment_status!=="pago"&&<Button className="mt-3" variant="outline" disabled={reference.length<3} onClick={()=>paid(s.id)}><Check className="size-4"/>Registrar pagamento</Button>}</div>)}</WorkspaceSection></div>}</AppShell>;}
+export const Route = createFileRoute("/_authenticated/gestao/fundos")({
+  head: () => ({
+    meta: [
+      { title: "Fundos e apuração — Upgrade Educação" },
+      {
+        name: "description",
+        content: "Configuração autorizada de pesos e fechamentos mensais dos fundos.",
+      },
+      { property: "og:title", content: "Fundos e apuração — Upgrade Educação" },
+      { property: "og:description", content: "Apuração e registro administrativo de repasses." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: FundsPage,
+});
+const presets = {
+  mvp: [0.5, 0.4, 0.1],
+  tracao: [0.55, 0.25, 0.2],
+  escala: [0.6, 0.2, 0.2],
+} as const;
+function FundsPage() {
+  const { data: profile } = useProfile();
+  const { data: admin } = useIsAdmin();
+  const qc = useQueryClient();
+  const [preset, setPreset] = useState<keyof typeof presets>("tracao");
+  const [month, setMonth] = useState("");
+  const [reference, setReference] = useState("");
+  const allowed = admin && ["estudante", "geral"].includes(profile?.role ?? "");
+  const { data } = useQuery({
+    queryKey: ["fund-admin"],
+    enabled: Boolean(allowed),
+    queryFn: async () => {
+      const [settings, funds, scores] = await Promise.all([
+        supabase.from("fund_settings").select("*").single(),
+        supabase.from("monthly_funds").select("*").order("month", { ascending: false }),
+        supabase.from("author_scores").select("*").order("month", { ascending: false }),
+      ]);
+      if (settings.error || funds.error || scores.error)
+        throw settings.error || funds.error || scores.error;
+      return { settings: settings.data, funds: funds.data ?? [], scores: scores.data ?? [] };
+    },
+  });
+  async function save() {
+    const weights = presets[preset];
+    const { error } = await supabase
+      .from("fund_settings")
+      .update({
+        preset,
+        audience_weight: weights[0],
+        production_weight: weights[1],
+        completion_weight: weights[2],
+      })
+      .eq("id", true);
+    if (error) return toast.error(error.message);
+    await qc.invalidateQueries();
+    toast.success("Pesos atualizados.");
+  }
+  async function close() {
+    const { error } = await supabase.rpc("close_month", { _month: `${month}-01` });
+    if (error) return toast.error(error.message);
+    await qc.invalidateQueries();
+    toast.success("Mês fechado.");
+  }
+  async function paid(id: string) {
+    const { error } = await supabase.rpc("mark_author_payment", { _id: id, _reference: reference });
+    if (error) return toast.error(error.message);
+    await qc.invalidateQueries();
+    toast.success("Pagamento registrado.");
+  }
+  if (!profile) return <p>Carregando…</p>;
+  return (
+    <AppShell role={profile.role} userName={profile.full_name}>
+      {!allowed ? (
+        <AdminGate>
+          <p>Acesso não autorizado.</p>
+        </AdminGate>
+      ) : (
+        <AdminGate>
+          <div>
+            <WorkspaceHeader
+              icon={Wallet}
+              eyebrow="Upgrade / Financeiro"
+              title="Fundos e apuração mensal."
+              subtitle="Professores 25% · Instituições 10%"
+            />
+            <WorkspaceSection title="Pesos do score">
+              <p className="mb-4 text-sm text-muted-foreground">
+                Configuração atual: {data?.settings.preset} ·{" "}
+                {Number(data?.settings.audience_weight ?? 0) * 100}% /{" "}
+                {Number(data?.settings.production_weight ?? 0) * 100}% /{" "}
+                {Number(data?.settings.completion_weight ?? 0) * 100}%
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <select
+                  aria-label="Fase do score"
+                  className="h-10 rounded-md border border-input bg-background px-3"
+                  value={preset}
+                  onChange={(e) => setPreset(e.target.value as keyof typeof presets)}
+                >
+                  <option value="mvp">MVP — 50 / 40 / 10</option>
+                  <option value="tracao">Tração — 55 / 25 / 20</option>
+                  <option value="escala">Escala — 60 / 20 / 20</option>
+                </select>
+                <Button onClick={save}>
+                  <Save className="size-4" />
+                  Salvar pesos
+                </Button>
+              </div>
+            </WorkspaceSection>
+            <WorkspaceSection title="Fechamento">
+              <Label htmlFor="fund-month">Mês encerrado</Label>
+              <div className="mt-2 flex flex-wrap gap-3">
+                <Input
+                  id="fund-month"
+                  className="max-w-xs"
+                  type="month"
+                  value={month}
+                  onChange={(e) => setMonth(e.target.value)}
+                />
+                <Button disabled={!month} onClick={close}>
+                  Fechar mês
+                </Button>
+              </div>
+              {data?.funds.map((f) => (
+                <div className="workspace-row" key={f.month}>
+                  <p>
+                    {f.month} · Receita{" "}
+                    {(Number(f.total_revenue_cents) / 100).toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    })}
+                  </p>
+                </div>
+              ))}
+            </WorkspaceSection>
+            <WorkspaceSection title="Repasses">
+              <Label htmlFor="payment-reference">Referência de pagamento realizado</Label>
+              <Input
+                id="payment-reference"
+                value={reference}
+                onChange={(e) => setReference(e.target.value)}
+                maxLength={160}
+              />
+              {data?.scores.map((s) => (
+                <div className="workspace-row" key={s.id}>
+                  <p>
+                    {s.month} · {s.fund_type} ·{" "}
+                    {(Number(s.amount_cents) / 100).toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    })}{" "}
+                    · {s.payment_status}
+                  </p>
+                  {s.payment_status !== "pago" && (
+                    <Button
+                      className="mt-3"
+                      variant="outline"
+                      disabled={reference.length < 3}
+                      onClick={() => paid(s.id)}
+                    >
+                      <Check className="size-4" />
+                      Registrar pagamento
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </WorkspaceSection>
+          </div>
+        </AdminGate>
+      )}
+    </AppShell>
+  );
+}

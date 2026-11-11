@@ -46,6 +46,13 @@ function CadastrosContent() {
   const [iesName, setIesName] = useState("");
   const [iesCity, setIesCity] = useState("");
   const [teacherEmail, setTeacherEmail] = useState("");
+  const [companyCnpj, setCompanyCnpj] = useState("");
+  const [iesCnpj, setIesCnpj] = useState("");
+  const cnpjOf = (value: string) => {
+    const digits = value.replace(/\D/g, "");
+    if (value.trim() && digits.length !== 14) throw new Error("CNPJ deve ter 14 dígitos");
+    return digits || null;
+  };
 
   const { data } = useQuery({
     queryKey: ["gestao-cadastros"],
@@ -71,9 +78,12 @@ function CadastrosContent() {
     mutationFn: async () => {
       if (companyName.trim().length < 2) throw new Error("Informe o nome da empresa");
       const code = `${companyName.trim().slice(0, 4).toUpperCase().replace(/\s/g, "")}${Math.floor(1000 + Math.random() * 8999)}`;
-      const { error } = await supabase
-        .from("companies")
-        .insert({ name: companyName.trim(), code, industry: industry || null });
+      const { error } = await supabase.from("companies").insert({
+        name: companyName.trim(),
+        code,
+        industry: industry || null,
+        cnpj: cnpjOf(companyCnpj),
+      });
       if (error) throw error;
       return code;
     },
@@ -81,6 +91,7 @@ function CadastrosContent() {
       toast.success(`Empresa cadastrada. Código de vínculo: ${code}`);
       setCompanyName("");
       setIndustry("");
+      setCompanyCnpj("");
       refresh();
     },
     onError: (error: Error) => toast.error(error.message),
@@ -91,13 +102,14 @@ function CadastrosContent() {
       if (iesName.trim().length < 2) throw new Error("Informe o nome da instituição");
       const { error } = await supabase
         .from("institutions")
-        .insert({ name: iesName.trim(), city: iesCity || null });
+        .insert({ name: iesName.trim(), city: iesCity || null, cnpj: cnpjOf(iesCnpj) });
       if (error) throw error;
     },
     onSuccess: () => {
       toast.success("Instituição cadastrada");
       setIesName("");
       setIesCity("");
+      setIesCnpj("");
       refresh();
     },
     onError: (error: Error) => toast.error(error.message),
@@ -107,13 +119,7 @@ function CadastrosContent() {
     mutationFn: async () => {
       const email = teacherEmail.trim().toLowerCase();
       if (!email) throw new Error("Informe o e-mail do professor");
-      const { data: found } = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("email", email)
-        .maybeSingle();
-      if (!found) throw new Error("Nenhuma conta encontrada com este e-mail. Peça o cadastro primeiro.");
-      const { error } = await supabase.from("profiles").update({ role: "professor" }).eq("id", found.id);
+      const { error } = await supabase.rpc("admin_register_professor", { _email: email });
       if (error) throw error;
     },
     onSuccess: () => {
@@ -133,25 +139,48 @@ function CadastrosContent() {
         </p>
       </div>
 
-      <SectionCard title="Nova empresa" description="Um código de vínculo é gerado para os colaboradores.">
+      <SectionCard
+        title="Nova empresa"
+        description="Um código de vínculo é gerado para os colaboradores."
+      >
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="company">Nome</Label>
-            <Input id="company" value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
+            <Input
+              id="company"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+            />
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="industry">Setor</Label>
             <Input id="industry" value={industry} onChange={(e) => setIndustry(e.target.value)} />
           </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="company-cnpj">CNPJ (opcional, 14 dígitos)</Label>
+            <Input
+              id="company-cnpj"
+              inputMode="numeric"
+              value={companyCnpj}
+              onChange={(e) => setCompanyCnpj(e.target.value)}
+            />
+          </div>
         </div>
-        <Button className="mt-4" onClick={() => createCompany.mutate()} disabled={createCompany.isPending}>
+        <Button
+          className="mt-4"
+          onClick={() => createCompany.mutate()}
+          disabled={createCompany.isPending}
+        >
           Cadastrar empresa
         </Button>
         <div className="mt-5 divide-y divide-border">
           {(data?.companies ?? []).map((company) => (
             <div key={company.id} className="flex items-center justify-between py-2.5">
               <span className="text-sm text-foreground">{company.name}</span>
-              <Badge variant="secondary">{company.code}</Badge>
+              <span className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground">{company.status}</span>
+                <Badge variant="secondary">{company.code}</Badge>
+              </span>
             </div>
           ))}
         </div>
@@ -166,6 +195,15 @@ function CadastrosContent() {
           <div className="space-y-1.5">
             <Label htmlFor="city">Cidade</Label>
             <Input id="city" value={iesCity} onChange={(e) => setIesCity(e.target.value)} />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="ies-cnpj">CNPJ (opcional, 14 dígitos)</Label>
+            <Input
+              id="ies-cnpj"
+              inputMode="numeric"
+              value={iesCnpj}
+              onChange={(e) => setIesCnpj(e.target.value)}
+            />
           </div>
         </div>
         <Button
