@@ -7,8 +7,7 @@ export const Route = createFileRoute("/trabalhe-conosco")({
       { title: "Trabalhe conosco — Upgrade Educação" },
       {
         name: "description",
-        content:
-          "Faça parte do time que amplia o acesso à educação complementar no Brasil.",
+        content: "Faça parte do time que amplia o acesso à educação complementar no Brasil.",
       },
       { property: "og:title", content: "Trabalhe conosco — Upgrade Educação" },
       { property: "og:description", content: "Vagas, cultura e como se candidatar na Upgrade." },

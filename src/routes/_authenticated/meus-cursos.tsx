@@ -6,14 +6,16 @@ import { useProfile } from "@/hooks/use-profile";
 import { useLearnerData } from "@/hooks/use-learner-data";
 
 export const Route = createFileRoute("/_authenticated/meus-cursos")({
-  head: () => ({ meta: [
-    { title: "Meus cursos — Upgrade Educação" },
-    { name: "description", content: "Continue os cursos da sua jornada de aprendizagem." },
-    { property: "og:title", content: "Meus cursos — Upgrade Educação" },
-    { property: "og:description", content: "Sua evolução nos cursos Upgrade." },
-    { property: "og:type", content: "website" },
-    { name: "twitter:card", content: "summary_large_image" },
-  ] }),
+  head: () => ({
+    meta: [
+      { title: "Meus cursos — Upgrade Educação" },
+      { name: "description", content: "Continue os cursos da sua jornada de aprendizagem." },
+      { property: "og:title", content: "Meus cursos — Upgrade Educação" },
+      { property: "og:description", content: "Sua evolução nos cursos Upgrade." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: MyCoursesPage,
 });
 
@@ -22,7 +24,8 @@ function MyCoursesPage() {
   const { data } = useLearnerData(profile?.id);
 
   if (!profile) return <p className="p-10 text-muted-foreground">Carregando…</p>;
-  if (!["estudante","geral","colaborador"].includes(profile.role ?? "")) return <Navigate to="/painel" />;
+  if (!["estudante", "geral", "colaborador"].includes(profile.role ?? ""))
+    return <Navigate to="/painel" />;
 
   const enrollments = data?.enrollments ?? [];
 
@@ -31,9 +34,7 @@ function MyCoursesPage() {
       <div className="space-y-6">
         <div>
           <h1 className="font-display text-3xl font-extrabold text-foreground">Meus cursos</h1>
-          <p className="mt-1 text-muted-foreground">
-            Seu aprendizado e suas avaliações.
-          </p>
+          <p className="mt-1 text-muted-foreground">Seu aprendizado e suas avaliações.</p>
         </div>
 
         <SectionCard
@@ -45,9 +46,7 @@ function MyCoursesPage() {
           }
         >
           {enrollments.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              Você ainda não iniciou nenhum curso.
-            </p>
+            <p className="text-sm text-muted-foreground">Você ainda não iniciou nenhum curso.</p>
           ) : (
             <ul className="space-y-3">
               {enrollments.map((enrollment) => (

@@ -102,8 +102,13 @@ function LeadForm({ variant }: { variant: LeadVariant }) {
   );
 }
 
-
-function PricingSection({ pricing, role }: { pricing: LandingPricing; role: LandingContent["role"] }) {
+function PricingSection({
+  pricing,
+  role,
+}: {
+  pricing: LandingPricing;
+  role: LandingContent["role"];
+}) {
   const { data: plans, isLoading } = usePlans(role);
 
   return (
@@ -111,7 +116,9 @@ function PricingSection({ pricing, role }: { pricing: LandingPricing; role: Land
       <div className="mx-auto w-full max-w-6xl px-5 py-16">
         {pricing.kind === "form" ? (
           <>
-            <h2 className="font-display text-3xl font-extrabold text-foreground">{pricing.title}</h2>
+            <h2 className="font-display text-3xl font-extrabold text-foreground">
+              {pricing.title}
+            </h2>
             <p className="mt-2 max-w-2xl text-muted-foreground">{pricing.description}</p>
             <div className="mt-8 max-w-3xl">
               <LeadForm variant={pricing.variant} />
@@ -119,13 +126,16 @@ function PricingSection({ pricing, role }: { pricing: LandingPricing; role: Land
           </>
         ) : pricing.kind === "statement" ? (
           <div className="max-w-3xl">
-            <h2 className="font-display text-3xl font-extrabold text-foreground">{pricing.title}</h2>
+            <h2 className="font-display text-3xl font-extrabold text-foreground">
+              {pricing.title}
+            </h2>
             <p className="mt-4 text-lg text-muted-foreground">{pricing.description}</p>
           </div>
         ) : (
-
           <>
-            <h2 className="font-display text-3xl font-extrabold text-foreground">Planos e valores</h2>
+            <h2 className="font-display text-3xl font-extrabold text-foreground">
+              Planos e valores
+            </h2>
             {pricing.kind === "fixed" ? (
               <div className="mt-8 max-w-md rounded-2xl border border-brand bg-card p-8 shadow-lift ring-1 ring-brand/30">
                 <h3 className="font-display text-xl font-bold text-foreground">{pricing.name}</h3>
@@ -160,20 +170,25 @@ function PricingSection({ pricing, role }: { pricing: LandingPricing; role: Land
                       }`}
                     >
                       <div className="flex items-center justify-between gap-3">
-                        <h3 className="font-display text-xl font-bold text-foreground">{plan.name}</h3>
+                        <h3 className="font-display text-xl font-bold text-foreground">
+                          {plan.name}
+                        </h3>
                         {plan.highlight && <Badge>Recomendado</Badge>}
                       </div>
                       <p className="mt-2 text-sm text-muted-foreground">{plan.description}</p>
                       <div className="mt-5">
                         <p className="font-display text-3xl font-extrabold text-foreground">
-                          {plan.price_month_cents === 0 ? "Sem custo" : formatBRL(plan.price_month_cents)}
+                          {plan.price_month_cents === 0
+                            ? "Sem custo"
+                            : formatBRL(plan.price_month_cents)}
                           {plan.price_month_cents > 0 && (
                             <span className="text-sm font-medium text-muted-foreground"> /mês</span>
                           )}
                         </p>
                         <p className="text-xs text-muted-foreground">
                           {plan.unit}
-                          {plan.price_year_cents > 0 && ` · ${formatBRL(plan.price_year_cents)} no anual`}
+                          {plan.price_year_cents > 0 &&
+                            ` · ${formatBRL(plan.price_year_cents)} no anual`}
                         </p>
                       </div>
                       <ul className="mt-5 flex-1 space-y-2">
@@ -184,7 +199,11 @@ function PricingSection({ pricing, role }: { pricing: LandingPricing; role: Land
                           </li>
                         ))}
                       </ul>
-                      <Button asChild className="mt-6" variant={plan.highlight ? "default" : "outline"}>
+                      <Button
+                        asChild
+                        className="mt-6"
+                        variant={plan.highlight ? "default" : "outline"}
+                      >
                         <Link to="/auth" search={{ mode: "signup" }}>
                           {plan.price_month_cents === 0 ? "Ativar acesso" : "Contratar"}
                         </Link>
@@ -246,7 +265,10 @@ export function ProfileLanding({ content }: { content: LandingContent }) {
             }`}
           >
             {content.highlights.map((item) => (
-              <div key={item.title} className="rounded-2xl border border-border bg-card p-6 shadow-soft">
+              <div
+                key={item.title}
+                className="rounded-2xl border border-border bg-card p-6 shadow-soft"
+              >
                 <h2 className="font-display text-lg font-bold text-foreground">{item.title}</h2>
                 <p className="mt-2 text-sm text-muted-foreground">{item.text}</p>
               </div>
@@ -261,11 +283,16 @@ export function ProfileLanding({ content }: { content: LandingContent }) {
             <h2 className="font-display text-3xl font-extrabold text-foreground">Como contratar</h2>
             <ol className="mt-8 grid gap-5 md:grid-cols-3">
               {(content.steps ?? []).map((step, index) => (
-                <li key={step.title} className="rounded-2xl border border-border bg-card p-6 shadow-soft">
+                <li
+                  key={step.title}
+                  className="rounded-2xl border border-border bg-card p-6 shadow-soft"
+                >
                   <span className="inline-flex size-8 items-center justify-center rounded-full bg-brand-soft font-display font-bold text-brand">
                     {index + 1}
                   </span>
-                  <h3 className="mt-3 font-display text-lg font-bold text-foreground">{step.title}</h3>
+                  <h3 className="mt-3 font-display text-lg font-bold text-foreground">
+                    {step.title}
+                  </h3>
                   <p className="mt-1 text-sm text-muted-foreground">{step.text}</p>
                 </li>
               ))}
@@ -333,11 +360,11 @@ export function ProfileLanding({ content }: { content: LandingContent }) {
           </section>
         )}
 
-
-
         <section className="border-t border-border bg-secondary/30">
           <div className="mx-auto w-full max-w-4xl px-5 py-16">
-            <h2 className="font-display text-3xl font-extrabold text-foreground">Perguntas frequentes</h2>
+            <h2 className="font-display text-3xl font-extrabold text-foreground">
+              Perguntas frequentes
+            </h2>
             <div className="mt-6 space-y-4">
               {content.faq.map((item) => (
                 <div key={item.q} className="rounded-2xl border border-border bg-card p-5">

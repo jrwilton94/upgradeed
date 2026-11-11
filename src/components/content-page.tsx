@@ -32,7 +32,9 @@ export function ContentPage({
           <div className="space-y-8">
             {(sections ?? []).map((section) => (
               <div key={section.heading} className="rounded-2xl border border-border bg-card p-6">
-                <h2 className="font-display text-xl font-bold text-foreground">{section.heading}</h2>
+                <h2 className="font-display text-xl font-bold text-foreground">
+                  {section.heading}
+                </h2>
                 {section.body.map((paragraph) => (
                   <p key={paragraph} className="mt-3 text-sm text-muted-foreground">
                     {paragraph}

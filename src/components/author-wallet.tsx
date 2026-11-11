@@ -1,6 +1,6 @@
-import { useQuery,useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Wallet,Save } from "lucide-react";
+import { Wallet, Save } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,10 +10,126 @@ import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/use-profile";
 import { useOrganization } from "@/hooks/use-organization";
 import { hasPermission } from "@/lib/organization";
-const brl=(n:number)=>new Intl.NumberFormat("pt-BR",{style:"currency",currency:"BRL"}).format(n/100);
-export function AuthorWallet(){const {data:profile}=useProfile();const org=useOrganization();const qc=useQueryClient();const [form,setForm]=useState({holder_name:"",bank_code:"",branch:"",account:"",pix_key:""});const [busy,setBusy]=useState(false);const bankAllowed=profile?.role==="professor"||hasPermission(org.data,"bancarios");const owner=profile?.role==="professor"?profile.id:org.id;
- const {data}=useQuery({queryKey:["author-wallet",owner,profile?.role],enabled:Boolean(owner&&["professor","ies"].includes(profile?.role??"")),queryFn:async()=>{const [metrics,history]=await Promise.all([supabase.rpc("author_metrics",{}),supabase.from("author_scores").select("*").eq("owner_id",owner??"").order("month",{ascending:false})]);if(metrics.error||history.error)throw metrics.error||history.error;return{metrics:metrics.data??[],history:history.data??[]};}});
- async function save(){setBusy(true);const {error}=await supabase.rpc("save_payout_account",{_payload:form});setBusy(false);if(error)return toast.error(error.message);await qc.invalidateQueries();setForm({holder_name:"",bank_code:"",branch:"",account:"",pix_key:""});toast.success("Dados de recebimento salvos.");}
- const estimate=(data?.metrics??[]).reduce((sum,m)=>sum+Number(m.estimated_cents),0);const score=(data?.metrics??[]).reduce((sum,m)=>sum+Number(m.score),0);
- return <><WorkspaceSection title="Conta de recebimento"><Wallet className="mb-4 size-6 text-brand"/><div className="grid gap-5 sm:grid-cols-2"><div><p className="text-xs text-muted-foreground">Score corrente por conteúdo</p><p className="mt-2 text-2xl font-bold">{score.toFixed(4)}</p></div><div><p className="text-xs text-muted-foreground">Estimativa do mês</p><p className="mt-2 text-2xl font-bold">{brl(estimate)}</p></div></div><p className="mt-4 text-xs text-muted-foreground">Estimativa sujeita ao fechamento mensal. Transferências bancárias automáticas não estão conectadas.</p>{data?.history.map(h=><div className="workspace-row" key={h.id}><div className="flex justify-between gap-3"><span>{new Date(`${h.month}T12:00:00`).toLocaleDateString("pt-BR",{month:"long",year:"numeric"})}</span><strong>{brl(Number(h.amount_cents))}</strong></div><p className="text-xs text-muted-foreground">{h.payment_status==="pago"?"Pagamento registrado":"Repasse pendente"} · Score {Number(h.final_score).toFixed(4)}</p></div>)}{!data?.history.length&&<p className="mt-6 text-sm text-muted-foreground">Nenhum fechamento registrado.</p>}</WorkspaceSection>{bankAllowed&&<WorkspaceSection title="Dados para recebimento"><form className="space-y-4" onSubmit={e=>{e.preventDefault();save();}}><div className="grid gap-4 sm:grid-cols-2">{([['holder_name','Titular'],['bank_code','Código do banco'],['branch','Agência'],['account','Conta'],['pix_key','Chave Pix (opcional)']] as const).map(([key,label])=><div key={key}><Label htmlFor={`bank-${key}`}>{label}</Label><Input id={`bank-${key}`} value={form[key]} maxLength={160} required={key!=="pix_key"} onChange={e=>setForm(f=>({...f,[key]:e.target.value}))}/></div>)}</div><Button type="submit" disabled={busy}><Save className="size-4"/>Salvar dados bancários</Button></form></WorkspaceSection>}</>;
+const brl = (n: number) =>
+  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n / 100);
+export function AuthorWallet() {
+  const { data: profile } = useProfile();
+  const org = useOrganization();
+  const qc = useQueryClient();
+  const [form, setForm] = useState({
+    holder_name: "",
+    bank_code: "",
+    branch: "",
+    account: "",
+    pix_key: "",
+  });
+  const [busy, setBusy] = useState(false);
+  const bankAllowed = profile?.role === "professor" || hasPermission(org.data, "bancarios");
+  const owner = profile?.role === "professor" ? profile.id : org.id;
+  const { data } = useQuery({
+    queryKey: ["author-wallet", owner, profile?.role],
+    enabled: Boolean(owner && ["professor", "ies"].includes(profile?.role ?? "")),
+    queryFn: async () => {
+      const [metrics, history] = await Promise.all([
+        supabase.rpc("author_metrics", {}),
+        supabase
+          .from("author_scores")
+          .select("*")
+          .eq("owner_id", owner ?? "")
+          .order("month", { ascending: false }),
+      ]);
+      if (metrics.error || history.error) throw metrics.error || history.error;
+      return { metrics: metrics.data ?? [], history: history.data ?? [] };
+    },
+  });
+  async function save() {
+    setBusy(true);
+    const { error } = await supabase.rpc("save_payout_account", { _payload: form });
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    await qc.invalidateQueries();
+    setForm({ holder_name: "", bank_code: "", branch: "", account: "", pix_key: "" });
+    toast.success("Dados de recebimento salvos.");
+  }
+  const estimate = (data?.metrics ?? []).reduce((sum, m) => sum + Number(m.estimated_cents), 0);
+  const score = (data?.metrics ?? []).reduce((sum, m) => sum + Number(m.score), 0);
+  return (
+    <>
+      <WorkspaceSection title="Conta de recebimento">
+        <Wallet className="mb-4 size-6 text-brand" />
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div>
+            <p className="text-xs text-muted-foreground">Score corrente por conteúdo</p>
+            <p className="mt-2 text-2xl font-bold">{score.toFixed(4)}</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Estimativa do mês</p>
+            <p className="mt-2 text-2xl font-bold">{brl(estimate)}</p>
+          </div>
+        </div>
+        <p className="mt-4 text-xs text-muted-foreground">
+          Estimativa sujeita ao fechamento mensal. Transferências bancárias automáticas não estão
+          conectadas.
+        </p>
+        {data?.history.map((h) => (
+          <div className="workspace-row" key={h.id}>
+            <div className="flex justify-between gap-3">
+              <span>
+                {new Date(`${h.month}T12:00:00`).toLocaleDateString("pt-BR", {
+                  month: "long",
+                  year: "numeric",
+                })}
+              </span>
+              <strong>{brl(Number(h.amount_cents))}</strong>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {h.payment_status === "pago" ? "Pagamento registrado" : "Repasse pendente"} · Score{" "}
+              {Number(h.final_score).toFixed(4)}
+            </p>
+          </div>
+        ))}
+        {!data?.history.length && (
+          <p className="mt-6 text-sm text-muted-foreground">Nenhum fechamento registrado.</p>
+        )}
+      </WorkspaceSection>
+      {bankAllowed && (
+        <WorkspaceSection title="Dados para recebimento">
+          <form
+            className="space-y-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              save();
+            }}
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              {(
+                [
+                  ["holder_name", "Titular"],
+                  ["bank_code", "Código do banco"],
+                  ["branch", "Agência"],
+                  ["account", "Conta"],
+                  ["pix_key", "Chave Pix (opcional)"],
+                ] as const
+              ).map(([key, label]) => (
+                <div key={key}>
+                  <Label htmlFor={`bank-${key}`}>{label}</Label>
+                  <Input
+                    id={`bank-${key}`}
+                    value={form[key]}
+                    maxLength={160}
+                    required={key !== "pix_key"}
+                    onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
+                  />
+                </div>
+              ))}
+            </div>
+            <Button type="submit" disabled={busy}>
+              <Save className="size-4" />
+              Salvar dados bancários
+            </Button>
+          </form>
+        </WorkspaceSection>
+      )}
+    </>
+  );
 }

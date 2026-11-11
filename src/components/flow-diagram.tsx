@@ -17,9 +17,7 @@ export function FlowDiagram() {
         <div key={step.label}>
           <div
             className={`flex items-center justify-between gap-4 rounded-2xl border px-5 py-4 shadow-soft ${
-              step.ai
-                ? "border-brand/60 bg-brand-soft"
-                : "border-border bg-card"
+              step.ai ? "border-brand/60 bg-brand-soft" : "border-border bg-card"
             }`}
           >
             <div>

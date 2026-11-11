@@ -1,8 +1,22 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight, Briefcase, Building2, Plus, ShieldCheck, Sparkles, UserCheck, Users } from "lucide-react";
+import {
+  ArrowUpRight,
+  Briefcase,
+  Building2,
+  Plus,
+  ShieldCheck,
+  Sparkles,
+  UserCheck,
+  Users,
+} from "lucide-react";
 import { useState } from "react";
-import { WorkspaceHeader, MetricStrip, WorkspaceSection, WorkspaceEmpty } from "@/components/dashboard-workspace";
+import {
+  WorkspaceHeader,
+  MetricStrip,
+  WorkspaceSection,
+  WorkspaceEmpty,
+} from "@/components/dashboard-workspace";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,7 +25,7 @@ import { hasPermission } from "@/lib/organization";
 import type { Tables } from "@/integrations/supabase/types";
 
 export function CompanyDashboard({ profile }: { profile: Tables<"profiles"> }) {
-  const org=useOrganization();
+  const org = useOrganization();
   const [tab, setTab] = useState("recruiting");
   const { data, isLoading } = useQuery({
     queryKey: ["company-dashboard", profile.company_id, org.data],
@@ -36,8 +50,10 @@ export function CompanyDashboard({ profile }: { profile: Tables<"profiles"> }) {
             .eq("status", "aceita")
         : { data: [] };
       const matches = matchesRes.data ?? [];
-      const accepted=await supabase.rpc("accepted_candidate_profiles",{_company:profile.company_id});
-      const names = new Map((accepted.data??[]).map(p=>[p.match_id,p.full_name]));
+      const accepted = await supabase.rpc("accepted_candidate_profiles", {
+        _company: profile.company_id,
+      });
+      const names = new Map((accepted.data ?? []).map((p) => [p.match_id, p.full_name]));
       return {
         company: companyRes.data,
         jobs,
@@ -57,16 +73,151 @@ export function CompanyDashboard({ profile }: { profile: Tables<"profiles"> }) {
 
   const open = data.jobs.filter((j) => j.status === "aberta");
 
-  return <div className="workspace-shell">
-    <WorkspaceHeader eyebrow="Empresa / Central de talentos" title={data.company?.name ?? "Talentos & oportunidades"} subtitle={`Código de vínculo: ${data.company?.code ?? "—"}`} icon={Building2} action={hasPermission(org.data,"vagas_externas")||hasPermission(org.data,"vagas_internas")?<Button asChild><Link to="/vagas/nova"><Plus className="size-4" />Publicar vaga</Link></Button>:undefined} />
-    <MetricStrip items={[{label:"Vagas abertas",value:open.length,icon:Briefcase},{label:"Vagas publicadas",value:data.jobs.length,icon:Sparkles},{label:"Candidaturas consentidas",value:data.matches.length,icon:UserCheck},{label:"Código da empresa",value:data.company?.code ?? "—",icon:Building2}]} />
-    <div className="workspace-tabs" role="tablist" aria-label="Central de talentos">{[['recruiting','Recrutamento'],['team','Colaboradores'],['academy','Academia corporativa']].map(([key,label]) => <Button role="tab" key={key} variant="ghost" aria-selected={tab === key} onClick={() => setTab(key)}>{label}</Button>)}</div>
-    {tab === 'recruiting' && <div className="workspace-grid"><div><WorkspaceSection title="Vagas da empresa" count={data.jobs.length} action={<Button asChild variant="ghost" size="sm"><Link to="/vagas">Gerenciar<ArrowUpRight className="size-4" /></Link></Button>}>
-      {!data.jobs.length ? <WorkspaceEmpty icon={Briefcase} title="Sua próxima contratação começa aqui" text="Nenhuma vaga publicada ainda." to="/vagas/nova" label="Publicar primeira vaga" /> : data.jobs.slice(0,5).map(job => <article key={job.id} className="workspace-row"><div className="flex flex-wrap items-center justify-between gap-3"><div><h3 className="font-semibold text-foreground">{job.title}</h3><p className="mt-2 text-xs text-muted-foreground">{job.area} · {job.modality} · {job.seniority}</p></div><Badge variant={job.status === 'aberta' ? 'default' : 'secondary'}>{job.status}</Badge></div></article>)}
-    </WorkspaceSection><WorkspaceSection title="Candidaturas recebidas" count={data.matches.length}>
-      {!data.matches.length ? <WorkspaceEmpty icon={UserCheck} title="Nenhuma candidatura recebida" text="Os candidatos aparecem aqui somente após aceitarem participar da seleção." /> : data.matches.map(m => <article key={m.id} className="workspace-row"><div className="flex flex-wrap justify-between gap-3"><p className="font-semibold text-foreground">{m.candidateName}</p><Badge variant="secondary">{m.score}% compatível</Badge></div><p className="mt-2 text-xs text-muted-foreground">{m.jobs?.title}</p><div className="mt-3 flex flex-wrap gap-2">{m.matched_skills.map(skill => <Badge key={skill} variant="secondary">{skill}</Badge>)}</div></article>)}
-    </WorkspaceSection></div><div className="lg:border-l lg:border-border lg:pl-7"><WorkspaceSection title="Seleção responsável"><ShieldCheck className="mb-4 size-7 text-brand" /><p className="text-sm leading-relaxed text-muted-foreground">A IA recomenda compatibilidades. A avaliação e a decisão final são humanas.</p><p className="workspace-note mt-6 text-xs leading-relaxed text-muted-foreground">Dados de candidatos externos são compartilhados apenas com candidatura consentida.</p></WorkspaceSection><WorkspaceSection title="Talentos internos"><WorkspaceEmpty icon={Users} title="Mobilidade interna" text="Gerencie cargos, trilhas e vagas internas da organização." /></WorkspaceSection></div></div>}
-    {tab === 'team' && <WorkspaceSection title="Equipe e desenvolvimento"><Button asChild><Link to="/empresa/equipe">Gerenciar colaboradores e competências</Link></Button></WorkspaceSection>}
-    {tab === 'academy' && <WorkspaceSection title="Academia corporativa"><Button asChild><Link to="/empresa/equipe">Cargos e trilhas de desenvolvimento</Link></Button></WorkspaceSection>}
-  </div>;
+  return (
+    <div className="workspace-shell">
+      <WorkspaceHeader
+        eyebrow="Empresa / Central de talentos"
+        title={data.company?.name ?? "Talentos & oportunidades"}
+        subtitle={`Código de vínculo: ${data.company?.code ?? "—"}`}
+        icon={Building2}
+        action={
+          hasPermission(org.data, "vagas_externas") || hasPermission(org.data, "vagas_internas") ? (
+            <Button asChild>
+              <Link to="/vagas/nova">
+                <Plus className="size-4" />
+                Publicar vaga
+              </Link>
+            </Button>
+          ) : undefined
+        }
+      />
+      <MetricStrip
+        items={[
+          { label: "Vagas abertas", value: open.length, icon: Briefcase },
+          { label: "Vagas publicadas", value: data.jobs.length, icon: Sparkles },
+          { label: "Candidaturas consentidas", value: data.matches.length, icon: UserCheck },
+          { label: "Código da empresa", value: data.company?.code ?? "—", icon: Building2 },
+        ]}
+      />
+      <div className="workspace-tabs" role="tablist" aria-label="Central de talentos">
+        {[
+          ["recruiting", "Recrutamento"],
+          ["team", "Colaboradores"],
+          ["academy", "Academia corporativa"],
+        ].map(([key, label]) => (
+          <Button
+            role="tab"
+            key={key}
+            variant="ghost"
+            aria-selected={tab === key}
+            onClick={() => setTab(key)}
+          >
+            {label}
+          </Button>
+        ))}
+      </div>
+      {tab === "recruiting" && (
+        <div className="workspace-grid">
+          <div>
+            <WorkspaceSection
+              title="Vagas da empresa"
+              count={data.jobs.length}
+              action={
+                <Button asChild variant="ghost" size="sm">
+                  <Link to="/vagas">
+                    Gerenciar
+                    <ArrowUpRight className="size-4" />
+                  </Link>
+                </Button>
+              }
+            >
+              {!data.jobs.length ? (
+                <WorkspaceEmpty
+                  icon={Briefcase}
+                  title="Sua próxima contratação começa aqui"
+                  text="Nenhuma vaga publicada ainda."
+                  to="/vagas/nova"
+                  label="Publicar primeira vaga"
+                />
+              ) : (
+                data.jobs.slice(0, 5).map((job) => (
+                  <article key={job.id} className="workspace-row">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <h3 className="font-semibold text-foreground">{job.title}</h3>
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          {job.area} · {job.modality} · {job.seniority}
+                        </p>
+                      </div>
+                      <Badge variant={job.status === "aberta" ? "default" : "secondary"}>
+                        {job.status}
+                      </Badge>
+                    </div>
+                  </article>
+                ))
+              )}
+            </WorkspaceSection>
+            <WorkspaceSection title="Candidaturas recebidas" count={data.matches.length}>
+              {!data.matches.length ? (
+                <WorkspaceEmpty
+                  icon={UserCheck}
+                  title="Nenhuma candidatura recebida"
+                  text="Os candidatos aparecem aqui somente após aceitarem participar da seleção."
+                />
+              ) : (
+                data.matches.map((m) => (
+                  <article key={m.id} className="workspace-row">
+                    <div className="flex flex-wrap justify-between gap-3">
+                      <p className="font-semibold text-foreground">{m.candidateName}</p>
+                      <Badge variant="secondary">{m.score}% compatível</Badge>
+                    </div>
+                    <p className="mt-2 text-xs text-muted-foreground">{m.jobs?.title}</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {m.matched_skills.map((skill) => (
+                        <Badge key={skill} variant="secondary">
+                          {skill}
+                        </Badge>
+                      ))}
+                    </div>
+                  </article>
+                ))
+              )}
+            </WorkspaceSection>
+          </div>
+          <div className="lg:border-l lg:border-border lg:pl-7">
+            <WorkspaceSection title="Seleção responsável">
+              <ShieldCheck className="mb-4 size-7 text-brand" />
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                A IA recomenda compatibilidades. A avaliação e a decisão final são humanas.
+              </p>
+              <p className="workspace-note mt-6 text-xs leading-relaxed text-muted-foreground">
+                Dados de candidatos externos são compartilhados apenas com candidatura consentida.
+              </p>
+            </WorkspaceSection>
+            <WorkspaceSection title="Talentos internos">
+              <WorkspaceEmpty
+                icon={Users}
+                title="Mobilidade interna"
+                text="Gerencie cargos, trilhas e vagas internas da organização."
+              />
+            </WorkspaceSection>
+          </div>
+        </div>
+      )}
+      {tab === "team" && (
+        <WorkspaceSection title="Equipe e desenvolvimento">
+          <Button asChild>
+            <Link to="/empresa/equipe">Gerenciar colaboradores e competências</Link>
+          </Button>
+        </WorkspaceSection>
+      )}
+      {tab === "academy" && (
+        <WorkspaceSection title="Academia corporativa">
+          <Button asChild>
+            <Link to="/empresa/equipe">Cargos e trilhas de desenvolvimento</Link>
+          </Button>
+        </WorkspaceSection>
+      )}
+    </div>
+  );
 }

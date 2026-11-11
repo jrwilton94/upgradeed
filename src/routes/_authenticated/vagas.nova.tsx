@@ -13,23 +13,37 @@ import { hasPermission } from "@/lib/organization";
 import { useQuery } from "@tanstack/react-query";
 
 export const Route = createFileRoute("/_authenticated/vagas/nova")({
-  head: () => ({ meta: [
-    { title: "Publicar vaga — Upgrade Educação" },
-    { name: "description", content: "Cadastre uma oportunidade para sua empresa." },
-    { property: "og:title", content: "Publicar vaga — Upgrade Educação" },
-    { property: "og:description", content: "Conecte sua empresa a competências." },
-    { property: "og:type", content: "website" },
-    { name: "twitter:card", content: "summary_large_image" },
-  ] }),
+  head: () => ({
+    meta: [
+      { title: "Publicar vaga — Upgrade Educação" },
+      { name: "description", content: "Cadastre uma oportunidade para sua empresa." },
+      { property: "og:title", content: "Publicar vaga — Upgrade Educação" },
+      { property: "og:description", content: "Conecte sua empresa a competências." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: NewJobPage,
 });
 
 function NewJobPage() {
   const { data: profile } = useProfile();
   const navigate = useNavigate();
-  const org=useOrganization();
-  const [jobType,setJobType]=useState("externa");const [scope,setScope]=useState("");
-  const {data:scopes}=useQuery({queryKey:["job-scopes",org.id],enabled:Boolean(org.id),queryFn:async()=>{if(!org.id)return [];const {data}=await supabase.from("organization_scopes").select("*").eq("organization_id",org.id);return data??[];}});
+  const org = useOrganization();
+  const [jobType, setJobType] = useState("externa");
+  const [scope, setScope] = useState("");
+  const { data: scopes } = useQuery({
+    queryKey: ["job-scopes", org.id],
+    enabled: Boolean(org.id),
+    queryFn: async () => {
+      if (!org.id) return [];
+      const { data } = await supabase
+        .from("organization_scopes")
+        .select("*")
+        .eq("organization_id", org.id);
+      return data ?? [];
+    },
+  });
   const [form, setForm] = useState({
     title: "",
     area: "",
@@ -54,24 +68,38 @@ function NewJobPage() {
       return toast.error("Preencha título e descrição da vaga.");
     }
     setLoading(true);
-    const { data:created,error } = await supabase.from("jobs").insert({
-      company_id: profile.company_id,
-      title: form.title.trim(),
-      area: form.area.trim() || "Geral",
-      description: form.description.trim(),
-      required_skills: form.required_skills.split(",").map((s) => s.trim()).filter(Boolean),
-      desired_skills: form.desired_skills.split(",").map((s) => s.trim()).filter(Boolean),
-      modality: form.modality,
-      contract_type: form.contract_type,
-      seniority: form.seniority,
-      city: form.city.trim() || null,
-      state: form.state.trim() || null,
-      salary_range: form.salary_range.trim() || null,
-      job_type:jobType,scope_id:scope||null,
-    }).select("id").single();
+    const { data: created, error } = await supabase
+      .from("jobs")
+      .insert({
+        company_id: profile.company_id,
+        title: form.title.trim(),
+        area: form.area.trim() || "Geral",
+        description: form.description.trim(),
+        required_skills: form.required_skills
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean),
+        desired_skills: form.desired_skills
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean),
+        modality: form.modality,
+        contract_type: form.contract_type,
+        seniority: form.seniority,
+        city: form.city.trim() || null,
+        state: form.state.trim() || null,
+        salary_range: form.salary_range.trim() || null,
+        job_type: jobType,
+        scope_id: scope || null,
+      })
+      .select("id")
+      .single();
     setLoading(false);
     if (error) return toast.error(error.message);
-    if(created){const generated=await supabase.rpc("generate_job_matches",{_job:created.id});if(generated.error)toast.error("Vaga salva, mas não foi possível gerar sugestões.");}
+    if (created) {
+      const generated = await supabase.rpc("generate_job_matches", { _job: created.id });
+      if (generated.error) toast.error("Vaga salva, mas não foi possível gerar sugestões.");
+    }
     toast.success("Vaga publicada!");
     navigate({ to: "/vagas" });
   }
@@ -98,8 +126,38 @@ function NewJobPage() {
           description="Descreva competências, não perfis pessoais. Dados sensíveis não são usados no matching."
         >
           <div className="grid gap-4 sm:grid-cols-2">
-            <div><Label htmlFor="job-type">Tipo de vaga</Label><select id="job-type" className="h-10 w-full rounded-md border border-input bg-background px-3" value={jobType} onChange={e=>setJobType(e.target.value)}>{hasPermission(org.data,"vagas_externas")&&<option value="externa">Externa</option>}{hasPermission(org.data,"vagas_internas")&&<option value="interna">Interna</option>}</select></div>
-            <div><Label htmlFor="job-scope">Escopo</Label><select id="job-scope" className="h-10 w-full rounded-md border border-input bg-background px-3" value={scope} onChange={e=>setScope(e.target.value)}><option value="">Toda a organização</option>{scopes?.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
+            <div>
+              <Label htmlFor="job-type">Tipo de vaga</Label>
+              <select
+                id="job-type"
+                className="h-10 w-full rounded-md border border-input bg-background px-3"
+                value={jobType}
+                onChange={(e) => setJobType(e.target.value)}
+              >
+                {hasPermission(org.data, "vagas_externas") && (
+                  <option value="externa">Externa</option>
+                )}
+                {hasPermission(org.data, "vagas_internas") && (
+                  <option value="interna">Interna</option>
+                )}
+              </select>
+            </div>
+            <div>
+              <Label htmlFor="job-scope">Escopo</Label>
+              <select
+                id="job-scope"
+                className="h-10 w-full rounded-md border border-input bg-background px-3"
+                value={scope}
+                onChange={(e) => setScope(e.target.value)}
+              >
+                <option value="">Toda a organização</option>
+                {scopes?.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+            </div>
             {field("title", "Título", "Analista de Dados Jr.")}
             {field("area", "Área", "Tecnologia")}
             {field("required_skills", "Competências obrigatórias", "SQL, Excel")}

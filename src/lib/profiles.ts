@@ -51,11 +51,7 @@ export const PROFILES: ProfileDefinition[] = [
     emoji: "👤",
     summary: "Aprenda continuamente e evolua profissionalmente.",
     path: "/para/profissional",
-    bullets: [
-      "Aprende no próprio ritmo",
-      "Plano individual",
-      "Sem vínculo com instituição",
-    ],
+    bullets: ["Aprende no próprio ritmo", "Plano individual", "Sem vínculo com instituição"],
   },
   {
     role: "colaborador",

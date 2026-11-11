@@ -60,12 +60,16 @@ const PILLARS = [
 ];
 
 const ECOSYSTEM_ROLES: Record<string, string> = {
-  estudante: "Vínculo estudantil válido, cursos, horas complementares, orientação de carreira e matching opcional.",
-  geral: "Plano individual, cursos e trilhas por objetivo, avaliações de competências e matching opcional.",
+  estudante:
+    "Vínculo estudantil válido, cursos, horas complementares, orientação de carreira e matching opcional.",
+  geral:
+    "Plano individual, cursos e trilhas por objetivo, avaliações de competências e matching opcional.",
   colaborador: "Academia corporativa, capacitação e mobilidade interna, sem matching externo.",
-  professor: "Publica cursos e acompanha audiência, minutos assistidos, conclusão, score e fundo de 25%. Não gerencia usuários.",
+  professor:
+    "Publica cursos e acompanha audiência, minutos assistidos, conclusão, score e fundo de 25%. Não gerencia usuários.",
   ies: "Publica conteúdo e recebe pelo fundo separado de 10%. Acessa apenas relatórios agregados, nunca dados individuais.",
-  empresa: "Cadastra colaboradores, capacita equipes e publica vagas internas ou abertas. Recebe candidatos externos somente após candidatura.",
+  empresa:
+    "Cadastra colaboradores, capacita equipes e publica vagas internas ou abertas. Recebe candidatos externos somente após candidatura.",
 };
 
 const AI_USES = [
@@ -99,9 +103,9 @@ function PlataformaPage() {
             <p className="mt-5 max-w-2xl text-muted-foreground">
               A Upgrade Educação é um hub de Skills Intelligence que amplia o acesso à educação
               complementar no Brasil. Acompanhamos a trajetória do Ensino Médio à Graduação,
-              conectando competências adquiridas, orientação de carreira e oportunidades de trabalho.
-              Cursos livres e certificados apoiam a formação; indicadores agregados ajudam as
-              instituições a agir sobre a evasão e a transição para o mercado.
+              conectando competências adquiridas, orientação de carreira e oportunidades de
+              trabalho. Cursos livres e certificados apoiam a formação; indicadores agregados ajudam
+              as instituições a agir sobre a evasão e a transição para o mercado.
             </p>
             <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {PILLARS.map((pillar) => (
@@ -118,11 +122,13 @@ function PlataformaPage() {
         </section>
 
         <section className="mx-auto w-full max-w-6xl px-5 py-20">
-          <h2 className="text-3xl font-extrabold text-foreground">Seis perfis. Um único ecossistema.</h2>
+          <h2 className="text-3xl font-extrabold text-foreground">
+            Seis perfis. Um único ecossistema.
+          </h2>
           <p className="mt-4 max-w-3xl text-muted-foreground">
             Cada perfil contribui de uma forma diferente, mas todos compartilham a mesma base de
-            competências verificadas. É essa inteligência compartilhada que transforma aprendizado em
-            desenvolvimento, conexões e oportunidades.
+            competências verificadas. É essa inteligência compartilhada que transforma aprendizado
+            em desenvolvimento, conexões e oportunidades.
           </p>
           <div className="mt-8 overflow-hidden rounded-2xl border border-border">
             <table className="w-full text-left text-sm">
@@ -159,9 +165,7 @@ function PlataformaPage() {
             <p className="text-sm font-semibold tracking-wide text-brand uppercase">
               Transparência algorítmica
             </p>
-            <h2 className="mt-3 text-3xl font-extrabold text-foreground">
-              Como funciona nossa IA
-            </h2>
+            <h2 className="mt-3 text-3xl font-extrabold text-foreground">Como funciona nossa IA</h2>
             <p className="mt-4 max-w-3xl text-muted-foreground">
               O motor de matching da Upgrade Educação é uma ferramenta assistiva de sugestão
               informacional. Não é um sistema de triagem nem de decisão automatizada de

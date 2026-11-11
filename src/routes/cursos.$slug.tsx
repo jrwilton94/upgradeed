@@ -76,7 +76,10 @@ function CourseDetail() {
     if (!userId || !data?.course) return;
     const { error } = await supabase
       .from("enrollments")
-      .upsert({ user_id: userId, course_id: data.course.id, progress: 10 }, { onConflict: "user_id,course_id,profile_role" });
+      .upsert(
+        { user_id: userId, course_id: data.course.id, progress: 10 },
+        { onConflict: "user_id,course_id,profile_role" },
+      );
     if (error) return toast.error(error.message);
     toast.success("Curso iniciado! Bons estudos.");
     queryClient.invalidateQueries();
@@ -106,7 +109,9 @@ function CourseDetail() {
   }
 
   const course = data.course;
-  const skills = (course.course_skills ?? []).map((cs) => cs.skills?.name).filter(Boolean) as string[];
+  const skills = (course.course_skills ?? [])
+    .map((cs) => cs.skills?.name)
+    .filter(Boolean) as string[];
   const lessons = [...(course.lessons ?? [])].sort((a, b) => a.position - b.position);
   const progress = data.enrollment?.progress ?? 0;
 
@@ -169,7 +174,14 @@ function CourseDetail() {
               </div>
             </section>
 
-            {(course.course_modules ?? []).map(module => <ModuleLearning key={module.id} module={module} lessons={lessons.filter(l => l.module_id === module.id)} role={profile?.role} />)}
+            {(course.course_modules ?? []).map((module) => (
+              <ModuleLearning
+                key={module.id}
+                module={module}
+                lessons={lessons.filter((l) => l.module_id === module.id)}
+                role={profile?.role}
+              />
+            ))}
           </div>
 
           <aside className="space-y-4">
@@ -182,7 +194,9 @@ function CourseDetail() {
                   Começar curso
                 </Button>
               ) : progress < 100 ? (
-                <p className="mt-4 text-sm text-muted-foreground">Conclua as avaliações dos módulos para avançar.</p>
+                <p className="mt-4 text-sm text-muted-foreground">
+                  Conclua as avaliações dos módulos para avançar.
+                </p>
               ) : (
                 <p className="mt-4 flex items-center gap-2 text-sm font-semibold text-brand">
                   <CheckCircle2 className="size-4" /> Curso concluído
@@ -193,7 +207,8 @@ function CourseDetail() {
               <Award className="size-5 text-brand" />
               <p className="mt-3 font-display font-bold text-foreground">Certificado</p>
               <p className="mt-1 text-sm text-muted-foreground">
-                {course.hours}h de aprendizado. Aprovação obrigatória; horas complementares dependem de vínculo estudantil validado.
+                {course.hours}h de aprendizado. Aprovação obrigatória; horas complementares dependem
+                de vínculo estudantil validado.
               </p>
             </div>
           </aside>

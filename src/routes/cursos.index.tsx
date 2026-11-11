@@ -34,7 +34,11 @@ export function useCourseCatalog() {
     queryKey: ["catalog"],
     queryFn: async () => {
       const [courses, categories] = await Promise.all([
-        supabase.from("courses").select("*").eq("published", true).order("students_count", { ascending: false }),
+        supabase
+          .from("courses")
+          .select("*")
+          .eq("published", true)
+          .order("students_count", { ascending: false }),
         supabase.from("categories").select("*").order("name"),
       ]);
       if (courses.error) throw courses.error;

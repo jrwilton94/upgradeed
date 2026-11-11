@@ -24,8 +24,14 @@ GRANT INSERT ON storage.objects TO authenticated;
 `;
 
 export function migrationFiles() {
-  const sup = readdirSync(join(root, "supabase/migrations")).filter(f => f.endsWith(".sql")).sort().map(f => join(root, "supabase/migrations", f));
-  const dri = readdirSync(join(root, "drizzle/migrations")).filter(f => /^\d{4}_.*\.sql$/.test(f)).sort().map(f => join(root, "drizzle/migrations", f));
+  const sup = readdirSync(join(root, "supabase/migrations"))
+    .filter((f) => f.endsWith(".sql"))
+    .sort()
+    .map((f) => join(root, "supabase/migrations", f));
+  const dri = readdirSync(join(root, "drizzle/migrations"))
+    .filter((f) => /^\d{4}_.*\.sql$/.test(f))
+    .sort()
+    .map((f) => join(root, "drizzle/migrations", f));
   // Ordem real: migrações do Supabase (até 07/out) e depois as do drizzle (a partir de 12/out).
   return [...sup, ...dri];
 }
@@ -38,31 +44,56 @@ export async function boot({ upTo, seedAfter } = {}) {
   for (const file of migrationFiles()) {
     const name = file.split("/").pop();
     if (upTo && file.includes("drizzle/migrations") && name > upTo) break;
-    if (!seeded && file.includes("drizzle/migrations") && name.slice(0, 4) > seedAfter.tag) { await seedAfter.fn(db); seeded = true; }
-    try { await db.exec(readFileSync(file, "utf8")); }
-    catch (e) { throw new Error(`Falha em ${name}: ${e.message}`); }
+    if (!seeded && file.includes("drizzle/migrations") && name.slice(0, 4) > seedAfter.tag) {
+      await seedAfter.fn(db);
+      seeded = true;
+    }
+    try {
+      await db.exec(readFileSync(file, "utf8"));
+    } catch (e) {
+      throw new Error(`Falha em ${name}: ${e.message}`);
+    }
   }
   return db;
 }
 
 export async function newUser(db, email, meta = {}) {
-  const r = await db.query("INSERT INTO auth.users(email, raw_user_meta_data) VALUES ($1,$2) RETURNING id", [email, JSON.stringify(meta)]);
+  const r = await db.query(
+    "INSERT INTO auth.users(email, raw_user_meta_data) VALUES ($1,$2) RETURNING id",
+    [email, JSON.stringify(meta)],
+  );
   return r.rows[0].id;
 }
 
 /** Executa fn com o papel `authenticated` e o usuário informado (equivale a uma chamada direta ao Supabase). */
 export async function as(db, userId, fn) {
-  await db.exec(`SET ROLE authenticated; SELECT set_config('request.jwt.claim.sub','${userId}',false), set_config('request.jwt.claim.role','authenticated',false);`);
-  try { return await fn(db); }
-  finally { await db.exec("RESET ROLE; SELECT set_config('request.jwt.claim.sub','',false), set_config('request.jwt.claim.role','',false);"); }
+  await db.exec(
+    `SET ROLE authenticated; SELECT set_config('request.jwt.claim.sub','${userId}',false), set_config('request.jwt.claim.role','authenticated',false);`,
+  );
+  try {
+    return await fn(db);
+  } finally {
+    await db.exec(
+      "RESET ROLE; SELECT set_config('request.jwt.claim.sub','',false), set_config('request.jwt.claim.role','',false);",
+    );
+  }
 }
 
 export async function asAnon(db, fn) {
   await db.exec("SET ROLE anon; SELECT set_config('request.jwt.claim.sub','',false);");
-  try { return await fn(db); } finally { await db.exec("RESET ROLE;"); }
+  try {
+    return await fn(db);
+  } finally {
+    await db.exec("RESET ROLE;");
+  }
 }
 
 export async function expectError(promise, pattern) {
-  try { await promise; } catch (e) { if (!pattern || pattern.test(e.message)) return e; throw new Error(`Erro inesperado: ${e.message}`); }
+  try {
+    await promise;
+  } catch (e) {
+    if (!pattern || pattern.test(e.message)) return e;
+    throw new Error(`Erro inesperado: ${e.message}`);
+  }
   throw new Error("Era esperado um erro, mas a operação foi permitida");
 }

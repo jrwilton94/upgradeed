@@ -10,7 +10,8 @@ export function AdminGate({ children }: { children: ReactNode }) {
       <div className="rounded-2xl border border-border bg-card p-8 text-center shadow-soft">
         <h1 className="font-display text-xl font-bold text-foreground">Área restrita</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Esta área é exclusiva do time de gestão da Upgrade. Fale com um administrador para receber acesso.
+          Esta área é exclusiva do time de gestão da Upgrade. Fale com um administrador para receber
+          acesso.
         </p>
       </div>
     );

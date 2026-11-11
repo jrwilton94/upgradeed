@@ -11,9 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const LINKS = [
-  { to: "/plataforma", label: "A plataforma" },
-] as const;
+const LINKS = [{ to: "/plataforma", label: "A plataforma" }] as const;
 
 const FOR_YOU = [
   { to: "/para/estudante", label: "Estudante" },

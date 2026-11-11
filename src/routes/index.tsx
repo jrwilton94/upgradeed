@@ -74,7 +74,9 @@ function Index() {
             </div>
             <h1 className="animate-rise mt-6 max-w-4xl text-4xl leading-[1.05] font-extrabold text-foreground sm:text-6xl lg:text-7xl">
               Transformamos competências em{" "}
-              <span className="bg-brand-gradient bg-clip-text text-transparent">oportunidades.</span>
+              <span className="bg-brand-gradient bg-clip-text text-transparent">
+                oportunidades.
+              </span>
             </h1>
             <p className="animate-rise mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Ampliamos o acesso à educação complementar no Brasil, conectando aprendizagem,
@@ -108,7 +110,9 @@ function Index() {
           <h2 className="text-3xl font-extrabold text-foreground sm:text-4xl">
             Qual perfil mais se encaixa com você?
           </h2>
-          <p className="mt-3 max-w-2xl text-muted-foreground">Conecte-se às oportunidades certas.</p>
+          <p className="mt-3 max-w-2xl text-muted-foreground">
+            Conecte-se às oportunidades certas.
+          </p>
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {PROFILES.map((profile) => (
               <article

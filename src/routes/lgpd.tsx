@@ -11,7 +11,10 @@ export const Route = createFileRoute("/lgpd")({
           "Como a Upgrade Educação trata dados pessoais em conformidade com a Lei Geral de Proteção de Dados.",
       },
       { property: "og:title", content: "LGPD — Upgrade Educação" },
-      { property: "og:description", content: "Bases legais, direitos do titular e minimização de dados." },
+      {
+        property: "og:description",
+        content: "Bases legais, direitos do titular e minimização de dados.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

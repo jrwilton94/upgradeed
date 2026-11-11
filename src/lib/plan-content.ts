@@ -53,7 +53,6 @@ export type LandingContent = {
   secondaryCtaLabel?: string;
 };
 
-
 export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
   estudante: {
     role: "estudante",
@@ -201,11 +200,29 @@ export const LANDING_CONTENT: Record<ProfileRole, LandingContent> = {
       description:
         "A remuneração acompanha o desempenho dos seus conteúdos na plataforma. Veja como funciona em linhas gerais:",
       rows: [
-        { label: "Fundo de professores", detail: "25% da receita mensal da plataforma, separado do fundo das IES." },
-        { label: "Audiência", detail: "Participação dos minutos assistidos: 50% do score no MVP, 55% na tração e 60% na escala." },
-        { label: "Produção", detail: "Participação dos minutos de conteúdo aprovado: 40% no MVP, 25% na tração e 20% na escala." },
-        { label: "Conclusão", detail: "Taxa média de conclusão: 10% no MVP e 20% na tração e escala." },
-        { label: "Remuneração", detail: "Seu score multiplicado pelo fundo mensal dos professores. Score e fundo são acompanhados semanalmente." },
+        {
+          label: "Fundo de professores",
+          detail: "25% da receita mensal da plataforma, separado do fundo das IES.",
+        },
+        {
+          label: "Audiência",
+          detail:
+            "Participação dos minutos assistidos: 50% do score no MVP, 55% na tração e 60% na escala.",
+        },
+        {
+          label: "Produção",
+          detail:
+            "Participação dos minutos de conteúdo aprovado: 40% no MVP, 25% na tração e 20% na escala.",
+        },
+        {
+          label: "Conclusão",
+          detail: "Taxa média de conclusão: 10% no MVP e 20% na tração e escala.",
+        },
+        {
+          label: "Remuneração",
+          detail:
+            "Seu score multiplicado pelo fundo mensal dos professores. Score e fundo são acompanhados semanalmente.",
+        },
       ],
       note: "Audiência conta a partir de 20 segundos, limitada à duração do vídeo por pessoa/dia. Conteúdos sem visualização no mês não diluem o fundo.",
       ctaLabel: "Saiba mais",

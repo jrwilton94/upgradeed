@@ -23,10 +23,12 @@ export const Route = createFileRoute("/faq")({
       eyebrow="Ajuda"
       title="Perguntas Frequentes"
       intro="As dúvidas mais comuns de estudantes, profissionais, professores, instituições e empresas."
-      sections={PROFILES.flatMap((profile) => PROFILE_FAQ[profile.role].map((item) => ({
-        heading: `${profile.label} — ${item.q}`,
-        body: [item.a],
-      })))}
+      sections={PROFILES.flatMap((profile) =>
+        PROFILE_FAQ[profile.role].map((item) => ({
+          heading: `${profile.label} — ${item.q}`,
+          body: [item.a],
+        })),
+      )}
     />
   ),
 });

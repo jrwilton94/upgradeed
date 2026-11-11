@@ -143,7 +143,12 @@ function GestaoContent() {
         <div className="grid gap-4 sm:grid-cols-4">
           <div className="space-y-1.5">
             <Label htmlFor="amount">Valor (R$)</Label>
-            <Input id="amount" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="1490,00" />
+            <Input
+              id="amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="1490,00"
+            />
           </div>
           <div className="space-y-1.5 sm:col-span-2">
             <Label htmlFor="description">Descrição</Label>
@@ -180,7 +185,10 @@ function GestaoContent() {
         ) : (
           <div className="divide-y divide-border">
             {payments.map((payment) => (
-              <div key={payment.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
+              <div
+                key={payment.id}
+                className="flex flex-wrap items-center justify-between gap-3 py-3"
+              >
                 <div>
                   <p className="text-sm font-medium text-foreground">{payment.description}</p>
                   <p className="text-xs text-muted-foreground">

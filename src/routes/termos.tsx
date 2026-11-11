@@ -11,7 +11,10 @@ export const Route = createFileRoute("/termos")({
           "Termos de Uso da Upgrade Educação: regras de acesso, planos, conteúdos e responsabilidades das partes.",
       },
       { property: "og:title", content: "Termos de Uso — Upgrade Educação" },
-      { property: "og:description", content: "Regras de acesso, assinaturas, conteúdos e conduta." },
+      {
+        property: "og:description",
+        content: "Regras de acesso, assinaturas, conteúdos e conduta.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

@@ -10,14 +10,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { PROFILES, type ProfileRole } from "@/lib/profiles";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (search: Record<string, unknown>) => ({
     mode: (search.mode === "signup" ? "signup" : search.mode === "reset" ? "reset" : "login") as
-      | "login"
-      | "signup"
-      | "reset",
+      "login" | "signup" | "reset",
   }),
   head: () => ({
     meta: [
@@ -51,16 +55,25 @@ function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [testRoles, setTestRoles] = useState<ProfileRole[]>([]);
-  const [organizations,setOrganizations]=useState<{organization_id:string;organization_type:string;name:string}[]>([]);
+  const [organizations, setOrganizations] = useState<
+    { organization_id: string; organization_type: string; name: string }[]
+  >([]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-    if (data.session) {
-      supabase.from("test_profile_access").select("role").then(({ data: access }) => {
-        if (access?.length) setTestRoles(access.map(a => a.role));
-        else supabase.rpc("organization_access_options").then(({data:options})=>{if(options?.length)setOrganizations(options);else navigate({to:"/painel",replace:true});});
-      });
-    }
+      if (data.session) {
+        supabase
+          .from("test_profile_access")
+          .select("role")
+          .then(({ data: access }) => {
+            if (access?.length) setTestRoles(access.map((a) => a.role));
+            else
+              supabase.rpc("organization_access_options").then(({ data: options }) => {
+                if (options?.length) setOrganizations(options);
+                else navigate({ to: "/painel", replace: true });
+              });
+          });
+      }
     });
   }, [navigate]);
 
@@ -113,8 +126,11 @@ function AuthPage() {
         setTestRoles(access.map((a) => a.role as ProfileRole));
         return;
       }
-      const {data:options}=await supabase.rpc("organization_access_options");
-      if(options?.length){setOrganizations(options);return;}
+      const { data: options } = await supabase.rpc("organization_access_options");
+      if (options?.length) {
+        setOrganizations(options);
+        return;
+      }
       navigate({ to: "/painel" });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Não foi possível concluir");
@@ -137,7 +153,11 @@ function AuthPage() {
   }
 
   const title =
-    mode === "signup" ? "Crie sua conta" : mode === "reset" ? "Recuperar senha" : "Bem-vindo de volta";
+    mode === "signup"
+      ? "Crie sua conta"
+      : mode === "reset"
+        ? "Recuperar senha"
+        : "Bem-vindo de volta";
 
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
@@ -226,7 +246,7 @@ function AuthPage() {
             </form>
           )}
 
-          <Dialog open={testRoles.length > 0 || organizations.length>0} onOpenChange={() => {}}>
+          <Dialog open={testRoles.length > 0 || organizations.length > 0} onOpenChange={() => {}}>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Em qual perfil deseja entrar?</DialogTitle>
@@ -234,11 +254,40 @@ function AuthPage() {
               </DialogHeader>
               <div className="grid gap-2 sm:grid-cols-2">
                 {PROFILES.filter((p) => testRoles.includes(p.role)).map((p) => (
-                  <Button key={p.role} variant="outline" className="h-11" disabled={loading} onClick={() => chooseProfile(p.role)}>
+                  <Button
+                    key={p.role}
+                    variant="outline"
+                    className="h-11"
+                    disabled={loading}
+                    onClick={() => chooseProfile(p.role)}
+                  >
                     {p.label}
                   </Button>
                 ))}
-                {organizations.map(o=><Button key={o.organization_id} variant="outline" className="h-auto min-h-11 whitespace-normal" disabled={loading} onClick={async()=>{setLoading(true);const {error}=await supabase.rpc("activate_organization",{_id:o.organization_id,_type:o.organization_type});if(error){setLoading(false);return toast.error("Acesso organizacional indisponível.");}await queryClient.invalidateQueries();await router.invalidate();navigate({to:"/painel"});}}>{o.name}</Button>)}
+                {organizations.map((o) => (
+                  <Button
+                    key={o.organization_id}
+                    variant="outline"
+                    className="h-auto min-h-11 whitespace-normal"
+                    disabled={loading}
+                    onClick={async () => {
+                      setLoading(true);
+                      const { error } = await supabase.rpc("activate_organization", {
+                        _id: o.organization_id,
+                        _type: o.organization_type,
+                      });
+                      if (error) {
+                        setLoading(false);
+                        return toast.error("Acesso organizacional indisponível.");
+                      }
+                      await queryClient.invalidateQueries();
+                      await router.invalidate();
+                      navigate({ to: "/painel" });
+                    }}
+                  >
+                    {o.name}
+                  </Button>
+                ))}
               </div>
             </DialogContent>
           </Dialog>

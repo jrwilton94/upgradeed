@@ -6,9 +6,17 @@ export const Route = createFileRoute("/para/empresa")({
   head: () => ({
     meta: [
       { title: "Planos para empresas — Upgrade Educação" },
-      { name: "description", content: "Publique vagas, receba candidatos com competências verificadas e desenvolva colaboradores na mesma plataforma." },
+      {
+        name: "description",
+        content:
+          "Publique vagas, receba candidatos com competências verificadas e desenvolva colaboradores na mesma plataforma.",
+      },
       { property: "og:title", content: "Planos para empresas — Upgrade Educação" },
-      { property: "og:description", content: "Publique vagas, receba candidatos com competências verificadas e desenvolva colaboradores na mesma plataforma." },
+      {
+        property: "og:description",
+        content:
+          "Publique vagas, receba candidatos com competências verificadas e desenvolva colaboradores na mesma plataforma.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
