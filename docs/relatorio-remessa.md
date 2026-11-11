@@ -58,7 +58,7 @@ Cada migração grava em `data_migration_log` as contagens "antes:" (0016) e "de
 8. **Emissão sem `ON CONFLICT`:** substituída por verificação de existência dentro de `submit_assessment` (corrida entre duas requisições simultâneas é barrada pelos índices únicos parciais).
 9. **Relatório socioeconômico (G):** limitado a atributos não sensíveis existentes (trabalha, busca emprego, nível de ensino); supressão k<5 com supressão complementar.
 10. **Bucket `student-declarations`:** sua criação não está no repositório (veio do Lovable); o bucket `academic-history` é criado pela `0023`.
-11. **Lint:** baseline de 2.325 problemas de formatação já existia; apenas os arquivos tocados/criados foram corrigidos (eslint limpo neles).
+11. **Lint:** o baseline de 2.325 problemas (2.318 erros de formatação + 7 avisos) foi zerado em commit separado só de formatação (`667acbb`); restam 7 avisos `react-refresh/only-export-components` em componentes de UI, que não afetam produção.
 12. **A confirmar com você:** como o Lovable aplica `drizzle/migrations` e se `0014`/`0015` já foram aplicados; `.lovable/north-star/` foi mantido.
 13. **Exemplo numérico da normalização (H)** — mês com R$ 1.000,00 pagos, fundo de professores 25% = R$ 250,00; pesos 55/25/20. Autor A (2 módulos: 50% e 100% de conclusão → taxa 75%; 60 min de 100; 2 de 3 vídeos produzidos com audiência) e autor B (1 módulo, 25%; 40 min):
    audiência A 0,60 / B 0,40; produção A 0,667 / B 0,333; conclusão A 0,75 / B 0,25 (taxas já somam 1,00).

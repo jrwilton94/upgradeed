@@ -20,3 +20,8 @@
 - Course enrollments and certificates are scoped by profile role via RLS and an insert trigger, so test profiles sharing one login keep separate learning history.
 - Organization permissions and scopes live in protected memberships; privileged mutations use authenticated database functions to enforce non-escalation and preserve audit history.
 - Share presentation primitives only; persona-specific data access must be independently authorized by database policies, including direct URL access.
+- Matching runs only in the database (`create_matches`); the browser reads suggestions from `matches` and never computes scores.
+- Certificates are issued by `submit_assessment` after server-side approval, one per module and one per course, always with hours; the student declaration only proves eligibility for the Student profile and never gates certificates.
+- Student lifecycle (grace period, warnings, move to General profile and back) lives in `run_student_lifecycle`; history is copied, never deleted. Migrations must stay additive: no DELETE, DROP TABLE or DROP COLUMN.
+- Aggregate reports for institutions suppress groups below 5 people, including in CSV; individual rows never reach the browser.
+- DB rule tests run with `cd tests/db && npm test` (PGlite, Supabase stubs); they are evidence for database rules, not for screens or mobile layout.
