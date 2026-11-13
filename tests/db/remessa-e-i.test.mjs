@@ -186,8 +186,14 @@ test("G: grupos com menos de 5 viram 'dados insuficientes' (com supressão compl
   const ies2 = await institution(db, "IES Pequena");
   await cohort(db, ies2, 4);
   const small = await rpc(ies2.owner, "ies_aggregate_report", [ies2.id]);
-  assert.equal(small.insufficient, true);
-  assert.equal(small.students, undefined, "nem a contagem total aparece");
+  assert.equal(small.insufficient, false);
+  assert.equal(small.small_cohort, true);
+  assert.equal(small.students, 4, "totais sempre aparecem");
+  assert.ok(
+    small.employability.matching.every((x) => x.suppressed && x.n === null),
+    "quebras por grupo continuam suprimidas",
+  );
+  assert.deepEqual(small.competencies, []);
 });
 
 test("G: grupos grandes aparecem; competências com menos de 5 pessoas são omitidas", async () => {
@@ -240,10 +246,11 @@ test("G: subperfil com escopo vê só o próprio escopo; sem permissão, outro p
   const semPerm = await member(db, ies, "ies", "ies", ["conteudo"], []);
   assert.equal((await rpc(ies.owner, "ies_aggregate_report", [ies.id])).students, 9);
   assert.equal((await rpc(c1, "ies_aggregate_report", [ies.id])).students, 6);
-  assert.equal(
-    (await rpc(c2, "ies_aggregate_report", [ies.id])).insufficient,
-    true,
-    "escopo com 3 alunos: insuficiente",
+  const r2 = await rpc(c2, "ies_aggregate_report", [ies.id]);
+  assert.equal(r2.students, 3, "totais do escopo pequeno aparecem");
+  assert.ok(
+    r2.socioeconomic.working.every((x) => x.n === null),
+    "grupos suprimidos",
   );
   await expectError(rpc(semPerm, "ies_aggregate_report", [ies.id]), /acesso institucional/);
   await expectError(

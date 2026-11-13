@@ -176,6 +176,13 @@
       "when": 1794186722550,
       "tag": "0024_offboarding_history",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1794187722550,
+      "tag": "0025_ies_report_always_totals",
+      "breakpoints": true
     }
   ]
 }

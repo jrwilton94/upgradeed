@@ -29,6 +29,7 @@ type Report =
   | { insufficient: true; message: string; min_group: number }
   | {
       insufficient: false;
+      small_cohort: boolean;
       students: number;
       hours: number;
       completion: number;
@@ -143,6 +144,12 @@ function IesReportPage() {
           </WorkspaceSection>
         ) : (
           <>
+            {data.small_cohort && (
+              <p className="text-sm text-muted-foreground" role="status">
+                Há menos de 5 estudantes nesta visão: os totais são exibidos, mas as quebras por
+                grupo aparecem como "Dados insuficientes" para evitar a identificação de pessoas.
+              </p>
+            )}
             <MetricStrip
               items={[
                 { label: "Estudantes vinculados", value: data.students, icon: BarChart3 },

@@ -1,6 +1,6 @@
 # Relatório da remessa — ajustes das nove partes (blocos A–I)
 
-Branch: `ajustes-remessa-9-partes` · Nada foi publicado ou aplicado no Lovable: as migrações `0016`–`0024` só rodam quando o Lovable as aplicar após o merge.
+Branch: `ajustes-remessa-9-partes` · Nada foi publicado ou aplicado no Lovable: as migrações `0016`–`0025` só rodam quando o Lovable as aplicar após o merge.
 
 **Como foi verificado (e o que não foi).** As regras de banco (RLS, funções, migrações de dados) foram executadas em PostgreSQL real via PGlite com *stubs* do Supabase (`auth`, `storage`, `pg_cron`): `tests/db`, `npm test` dentro dessa pasta, **48 testes, todos passando**. Não é o Supabase real. `npx tsc --noEmit` e `npm run build` passam. **Não** foram feitos percursos reais em telas, nem verificação em celular, nem chamadas ao Supabase hospedado.
 
@@ -56,7 +56,7 @@ Cada migração grava em `data_migration_log` as contagens "antes:" (0016) e "de
 6. **Competência de curso:** nível 40 por curso certificado (valor provisório); testes geram competências "não verificadas" (origem `teste`); conteúdo dos testes é um conjunto mínimo a revisar pedagogicamente.
 7. **Turmas (F7):** sem entidade própria; o escopo (curso/campus/centro) faz o papel. Vínculo de professor à IES é só cadastro (sem aceite do professor; ele recebe notificação) e não dá acesso aos cursos dele.
 8. **Emissão sem `ON CONFLICT`:** substituída por verificação de existência dentro de `submit_assessment` (corrida entre duas requisições simultâneas é barrada pelos índices únicos parciais).
-9. **Relatório socioeconômico (G):** limitado a atributos não sensíveis existentes (trabalha, busca emprego, nível de ensino); supressão k<5 com supressão complementar.
+9. **Relatório socioeconômico (G):** limitado a atributos não sensíveis existentes (trabalha, busca emprego, nível de ensino); supressão k<5 com supressão complementar **apenas nas quebras por grupo**. Desde a `0025`, os totais (estudantes, horas, conclusão) aparecem sempre, mesmo com menos de 5 estudantes; nesse caso a tela avisa e as quebras ficam como "Dados insuficientes". O corte (5) e a supressão complementar podem ser revistos com o jurídico (LGPD).
 10. **Bucket `student-declarations`:** sua criação não está no repositório (veio do Lovable); o bucket `academic-history` é criado pela `0023`.
 11. **Lint:** o baseline de 2.325 problemas (2.318 erros de formatação + 7 avisos) foi zerado em commit separado só de formatação (`667acbb`); restam 7 avisos `react-refresh/only-export-components` em componentes de UI, que não afetam produção.
 12. **A confirmar com você:** como o Lovable aplica `drizzle/migrations` e se `0014`/`0015` já foram aplicados; `.lovable/north-star/` foi mantido.
